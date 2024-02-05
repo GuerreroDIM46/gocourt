@@ -32,7 +32,7 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
 7. **Despliegue en Internet:**  
     * API pendiente developer
     * Web: pendiente developer  
-    * Librería: pendiente developer  
+
 
 ## Interfaz de usuario
 
