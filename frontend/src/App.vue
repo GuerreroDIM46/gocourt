@@ -2,9 +2,21 @@
 import xheader from "@/components/xheader.vue"
 import navbar from "@/components/navbar.vue"
 import xfooter from "@/components/xfooter.vue"
+// import { mapState, mapActions } from 'pinia'
+// import { usePartidosAPIStore } from '@/stores/partidosAPI'
 
 export default {
   components: { navbar, xfooter, xheader },
+  // computed: {
+  //   ...mapState(usePartidosAPIStore, ['partidosCargados', 'partidos'])
+  // },
+  // methods: {
+  //   ...mapActions(usePartidosAPIStore, ['cargarPartidos'])
+  // },
+  // mounted() {
+  //   this.cargarPartidos()
+  //   // this.partidosCargados = true
+  // }
 }
 
 </script>
@@ -15,8 +27,8 @@ export default {
     <div class="container">
     <navbar></navbar>
   </div>
-    <main>holaquetal
-    <!-- <router-view></router-view> -->
+    <main>
+    <router-view></router-view>
     </main>
     <xfooter></xfooter>
 

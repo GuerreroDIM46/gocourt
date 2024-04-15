@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  webserver:
+    image: gocourt-vue-img
+    container_name: gocourt-vue
+    restart: unless-stopped
+    ports:
+    - '86:80'

@@ -24,10 +24,10 @@
 <template>
   <ul class="nav nav-tabs nav-fill">
     <li class="nav-item">
-      <router-link class="nav-link" :class="{ active: ($route.path === '/jugadores' || $route.path === '/federados'  || $route.path === '/principiantes' || $route.path === '/todos') }" to="/principiantes">Jugadores</router-link>
+      <router-link class="nav-link" :class="{ active: $route.path === '/principiantes' }" to="/principiantes">Principiantes</router-link>
     </li>
     <li class="nav-item">
-      <router-link class="nav-link" :class="{ active: $route.path === '/partidos' }" to="/partidos">Partidos</router-link>
+      <router-link class="nav-link" :class="{ active: $route.path === '/federados' }" to="/federados">Federados</router-link>
     </li>
   </ul>
 </template>

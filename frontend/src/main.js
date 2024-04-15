@@ -7,7 +7,7 @@ import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import BadgeDirective from 'primevue/badgedirective'
 import Home from '@/components/Home.vue'
-import App from '@/App.vue'
+import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -20,12 +20,19 @@ library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass,
 
 
 const NotFound = () => import('@/components/NotFound.vue')
-
+const Partidos = () => import('@/components/Partidos.vue')
+const Jugadores = () => import('@/components/Jugadores.vue')
+const Federados = () => import('@/components/Federados.vue')
+const Principiantes = () => import('@/components/Principiantes.vue')
 
 
 const routes = [
     { path: '/', redirect: '/home'},
     { path: '/home', component: Home, name: 'home' },
+    { path: '/partidos', component: Partidos, name: 'partidos' },
+    { path: '/jugadores', component: Jugadores, name: 'jugadores' },
+    { path: '/federados', component: Federados, name: 'federados' },
+    { path: '/principiantes', component: Principiantes, name: 'principiantes' },
     { path: '/:pathMatch(.*)', component: NotFound, name: 'notfound'}
     
 ]

@@ -1,10 +1,10 @@
 <template>
   <footer>
-    <p class="fw-bold">Footer de Prueba</p>
+    <p class="fw-bold">Manabo2</p>
     <p class="fw-bold">
-      <a href="https://www.google.com/" target="_blank" rel="noopener noreferrer" aria-label="web de referencia"
+      <a href="https://nihongo-manabo.com/" target="_blank" rel="noopener noreferrer" aria-label="Web de Manabo"
         title="Web de Manabo">
-        Web de Referencia
+        Web de Manabo
       </a>
     </p>
     <font-awesome-icon :icon="['fab', 'instagram']" size="2xl" />
