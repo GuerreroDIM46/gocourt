@@ -6,50 +6,66 @@ import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 
 export default {
     components: { navbar2, Federado },
-    data() {
-        return {}
-    },
     computed: {
-        ...mapState(useJugadoresAPIStore, ['federados'])
+        ...mapState(useJugadoresAPIStore, {
+            federados: state => state.federados
+        }),
+        totalPaginas() {
+            return this.store.totalPaginasFederados;
+        }
     },
-    methods: { ...mapActions(useJugadoresAPIStore, ['cargarFederados']) },
+    data() {
+        return {
+            store: useJugadoresAPIStore()
+        };
+    },
+    methods: {
+        cambiarPagina(pagina) {
+            this.store.cambiarPaginaFederados(pagina);
+        }
+    },
     mounted() {
-        this.cargarFederados();
+        this.store.cargarFederados();
     }
-
 }
 </script>
 
 <template>
     <div class="container">
-    <div>
-        <navbar2></navbar2>
+        <navbar2 />
+        <table class="card">
+            <tr class="card-header contenedortitulo bordeverdeclaro">
+                <th>
+                    <!-- Controles de paginación -->
+                    <ul class="pagination">
+                        <li class="page-item" @click="store.paginaAnteriorFederados">
+                            <a class="page-link">Anterior</a>
+                        </li>
+                        <li v-for="pagina in totalPaginas" :key="pagina"
+                            :class="{ 'page-item': true, 'active': pagina === store.paginaFederados }">
+                            <a class="page-link" @click="cambiarPagina(pagina)">{{ pagina }}</a>
+                        </li>
+                        <li class="page-item" @click="store.paginaSiguienteFederados">
+                            <a class="page-link">Siguiente</a>
+                        </li>
+                    </ul>
+                </th>
+                <div class="crecer"></div>
+                <button type="button" class="btn btn-outline-success">
+                    Nuevo Jugador <font-awesome-icon class="me-2" :icon="['fas', 'user-plus']" />
+                </button>
+            </tr>
+            <tr v-for="federado in federados" :key="'federado-' + federado.id">
+                <Federado :federadosprop="federado" />
+            </tr>
+        </table>
     </div>
-    <div class="card text-center">
-        <div class="card-header contenedortitulo">
-            <div style="margin-left: 10px;">Nombre</div>
-            <div class="crecer"></div>
-            <div style="margin-right: 10px;">PC</div>
-            <div style="margin-right: 5px;">PL</div>
-            <div style="margin-right: 95px;">HC</div>
-        </div>
-        <div class="card-body">
-            <div v-for="federado in federados" :key="federado._links.self.href">
-                <Federado :federadosprop="federado"></Federado>
-            </div>
-        </div>
-        <div class="centrar">
-            <button type="button" class="btn btn-success" @click="abrirModalNuevoPartido">Añadir Jugador</button>
-        </div>
-    </div>
-</div>
-
 </template>
+
 
 <style scoped>
 .centrar {
     text-align: center;
-    /* Alinear horizontalmente */
 }
 
 .contenedortitulo {
@@ -65,5 +81,47 @@ export default {
     background-color: #70AD47;
     color: white;
     font-weight: 500;
+}
+
+.verdeoscuro {
+    background-color: #395623;
+    color: #CCCCCC;
+    font-weight: 500;
+    border: 1px;
+}
+
+.bordeverdeclaro {
+    border-color: #70AD47;
+}
+
+/* .bordeverdeoscuro {
+    border-color: #70AD47;
+    border: 2px;
+} */
+
+.pagination {
+    margin-bottom: 0px;
+}
+
+.pagination>.active>a {
+    color: white;
+    background-color: #70AD47 !Important;
+    border: solid 1px #70AD47 !Important;
+}
+
+.pagination>li>a {
+    background-color: white;
+    color: #70AD47;
+}
+
+.btn-outline-success:hover {
+    background-color: #70AD47 !important;
+    border-color: #70AD47;
+    color: white;
+}
+
+.btn-outline-success {
+    border-color: #395623;
+    color: #395623;
 }
 </style>
