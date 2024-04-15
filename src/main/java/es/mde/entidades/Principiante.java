@@ -28,6 +28,6 @@ public class Principiante extends Jugador {
     }
 
     public float getHandicap() {
-        return (float) (72 * ((Math.log(30.0 / puntuacionLargo) + Math.log(70.0 / puntuacionCorto)) + 121));
+        return (float) (49 + (72 * ((Math.log(30.0 / puntuacionLargo) + Math.log(70.0 / puntuacionCorto)))));
     }
 }
