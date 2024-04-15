@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  webserver:
+    image: gocourt-api
+    container_name: gocourt-api
+    restart: unless-stopped
+    ports:
+    - '8081:8080'
+
