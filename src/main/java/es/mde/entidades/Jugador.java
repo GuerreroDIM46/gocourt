@@ -2,6 +2,7 @@ package es.mde.entidades;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import org.checkerframework.common.reflection.qual.GetClass;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -84,6 +85,10 @@ public class Jugador {
 
     public void setCampo(Campo campo) {
         this.campo = campo;
+    }
+    
+    public String getNombreCampo() {
+        return this.getCampo().getNombre();
     }
        
 }
