@@ -1,9 +1,6 @@
 package es.mde.entidades;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import org.checkerframework.common.reflection.qual.GetClass;
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
@@ -16,7 +13,6 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
