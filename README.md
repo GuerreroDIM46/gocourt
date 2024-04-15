@@ -26,12 +26,14 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
 4. **Listado**: se mostrará un listado de jugadores de la Figura 1.  
 5. **CRUD**: Desde el listado anterior se podrá gestionar el CRUD de los jugadores usando el formulario de la Figura 2.  
 6. **URLs** del proyecto:  
-   1. Repositorio proyecto: https://git.institutomilitar.com/menadim46/gocourt  
-   1. Librería: pendiente developer  
+   1. Repositorio proyecto: 
+        - [GitLab](https://git.institutomilitar.com/menadim46/gocourt)  
+        - [GitHub](https://github.com/GuerreroDIM46/gocourt.git)  
+   2. Librería: pendiente developer
 
 7. **Despliegue en Internet:**  
-    * API pendiente developer
-    * Web: pendiente developer  
+    * API: https://gocourt-5ef625746984.herokuapp.com/api
+    * Web: https://gocourt.netlify.app/  
 
 
 ## Interfaz de usuario
