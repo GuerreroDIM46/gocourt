@@ -42,9 +42,9 @@ export default {
     <!-- Ajusta las columnas para ser responsivas -->
     <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
         <!-- Agrupa DNI y campo en un contenedor para mejor control -->
-        <div class="mb-2 mb-md-0 flex-fill d-flex">
-            <span class="fl">{{ principiantesprop.dni }}</span>
-            <span class="fl">Campo hipermegapijoguay</span>
+        <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
+            <span class="fl"> - DNI: {{ principiantesprop.dni }}</span>
+            <span class="fl"> - Juega en: {{ principiantesprop.nombreCampo }}</span>
         </div>
         <!-- Contenedor para los botones, siempre en una sola fila -->
         <div class="d-flex">
