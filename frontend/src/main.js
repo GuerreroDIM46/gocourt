@@ -11,26 +11,25 @@ import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons' //iconos de muestra
+import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus } from '@fortawesome/free-solid-svg-icons' //iconos de muestra
 import { faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons' //iconos de muestra
 
 
-library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark)
+library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus)
 
 
 
 const NotFound = () => import('@/components/NotFound.vue')
 const Partidos = () => import('@/components/Partidos.vue')
-const Federados = () => import('@/components/Federados.vue')
-const Principiantes = () => import('@/components/Principiantes.vue')
+const Jugadores = () => import('@/components/Jugadores.vue')
+
 
 
 const routes = [
-    { path: '/', redirect: '/home'},
+    { path: '/', redirect: '/jugadores'},
     { path: '/home', component: Home, name: 'home' },
     { path: '/partidos', component: Partidos, name: 'partidos' },
-    { path: '/federados', component: Federados, name: 'federados' },
-    { path: '/principiantes', component: Principiantes, name: 'principiantes' },
+    { path: '/jugadores', component: Jugadores, name: 'jugadores' },
     { path: '/:pathMatch(.*)', component: NotFound, name: 'notfound'}
     
 ]

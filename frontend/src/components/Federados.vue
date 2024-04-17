@@ -1,35 +1,24 @@
 <script>
 import navbar2 from "@/components/navbar2.vue"
 import Federado from "@/components/Federado.vue"
-import Formulario from '@/components/FormularioFederado.vue'
+import FormularioFederado from '@/components/FormularioFederado.vue'
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
-import { Modal } from 'bootstrap'
 
 export default {
-    components: { navbar2, Federado, Formulario },
-    computed: {
-        ...mapState(useJugadoresAPIStore, {
-            federados: state => state.federados
-        }),
-        totalPaginas() {
-            return this.store.totalPaginasFederados;
-        }
-    },
+    components: { navbar2, Federado, FormularioFederado },
     data() {
-        return {
-            store: useJugadoresAPIStore()
-        };
+        return {}
     },
-    methods: {
-        cambiarPagina(pagina) {
-            this.store.cambiarPaginaFederados(pagina);
-        },
+    computed: {
+        ...mapState(useJugadoresAPIStore, ['federados'])
     },
+    methods: { ...mapActions(useJugadoresAPIStore, ['cargarFederados']) },
     mounted() {
-        this.store.cargarFederados();
+        this.cargarFederados();
     }
 }
+
 </script>
 
 <template>
@@ -46,22 +35,17 @@ export default {
                         </button>
                         <!-- Paginación -->
                         <ul class="pagination mb-0 order-2 order-md-1">
-                            <li class="page-item" @click="store.paginaAnteriorFederados">
-                                <a class="page-link">Anterior</a>
-                            </li>
-                            <li v-for="pagina in totalPaginas" :key="pagina"
-                                :class="{ 'page-item': true, 'active': pagina === store.paginaFederados }">
-                                <a class="page-link" @click="cambiarPagina(pagina)">{{ pagina }}</a>
-                            </li>
-                            <li class="page-item" @click="store.paginaSiguienteFederados">
-                                <a class="page-link">Siguiente</a>
-                            </li>
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
                         </ul>
                     </div>
                 </td>
             </tr>
             <tr v-for="federado in federados" :key="'federado-' + federado.id">
-                <Federado :federadosprop="federado" />
+                <Federado :jugador="federado" />
             </tr>
         </table>
     </div>
@@ -78,7 +62,7 @@ export default {
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" size="lg"/></button>
                 </div>
                 <div class="modal-body">
-                    <Formulario></Formulario>
+                    <FormularioFederado></FormularioFederado>
                 </div>
                 <div class="modal-footer verdeoscuro">
 

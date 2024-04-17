@@ -5,71 +5,43 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
     state: () => ({
         federados: [],
         principiantes: [],
-        paginaFederados: 1,
-        paginaPrincipiantes: 1,
-        tamanoPagina: 20,
-        totalPaginasFederados: 0,
-        totalPaginasPrincipiantes: 0,
+        jugadores: [],
+        federadosCargados: false,
+        principiantesCargados: false,
     }),
     actions: {
         async cargarFederados() {
             this.federadosCargados = false;
-            const response = await getFederados(this.paginaFederados - 1, this.tamanoPagina);
-            if (response.data._embedded) {
-                this.federados = response.data._embedded.federados;
-                this.totalPaginasFederados = response.data.page.totalPages; // Asegúrate de actualizar el total de páginas
-            }
-            this.federadosCargados = true;
-            
-            
+            await getFederados().then((response) => {
+                if (response.data._embedded) {
+                    const federadosConTipo = response.data._embedded.federados.map(federado => ({
+                        ...federado,
+                        tipo: 'federado'
+                    }));
+                    this.federados = federadosConTipo;
+                }
+                this.federadosCargados = true;
+                this.actualizarTodosJugadores();
+            });
         },
-        
         async cargarPrincipiantes() {
             this.principiantesCargados = false;
-            const response = await getPrincipiantes(this.paginaPrincipiantes - 1, this.tamanoPagina);
-            if (response.data._embedded) {
-                this.principiantes = response.data._embedded.principiantes;
-                this.totalPaginasPrincipiantes = response.data.page.totalPages;
-            }
-            this.principiantesCargados = true;
-            return response; // Asegúrate de devolver la respuesta
+            await getPrincipiantes().then((response) => {
+                if (response.data._embedded) {
+                    const principiantesConTipo = response.data._embedded.principiantes.map(principiante => ({
+                        ...principiante,
+                        tipo: 'principiante'
+                    }));
+                    this.principiantes = principiantesConTipo;
+                }
+                this.principiantesCargados = true;
+                this.actualizarTodosJugadores();
+            });
         },
-        
-        cambiarPaginaFederados(nuevaPagina) {
-            this.paginaFederados = nuevaPagina;
-            this.cargarFederados();
-            console.log("En el store: ", this.principiantes)
-        },
-        
-        cambiarPaginaPrincipiantes(nuevaPagina) {
-            this.paginaPrincipiantes = nuevaPagina;
-            this.cargarPrincipiantes();
-        },
-        
-        paginaAnteriorFederados() {
-            if (this.paginaFederados > 1) {
-                this.cambiarPaginaFederados(this.paginaFederados - 1);
-                console.log("En el store: ", this.principiantes)
-            }
-        },
-        
-        paginaSiguienteFederados() {
-            if (this.paginaFederados < this.totalPaginasFederados) {
-                this.cambiarPaginaFederados(this.paginaFederados + 1);
-                console.log("En el store: ", this.principiantes)
-            }
-        },
-        
-        paginaAnteriorPrincipiantes() {
-            if (this.paginaPrincipiantes > 1) {
-                this.cambiarPaginaPrincipiantes(this.paginaPrincipiantes - 1);
-            }
-        },
-        
-        paginaSiguientePrincipiantes() {
-            if (this.paginaPrincipiantes < this.totalPaginasPrincipiantes) {
-                this.cambiarPaginaPrincipiantes(this.paginaPrincipiantes + 1);
-            }
+        actualizarTodosJugadores() {
+            this.jugadores = [...this.federados, ...this.principiantes]
+                .sort((a, b) => a.nombre.localeCompare(b.nombre))
+                console.log("En el store: ", this.jugadores)
         }
     }
-})
+});

@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['federadosprop'],
+    props: ['jugador'],
     emits: [],
     methods: {}
 }
@@ -11,17 +11,17 @@ export default {
     <div class="casilla">
         <tr class="jugador containerjugador ">
             <td class="fl">
-                <div v-if="federadosprop.profesional" class="badge bg-secondary me-2">PRO</div>
-                <strong>{{ federadosprop.nombre }}
-                    {{ federadosprop.apellido1 }}
-                    {{ federadosprop.apellido2 }}</strong>
+                <div v-if="jugador.profesional" class="badge bg-secondary me-2">PRO</div>
+                <strong>{{ jugador.nombre }}
+                    {{ jugador.apellido1 }}
+                    {{ jugador.apellido2 }}</strong>
                     
             </td>
             <td class="crecer"></td>
             <!-- Handicap en formato botón con un decimal -->
             <td>
                 <button type="button" class="btn btn-outline-secondary" disabled>
-                    Handicap: {{ federadosprop.handicap }}
+                    Handicap: {{ jugador.handicap }}
                 </button>
             </td>
         </tr>
@@ -32,8 +32,8 @@ export default {
             <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
                 <!-- Agrupa DNI y campo en un contenedor para mejor control -->
                 <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
-                    <span class="fl"> - DNI: {{ federadosprop.dni }}</span>
-                    <span class="fl"> - Juega en: {{ federadosprop.nombreCampo }}</span>
+                    <span class="fl"> - DNI: {{ jugador.dni }}</span>
+                    <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
                 </div>
                 <!-- Contenedor para los botones, siempre en una sola fila -->
                 <div class="d-flex">

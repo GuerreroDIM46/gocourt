@@ -1,7 +1,7 @@
 <script>
 
 export default {
-    props: ['principiantesprop'],
+    props: ['jugador'],
     emits: [],
     methods: {}
 }
@@ -13,26 +13,26 @@ export default {
     <div class="casilla">
         <tr class="jugador containerjugador ">
             <td class="fl">
-                <strong>{{ principiantesprop.nombre }}
-                    {{ principiantesprop.apellido1 }}
-                    {{ principiantesprop.apellido2 }}</strong>
+                <strong>{{ jugador.nombre }}
+                    {{ jugador.apellido1 }}
+                    {{ jugador.apellido2 }}</strong>
             </td>
             <td class="crecer"></td>
             <td>
                 <button type="button" class="btn btn-outline-primary" disabled>
-                    PL: {{ principiantesprop.puntuacionLargo }}
+                    PL: {{ jugador.puntuacionLargo }}
                 </button>
             </td>
             <!-- Puntuación corto en formato botón -->
             <td>
                 <button type="button" class="btn btn-outline-primary" disabled>
-                    PC: {{ principiantesprop.puntuacionCorto }}
+                    PC: {{ jugador.puntuacionCorto }}
                 </button>
             </td>
             <!-- Handicap en formato botón con un decimal -->
             <td>
                 <button type="button" class="btn btn-outline-secondary" disabled>
-                    Handicap: {{ principiantesprop.handicap.toFixed(1) }}
+                    Handicap: {{ jugador.handicap.toFixed(1) }}
                 </button>
             </td>
         </tr>
@@ -43,8 +43,8 @@ export default {
     <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
         <!-- Agrupa DNI y campo en un contenedor para mejor control -->
         <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
-            <span class="fl"> - DNI: {{ principiantesprop.dni }}</span>
-            <span class="fl"> - Juega en: {{ principiantesprop.nombreCampo }}</span>
+            <span class="fl"> - DNI: {{ jugador.dni }}</span>
+            <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
         </div>
         <!-- Contenedor para los botones, siempre en una sola fila -->
         <div class="d-flex">

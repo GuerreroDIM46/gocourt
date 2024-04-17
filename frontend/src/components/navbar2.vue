@@ -29,6 +29,9 @@
     <li class="nav-item">
       <router-link class="nav-link" :class="{ active: $route.path === '/federados' }" to="/federados">Federados</router-link>
     </li>
+    <li class="nav-item">
+      <router-link class="nav-link" :class="{ active: $route.path === '/jugadores' }" to="/jugadores">Jugadores</router-link>
+    </li>
   </ul>
 </template>
 

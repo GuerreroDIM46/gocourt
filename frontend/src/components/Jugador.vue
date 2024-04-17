@@ -1,18 +1,14 @@
 <script>
 export default {
-  props: {
-    jugador: {
-      type: Object,
-      required: true
-    }
-  }
+    props: ['jugadoresprop'],
+    emits: [],
+    methods: {}
 }
 </script>
 
 <template>
   <div class="jugador">
-    <h3>{{ jugador.nombre }}</h3>
-    <p>Edad: {{ jugador.edad }}</p>
+    <h3>{{ jugadoresprop.nombre }}</h3>
     <!-- Agrega más detalles del jugador según tus necesidades -->
   </div>
 </template>
