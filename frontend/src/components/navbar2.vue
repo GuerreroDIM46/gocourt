@@ -38,7 +38,8 @@
   background-color: #395623;
   color: #CCCCCC;
   font-weight: 500;
-  border: 1px;
+  border: solid, 2px;
+  border-color: #395623;
 }
 
 .nav-tabs .nav-link.active {

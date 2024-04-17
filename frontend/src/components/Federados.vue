@@ -1,11 +1,13 @@
 <script>
 import navbar2 from "@/components/navbar2.vue"
 import Federado from "@/components/Federado.vue"
+import Formulario from '@/components/FormularioFederado.vue'
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
+import { Modal } from 'bootstrap'
 
 export default {
-    components: { navbar2, Federado },
+    components: { navbar2, Federado, Formulario },
     computed: {
         ...mapState(useJugadoresAPIStore, {
             federados: state => state.federados
@@ -22,7 +24,7 @@ export default {
     methods: {
         cambiarPagina(pagina) {
             this.store.cambiarPaginaFederados(pagina);
-        }
+        },
     },
     mounted() {
         this.store.cargarFederados();
@@ -39,7 +41,7 @@ export default {
                     <!-- Contenedor principal con flex -->
                     <div class="d-flex flex-column flex-md-row align-items-start justify-content-md-between">
                         <!-- Botón Nuevo Jugador, aparece primero y a la izquierda -->
-                        <button type="button" class="btn btn-outline-success mb-2 mb-md-0 order-1 order-md-2">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-outline-success mb-2 mb-md-0 order-1 order-md-2" >
                             Nuevo Jugador <font-awesome-icon class="me-2" :icon="['fas', 'user-plus']" />
                         </button>
                         <!-- Paginación -->
@@ -63,6 +65,29 @@ export default {
             </tr>
         </table>
     </div>
+
+    <!-- Modal -->
+    <!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
+        <div class="modal fade" id="staticBackdrop" ref="formularioModal" data-bs-backdrop="static" data-bs-keyboard="false"
+        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeclaro">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel"><font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />  Federado</h1>
+                    <div class="crecer"></div>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" size="lg"/></button>
+                </div>
+                <div class="modal-body">
+                    <Formulario></Formulario>
+                </div>
+                <div class="modal-footer verdeoscuro">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </template>
 
 
