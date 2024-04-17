@@ -8,7 +8,9 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import es.mde.rest.ConfiguracionRest;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -29,7 +32,9 @@ import jakarta.persistence.EntityManagerFactory;
     // "classpath:config/database.properties",
     "classpath:config/jackson.properties" })
 @EnableTransactionManagement
-@EnableJpaRepositories("${misRepositorios}") 
+@EnableJpaRepositories("${misRepositorios}")
+@ComponentScan("es.mde.rest")//para que escanee los Controller...
+@Import(ConfiguracionRest.class)
 public class ConfiguracionPorJava {
     
     @Value("${misEntidades}")
@@ -82,18 +87,7 @@ public class ConfiguracionPorJava {
         return mapper;
     }
     
-    @Bean
-    CorsFilter corsFilter() {
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        final CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(Collections.singletonList("*"));
-        config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept"));
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
-
+   
 
 
 }
