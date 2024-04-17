@@ -13,6 +13,7 @@ export default {
     <div class="casilla">
         <tr class="jugador containerjugador ">
             <td class="fl">
+                <div class="badge bg-success me-2">Principiante</div>
                 <strong>{{ jugador.nombre }}
                     {{ jugador.apellido1 }}
                     {{ jugador.apellido2 }}</strong>

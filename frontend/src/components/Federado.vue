@@ -11,7 +11,8 @@ export default {
     <div class="casilla">
         <tr class="jugador containerjugador ">
             <td class="fl">
-                <div v-if="jugador.profesional" class="badge bg-secondary me-2">PRO</div>
+                <div class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
                 <strong>{{ jugador.nombre }}
                     {{ jugador.apellido1 }}
                     {{ jugador.apellido2 }}</strong>

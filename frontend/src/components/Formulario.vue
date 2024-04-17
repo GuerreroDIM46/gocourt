@@ -7,10 +7,13 @@ export default {
     components: {  },
     data() {
         return {
+        tipo: 'principiante',
         nombre: '',
         apellido1: '',
         apellido2: '',
         dni: '',
+        profesional: false,
+        handicap: 0,
         puntuacionLargo: 0,
         puntuacionCorto: 0,
         campo: ''
@@ -33,6 +36,24 @@ export default {
   <div>
     <form @submit.prevent="enviarFormulario">
       <div class="row mb-3">
+  <!-- Select para el tipo de jugador -->
+  <div class="col-md-4">
+    <label for="tipo" class="form-label">Tipo de Jugador:</label>
+    <select class="form-select" id="tipo" v-model="tipo">
+      <option value="principiante">Principiante</option>
+      <option value="federado">Federado</option>
+    </select>
+  </div>
+
+  <!-- Select para el campo -->
+  <div class="col-md-8">
+    <label for="campo" class="form-label">Campo:</label>
+    <select class="form-select" id="campo" v-model="campoSeleccionado">
+      <option v-for="campo in campos" :key="campo.id" :value="campo.nombre">{{ campo.nombre }}</option>
+    </select>
+  </div>
+</div>
+      <div class="row mb-3">
         <!-- Nombre y Primer Apellido en la misma fila -->
         <div class="col-md-6">
           <label for="nombre" class="form-label">Nombre:</label>
@@ -54,17 +75,8 @@ export default {
           <input type="text" class="form-control" id="dni" v-model="dni">
         </div>
       </div>
-      <div class="row mb-3">
-        <!-- Campo en su propia fila -->
-        <div class="col-12">
-          <label for="campo" class="form-label">Campo:</label>
-          <select class="form-select" id="campo" v-model="campo">
-            <option v-for="campo in campos" :key="campo.id" :value="campo.nombre">{{ campo.nombre }}</option>
-          </select>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <!-- Handicap y Profesional en la misma fila -->
+      <div v-if="tipo !== 'federado'" class="row mb-3">
+        <!-- Puntuacion Largo y corto en la misma fila -->
         <div class="col-md-6 d-flex align-items-center">
           <label for="handicap" class="form-label">Precision larga distancia: {{ puntuacionLargo }}%</label>
           <input type="range" class="form-range ms-2" id="handicap" v-model="puntuacionLargo" min="0" max="100" step="1">
@@ -72,6 +84,17 @@ export default {
         <div class="col-md-6 d-flex align-items-center">
           <label for="handicap" class="form-label">Precision corta distancia: {{ puntuacionCorto }}%</label>
           <input type="range" class="form-range ms-2" id="handicap" v-model="puntuacionCorto" min="0" max="100" step="1">
+        </div>
+      </div>
+      <div v-if="tipo !== 'principiante'" class="row mb-3">
+        <!-- Handicap y Profesional en la misma fila -->
+        <div class="col-md-6 d-flex align-items-center">
+          <label for="handicap" class="form-label">Handicap: {{ handicap }}</label>
+          <input type="range" class="form-range ms-2" id="handicap" v-model="handicap" min="-40" max="100" step="1">
+        </div>
+        <div class="col-md-6 d-flex justify-content-center align-items-center">
+          <label for="profesional" class="form-label me-2">Profesional:</label>
+          <input type="checkbox" class="form-check-input" id="profesional" v-model="profesional">
         </div>
       </div>
       <div class="row mb-3">

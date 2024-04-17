@@ -1,21 +1,35 @@
 <script>
-import navbar2 from "@/components/navbar2.vue"
-import Jugador from "@/components/Jugador.vue"
 import Federado from "@/components/Federado.vue"
 import Principiante from "@/components/Principiante.vue"
+import Formulario from "@/components/Formulario.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 
 export default {
-    components: { navbar2, Jugador, Federado, Principiante },
+    components: {  Federado, Principiante, Formulario },
     data() {
-        return {}
+        return {
+          paginaActual: 1,
+          tamanoPagina: 10
+        }
     },
     computed: {
-        ...mapState(useJugadoresAPIStore, ['jugadores'])
+      ...mapState(useJugadoresAPIStore, ['jugadores']),
+      jugadoresPaginados() {
+        const start = (this.paginaActual - 1) * this.tamanoPagina;
+        const end = start + this.tamanoPagina;
+        return this.jugadores.slice(start, end);
+      },
+      totalPaginas() {
+        return Math.ceil(this.jugadores.length / this.tamanoPagina);
+      }
     },
     methods: {
-        ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes']) 
+      ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes']),
+      cambiarPagina(nuevaPagina) {
+        if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return;
+        this.paginaActual = nuevaPagina;
+      }
     },
     mounted() {
       this.cargarFederados();
@@ -38,43 +52,46 @@ export default {
               Nuevo Jugador <font-awesome-icon class="me-2" :icon="['fas', 'user-plus']" />
             </button>
             <!-- Paginación -->
-            <!-- <ul class="pagination mb-0 order-2 order-md-1">
-                          <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                          <li class="page-item"><a class="page-link" href="#">1</a></li>
-                          <li class="page-item"><a class="page-link" href="#">2</a></li>
-                          <li class="page-item"><a class="page-link" href="#">3</a></li>
-                          <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                      </ul> -->
+            <ul class="pagination mb-0 order-2 order-md-1">
+              <li class="page-item" :class="{ disabled: paginaActual === 1 }">
+        <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)">Previous</a>
+      </li>
+      <li class="page-item" v-for="n in totalPaginas" :key="n" :class="{ active: n === paginaActual }">
+        <a class="page-link" href="#" @click="cambiarPagina(n)">{{ n }}</a>
+      </li>
+      <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
+        <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)">Next</a>
+      </li>
+            </ul>
           </div>
         </td>
       </tr>
-      <tr v-for="jugador in jugadores" :key="jugador._links.self.href">
-        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" :jugador="jugador">
-        </component>
+      <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
+        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" :jugador="jugador"></component>
       </tr>
     </table>
   </div>
 
   <!-- Modal -->
   <!-- <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"> -->
-  <!-- <div class="modal fade" id="staticBackdrop" ref="formularioModal" data-bs-backdrop="static" data-bs-keyboard="false"
+  <div class="modal fade" id="staticBackdrop" ref="formularioModal" data-bs-backdrop="static" data-bs-keyboard="false"
       tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
               <div class="modal-header verdeclaro">
-                  <h1 class="modal-title fs-5" id="staticBackdropLabel"><font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />  Federado</h1>
+                  <h1 class="modal-title fs-5" id="staticBackdropLabel"><font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />  Jugador</h1>
                   <div class="crecer"></div>
                   <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" size="lg"/></button>
               </div>
               <div class="modal-body">
-                  <FormularioFederado></FormularioFederado>
+                  <Formulario></Formulario>
               </div>
               <div class="modal-footer verdeoscuro">
 
               </div>
           </div>
       </div>
-  </div> -->
+  </div>
 
 
 </template>
