@@ -46,6 +46,14 @@ export default {
       this.paginaActual = nuevaPagina
     },
   },
+  watch: {
+    tipoSeleccionado(newVal, oldVal) {
+      if (newVal !== oldVal) this.paginaActual = 1;
+    },
+    campoSeleccionado(newVal, oldVal) {
+      if (newVal !== oldVal) this.paginaActual = 1;
+    }
+  },
   mounted() {
     this.cargarFederados()
     this.cargarPrincipiantes()
@@ -60,7 +68,7 @@ export default {
       <tr class="card-header ">
         <td class="flexmio">
           <!-- Paginación  -->
-          <ul class="pagination me-2">
+          <ul class="pagination me-2 mb-2">
             <li class="page-item" :class="{ disabled: paginaActual === 1 }">
               <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)">Previous</a>
             </li>
@@ -72,25 +80,25 @@ export default {
             </li>
           </ul>
           <!-- Select para filtrar campos -->
-          <select v-model="this.campoSeleccionado" class="form-select me-2">
+          <select v-model="this.campoSeleccionado" class="form-select selectauto me-2 mb-2">
             <option value="todos">Todos los campos</option>
             <option v-for="campo in campos" :value="campo.nombre" :key="campo._links.self.href">
               {{ campo.nombre }}
             </option>
           </select>
           <!-- Select para filtrar jugadores -->
-          <select v-model="tipoSeleccionado" class="form-select me-2">
+          <select v-model="tipoSeleccionado" class="form-select selectauto me-2 mb-2">
             <option value="todos">Todos</option>
             <option value="federado">Federado</option>
             <option value="principiante">Principiante</option>
           </select>
           <!-- Botón Nuevo Jugador, ahora alineado a la derecha -->
           <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-            class="btn btn-outline-success btn-no-wrap" style="display: flex; align-items: center;">
+            class="btn btn-outline-success btn-no-wrap me-2 mb-2 ms-auto" style="display: flex; align-items: center;">
             <span class="btn-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
               Nuevo Jugador
             </span>
-            <font-awesome-icon class="me-2" :icon="['fas', 'user-plus']" />
+            <font-awesome-icon class="" :icon="['fas', 'user-plus']" />
           </button>
         </td>
       </tr>
@@ -126,9 +134,15 @@ export default {
 
 
 <style scoped>
+.selectauto {
+  width: auto;
+  max-width: 90%;
+}
+
 .flexmio {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 
