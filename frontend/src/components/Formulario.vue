@@ -7,6 +7,7 @@ export default {
     components: {  },
     data() {
         return {
+        campoSeleccionado: '',
         tipo: 'principiante',
         nombre: '',
         apellido1: '',
@@ -48,7 +49,7 @@ export default {
   <!-- Select para el campo -->
   <div class="col-md-8">
     <label for="campo" class="form-label">Campo:</label>
-    <select class="form-select" id="campo" v-model="campoSeleccionado">
+    <select class="form-select" id="campo" v-model="this.campoSeleccionado">
       <option v-for="campo in campos" :key="campo.id" :value="campo.nombre">{{ campo.nombre }}</option>
     </select>
   </div>
