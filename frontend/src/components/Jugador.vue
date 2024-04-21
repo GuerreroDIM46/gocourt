@@ -13,7 +13,7 @@ export default {
 }
 </script>
 
-<!-- <template>
+<template>
     <div class="casilla">
         <tr class="jugador containerjugador">
             <td class="fl">
@@ -23,17 +23,18 @@ export default {
                 <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
             </td>
             <td class="crecer"></td>
-            <td v-if="jugador.tipo === 'federado'" class="align-middle">
-                <button type="button" class="btn btn-outline-secondary" disabled>
-                    Handicap: {{ jugador.handicap.toFixed(1) }}
-                </button>
-            </td>
+
             <td v-if="jugador.tipo === 'principiante'" class="align-middle">
                 <button type="button" class="btn btn-outline-primary" disabled>
                     PL: {{ jugador.puntuacionLargo }}
                 </button>
                 <button type="button" class="btn btn-outline-primary" disabled>
                     PC: {{ jugador.puntuacionCorto }}
+                </button>
+            </td>
+            <td class="align-middle">
+                <button type="button" class="btn btn-outline-secondary" disabled>
+                    Handicap: {{ jugador.handicap.toFixed(1) }}
                 </button>
             </td>
         </tr>
@@ -58,7 +59,7 @@ export default {
             </td>
         </tr>
     </div>
-</template> -->
+</template>
 
 
 

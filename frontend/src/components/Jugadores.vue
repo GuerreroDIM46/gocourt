@@ -1,7 +1,5 @@
 <script>
-import Federado from "@/components/Federado.vue"
-import Principiante from "@/components/Principiante.vue"
-//import Jugador from "@/components/Principiante.vue"
+import Jugador from "@/components/Jugador.vue"
 import Formulario from "@/components/Formulario.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
@@ -11,9 +9,7 @@ import { Modal } from 'bootstrap'
 
 export default {
   components: { 
-    Federado, 
-    Principiante, 
-//    Jugador, 
+    Jugador, 
     Formulario },
   data() {
     return {
@@ -189,22 +185,22 @@ export default {
           </button>
         </td>
       </tr>
-      <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
+      <!-- <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
         <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" 
           :jugador="jugador"
           @editar-jugador="abrirModalEditar(jugador)"
           @ver-jugador="abrirModalVer(jugador)"
           @borrar-jugador="borrarJugador"
           ></component>
-      </tr>
-      <!-- <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
+      </tr> -->
+      <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
         <Jugador 
           :jugador="jugador"
           @editar-jugador="abrirModalEditar(jugador)"
           @ver-jugador="abrirModalVer(jugador)"
           @borrar-jugador="borrarJugador"
           ></Jugador>
-      </tr> -->
+      </tr> 
     </table>
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" ref="formularioModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
