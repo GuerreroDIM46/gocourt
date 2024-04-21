@@ -40,7 +40,7 @@ export function postJugador(jugador) {
 }
 
 export function putJugador(jugador, id) {
-    return llamadaAPI('put', jugador, id);
+    return llamadaAPI('patch', jugador, id);
 }
 
 export function deleteJugador(id) {

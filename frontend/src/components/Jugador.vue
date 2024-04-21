@@ -52,17 +52,38 @@ export default {
                     <button type="button" class="btn btn-outline-warning mr-1" @click="editarJugador">
                         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />
                     </button>
-                    <button type="button" class="btn btn-outline-danger" @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                        data-bs-target="#ModalConfirmacionBorrado">
                         <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
                     </button>
                 </div>
             </td>
         </tr>
     </div>
+
+    <!-- Modal Confirmacion Borrado-->
+    <div class="modal fade" id="ModalConfirmacionBorrado" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeoscuro">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmacion de Borrado</h1>
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <h5 style="text-align:justify;">¿Seguro?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="crecer"></div>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                        @click="$emit('borrar-jugador', { href: jugador._links.self.href })">Borrar Jugador</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </template>
-
-
-
 
 <style scoped>
 .casilla {
@@ -126,5 +147,33 @@ export default {
 .btn-outline-warning:hover,
 .btn-outline-danger:hover {
     color: white;
+}
+
+.crecer {
+    flex-grow: 1;
+}
+
+.verdeclaro {
+    background-color: #70AD47;
+    color: white;
+    font-weight: 500;
+}
+
+.verdeoscuro {
+    background-color: #395623;
+    color: #CCCCCC;
+    font-weight: 500;
+    border: 1px;
+}
+
+.btn-outline-success:hover {
+    background-color: #70AD47 !important;
+    border-color: #70AD47;
+    color: white;
+}
+
+.btn-outline-success {
+    border-color: #395623;
+    color: #395623;
 }
 </style>
