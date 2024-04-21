@@ -11,6 +11,10 @@ export default {
     editando: {
       type: Boolean,
       default: false
+    },
+    viendo: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['formulario-relleno', 'formulario-actualizado'],
@@ -106,7 +110,7 @@ export default {
 <template>
   <div>
     <form @submit.prevent="enviarFormulario">
-      <div class="row mb-3">
+      <div class="row mb-3" v-if="!viendo">
         <div class="col-md-4" v-if="!editando">
           <label for="tipo" class="form-label">Tipo de Jugador:</label>
           <select class="form-select" id="tipo" v-model="tipo">
@@ -122,7 +126,7 @@ export default {
         </div>
       </div>
       <!-- Inputs de texto para otros campos -->
-      <div class="row mb-3">
+      <div class="row mb-3" v-if="!viendo">
         <div class="col-md-6">
           <label for="nombre" class="form-label">Nombre:</label>
           <input type="text" class="form-control" id="nombre" v-model="nombre" required>
@@ -141,7 +145,7 @@ export default {
         </div>
       </div>
       <!-- Controles específicos de tipo de jugador -->
-      <div v-if="tipo === 'principiante'" class="row mb-3">
+      <div v-if="!viendo && tipo === 'principiante'" class="row mb-3">
         <div class="col-md-6">
           <label for="puntuacionLargo" class="form-label">Precisión larga distancia: {{ puntuacionLargo }}%</label>
           <input type="range" class="form-range" id="puntuacionLargo" v-model="puntuacionLargo" min="0" max="100">
@@ -151,7 +155,7 @@ export default {
           <input type="range" class="form-range" id="puntuacionCorto" v-model="puntuacionCorto" min="0" max="100">
         </div>
       </div>
-      <div v-if="tipo === 'federado'" class="row mb-3">
+      <div v-if="!viendo && tipo === 'federado'" class="row mb-3">
         <div class="col-md-6">
           <label for="handicap" class="form-label">Handicap: {{ handicap }}</label>
           <input type="range" class="form-range" id="handicap" v-model="handicap" min="-40" max="100">
@@ -161,12 +165,52 @@ export default {
           <input type="checkbox" class="form-check-input" id="profesional" v-model="profesional">
         </div>
       </div>
+
+
+
+
+
+
+
+      <div class="casilla" v-if="viendo">
+        <tr class="jugador containerjugador ">
+          <td class="fl">
+            <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
+            <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
+            <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
+            <strong>{{ jugador.nombre }}
+              {{ jugador.apellido1 }}
+              {{ jugador.apellido2 }}</strong>
+
+          </td>
+          <td class="crecer"></td>
+        </tr>
+        <tr class="jugador containerjugador">
+          <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
+            <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
+              <span class="fl"> - DNI: {{ jugador.dni }}</span>
+              <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
+              <span v-if="jugador.tipo === 'federado'" class="fl"> - Su handicap es: {{ jugador.handicap }}</span>
+              <span v-if="jugador.tipo === 'principiante'" class="fl"> - Su handicap simulado es: {{ jugador.handicap.toFixed(1) }}</span>
+
+            </div>
+            <div class="d-flex">
+              <div class="crecer"></div>
+            </div>
+          </td>
+        </tr>
+      </div>
+
+
+
+
+
       <div class="row mb-3">
         <div class="col-md-6">
-          <button type="button" class="btn btn-secondary" @click="resetForm">Reset</button>
+          <button type="button" class="btn btn-secondary" @click="resetForm" v-if="!viendo">Reset</button>
         </div>
         <div class="col-md-6 d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary" v-if="!viendo">Guardar</button>
         </div>
       </div>
     </form>

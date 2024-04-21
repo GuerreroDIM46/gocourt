@@ -1,6 +1,7 @@
 <script>
-import Federado from "@/components/Federado.vue"
-import Principiante from "@/components/Principiante.vue"
+// import Federado from "@/components/Federado.vue"
+// import Principiante from "@/components/Principiante.vue"
+import Jugador from "@/components/Principiante.vue"
 import Formulario from "@/components/Formulario.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
@@ -9,7 +10,11 @@ import { Modal } from 'bootstrap'
 
 
 export default {
-  components: { Federado, Principiante, Formulario },
+  components: { 
+//    Federado, 
+//    Principiante, 
+    Jugador, 
+    Formulario },
   data() {
     return {
       tipoSeleccionado: 'todos',
@@ -18,7 +23,7 @@ export default {
       tamanoPagina: 5,
       jugadorActual: null,
       editando: false,
-      // viendo: false,
+      viendo: false,
       bsModal: null
     }
   },
@@ -45,6 +50,15 @@ export default {
     },
     jugadoresAPIStore() {           // para observar cambios en el store (debeRecargar)
       return useJugadoresAPIStore()
+    },
+    tituloModal() {
+      if (this.viendo) {
+        return 'Detalles de Jugador';
+      } else if (this.editando) {
+        return 'Editar Jugador';
+      } else {
+        return 'Nuevo Jugador';
+      }
     }
   },
   methods: {
@@ -55,14 +69,23 @@ export default {
       this.paginaActual = nuevaPagina
     },
     abrirModalCrear() {
-      this.jugadorActual = null;
-      this.editando = false;
-      this.bsModal.show();
+      this.jugadorActual = null
+      this.editando = false
+      this.viendo = false
+      this.bsModal.show()
     },
     abrirModalEditar(jugador) {
       this.jugadorActual = jugador;
       console.log("jugador a editar: ", jugador);
       this.editando = true
+      this.viendo = false
+      this.bsModal.show()
+    },
+    abrirModalVer(jugador) {
+      this.jugadorActual = jugador;
+      console.log("jugador a ver: ", jugador);
+      this.editando = false
+      this.viendo = true
       this.bsModal.show()
     },
     manejarFormulario(jugador) {
@@ -83,8 +106,9 @@ export default {
         console.log("Href recibido:", href)
         this.eliminarJugador(href)
     },
-    resetearPartidoyEditando() {
+    salirModal() {
       this.editando = false
+      this.viendo = false
       this.jugadorActual = null
       this.bsModal.hide()
     }
@@ -100,7 +124,7 @@ export default {
     'jugadoresAPIStore.debeRecargar': function(newValue) {
     if (newValue) {
       this.jugadoresAPIStore.cargarFederados() // Ultra Feo
-      this.jugadoresAPIStore.cargarPrincipiantes()
+      this.jugadoresAPIStore.cargarPrincipiantes()  // Funciona, es lo que hay
       this.jugadoresAPIStore.actualizarTodosJugadores()
       this.jugadoresAPIStore.resetRecarga()
       console.log("Recargando jugadores...")
@@ -165,12 +189,21 @@ export default {
           </button>
         </td>
       </tr>
-      <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
+      <!-- <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
         <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" 
           :jugador="jugador"
           @editar-jugador="abrirModalEditar(jugador)"
+          @ver-jugador="abrirModalVer(jugador)"
           @borrar-jugador="borrarJugador"
           ></component>
+      </tr> -->
+      <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
+        <Jugador 
+          :jugador="jugador"
+          @editar-jugador="abrirModalEditar(jugador)"
+          @ver-jugador="abrirModalVer(jugador)"
+          @borrar-jugador="borrarJugador"
+          ></Jugador>
       </tr>
     </table>
     <!-- Modal -->
@@ -178,14 +211,14 @@ export default {
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header verdeclaro">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ editando ? 'Editar Jugador' : 'Nuevo Jugador' }}</h1>
-            <button type="button" class="btn btn-danger ms-auto" @click="resetearPartidoyEditando" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ tituloModal }}</h1>
+            <button type="button" class="btn btn-danger ms-auto" @click="salirModal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
           </div>
           <div class="modal-body">
             <Formulario 
               :jugador="jugadorActual" 
               :editando="editando"
-              
+              :viendo="viendo"
               @formulario-relleno="manejarFormulario" 
               @formulario-actualizado="manejarFormulario"
               ></Formulario>

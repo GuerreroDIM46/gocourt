@@ -2,10 +2,13 @@
 
 export default {
     props: ['jugador'],
-    emits: ['editar-jugador', 'borrar-jugador'],
+    emits: ['editar-jugador', 'borrar-jugador', 'ver-jugador'],
     methods: {
         editarJugador() {
             this.$emit('editar-jugador', this.jugador)
+        },
+        verJugador() {
+            this.$emit('ver-jugador', this.jugador)
         },
     }
 }
@@ -54,7 +57,7 @@ export default {
                 <!-- Contenedor para los botones, siempre en una sola fila -->
                 <div class="d-flex">
                     <div class="crecer"></div>
-                    <button type="button" class="btn btn-outline-info mr-1">
+                    <button type="button" class="btn btn-outline-info mr-1" @click="verJugador">
                         <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icono-fontawesome" size="lg" />
                     </button>
                     <button type="button" class="btn btn-outline-warning mr-1">

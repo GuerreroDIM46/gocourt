@@ -4,30 +4,36 @@ export default {
     emits: ['editar-jugador', 'borrar-jugador', 'ver-jugador'],
     methods: {
         editarJugador() {
-            this.$emit('editar-jugador', this.jugador)
+            this.$emit('editar-jugador', this.jugador);
         },
         verJugador() {
-            this.$emit('ver-jugador', this.jugador)
+            this.$emit('ver-jugador', this.jugador);
         },
     }
 }
 </script>
 
-<template>
+<!-- <template>
     <div class="casilla">
-        <tr class="jugador containerjugador ">
+        <tr class="jugador containerjugador">
             <td class="fl">
-                <div class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
                 <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
-                <strong>{{ jugador.nombre }}
-                    {{ jugador.apellido1 }}
-                    {{ jugador.apellido2 }}</strong>
-
+                <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
             </td>
             <td class="crecer"></td>
-            <td>
+            <td v-if="jugador.tipo === 'federado'" class="align-middle">
                 <button type="button" class="btn btn-outline-secondary" disabled>
                     Handicap: {{ jugador.handicap.toFixed(1) }}
+                </button>
+            </td>
+            <td v-if="jugador.tipo === 'principiante'" class="align-middle">
+                <button type="button" class="btn btn-outline-primary" disabled>
+                    PL: {{ jugador.puntuacionLargo }}
+                </button>
+                <button type="button" class="btn btn-outline-primary" disabled>
+                    PC: {{ jugador.puntuacionCorto }}
                 </button>
             </td>
         </tr>
@@ -45,15 +51,15 @@ export default {
                     <button type="button" class="btn btn-outline-warning mr-1" @click="editarJugador">
                         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />
                     </button>
-                    <button type="button" class="btn btn-outline-danger"
-                        @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
+                    <button type="button" class="btn btn-outline-danger" @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
                         <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
                     </button>
                 </div>
             </td>
         </tr>
     </div>
-</template>
+</template> -->
+
 
 
 
