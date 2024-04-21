@@ -1,5 +1,11 @@
-import { defineStore } from 'pinia'
-import { getFederados, getPrincipiantes } from '@/stores/APIservice'
+import { defineStore } from 'pinia';
+import {
+    getFederados,
+    getPrincipiantes,
+    postJugador,
+    putJugador,
+    deleteJugador
+} from '@/stores/APIservice';
 
 export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
     state: () => ({
@@ -11,37 +17,72 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
     }),
     actions: {
         async cargarFederados() {
-            this.federadosCargados = false;
-            await getFederados().then((response) => {
-                if (response.data._embedded) {
-                    const federadosConTipo = response.data._embedded.federados.map(federado => ({
-                        ...federado,
-                        tipo: 'federado'
-                    }));
-                    this.federados = federadosConTipo;
-                }
+            const response = await getFederados();
+            if (response.data._embedded) {
+                const federadosConTipo = response.data._embedded.federados.map(federado => ({
+                    ...federado,
+                    tipo: 'federado'
+                }));
+                this.federados = federadosConTipo;
                 this.federadosCargados = true;
                 this.actualizarTodosJugadores();
-            });
+            }
         },
         async cargarPrincipiantes() {
-            this.principiantesCargados = false;
-            await getPrincipiantes().then((response) => {
-                if (response.data._embedded) {
-                    const principiantesConTipo = response.data._embedded.principiantes.map(principiante => ({
-                        ...principiante,
-                        tipo: 'principiante'
-                    }));
-                    this.principiantes = principiantesConTipo;
-                }
+            const response = await getPrincipiantes();
+            if (response.data._embedded) {
+                const principiantesConTipo = response.data._embedded.principiantes.map(principiante => ({
+                    ...principiante,
+                    tipo: 'principiante'
+                }));
+                this.principiantes = principiantesConTipo;
                 this.principiantesCargados = true;
                 this.actualizarTodosJugadores();
-            });
+            }
         },
         actualizarTodosJugadores() {
-            this.jugadores = [...this.federados, ...this.principiantes]
-                .sort((a, b) => a.nombre.localeCompare(b.nombre))
-                console.log("En el store: ", this.jugadores)
-        }
+            this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre));
+            
+        },
+        async crearJugador(jugador) {
+            console.log("Datos del jugador a enviar (JugadoresAPI): ", jugador)
+            const response = await postJugador(jugador);
+            const { data } = response
+            const { _links, ...jugadorCreado } = data;
+            console.log("Datos del jugador creado devuelto por la api: ", jugadorCreado);
+            if (response.status === 200 || response.status === 201) {
+                this.jugadores.push(jugadorCreado);
+                this.actualizarTodosJugadores();
+            }
+        },
+        async actualizarJugador(jugador) {
+            const { url, ...jugadorSinUrl } = jugador;
+            console.log('jugador enviado desde el store la api: ', jugadorSinUrl)
+            console.log('id de jugador (store): ', url)
+            const response = await putJugador(jugadorSinUrl, url);
+            console.log(response)
+            const index = this.jugadores.findIndex(j => j._links.self.href === url);
+            console.log('Índice del jugador a actualizar en el store: ', index);
+            if (index !== -1) {
+                // Actualiza el jugador en el array usando el índice
+                // Asumiendo que la respuesta de la API es el jugador actualizado, de lo contrario usa jugadorSinUrl
+                this.jugadores[index] = {
+                    ...this.jugadores[index], ...jugadorSinUrl
+                }
+                this.actualizarTodosJugadores();
+            }
+        },
+                
+        async eliminarJugador(jugadorId) {
+            console.log("En el store, jugador a borrar: ", jugadorId)
+            const response = await deleteJugador(jugadorId);
+            console.log("Respuesta de la api al borrar jugador: ", response)
+            if (response.status === 200) {
+                const index = this.jugadores.findIndex(p => p._links.self.href === jugadorId)
+            if (index !== -1) {
+                this.jugadores.splice(index, 1)
+                }
+            }
+        },
     }
 });

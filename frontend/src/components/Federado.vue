@@ -1,10 +1,13 @@
 <script>
 export default {
     props: ['jugador'],
-    emits: [],
-    methods: {}
+    emits: ['editar-jugador', 'borrar-jugador'],
+    methods: {
+        editarJugador() {
+            this.$emit('editar-jugador', this.jugador);
+        },
+    }
 }
-
 </script>
 
 <template>
@@ -16,45 +19,39 @@ export default {
                 <strong>{{ jugador.nombre }}
                     {{ jugador.apellido1 }}
                     {{ jugador.apellido2 }}</strong>
-                    
+
             </td>
             <td class="crecer"></td>
-            <!-- Handicap en formato botón con un decimal -->
             <td>
                 <button type="button" class="btn btn-outline-secondary" disabled>
-                    Handicap: {{ jugador.handicap }}
+                    Handicap: {{ jugador.handicap.toFixed(1) }}
                 </button>
             </td>
         </tr>
-
-        <!-- Segunda fila con DNI, club y acciones -->
         <tr class="jugador containerjugador">
-            <!-- Ajusta las columnas para ser responsivas -->
             <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
-                <!-- Agrupa DNI y campo en un contenedor para mejor control -->
                 <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
                     <span class="fl"> - DNI: {{ jugador.dni }}</span>
                     <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
                 </div>
-                <!-- Contenedor para los botones, siempre en una sola fila -->
                 <div class="d-flex">
                     <div class="crecer"></div>
                     <button type="button" class="btn btn-outline-info mr-1">
                         <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icono-fontawesome" size="lg" />
                     </button>
-                    <button type="button" class="btn btn-outline-warning mr-1">
+                    <button type="button" class="btn btn-outline-warning mr-1" @click="editarJugador">
                         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />
                     </button>
-                    <button type="button" class="btn btn-outline-danger">
+                    <button type="button" class="btn btn-outline-danger"
+                        @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
                         <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
                     </button>
                 </div>
             </td>
         </tr>
-
     </div>
-
 </template>
+
 
 
 <style scoped>

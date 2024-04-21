@@ -15,8 +15,7 @@ export const useCamposAPIStore = defineStore('camposAPI', {
                     const campos = response.data._embedded.campos
                     this.campos = campos
                 }
-                this.camposCargados = true
-                console.log("En el store: ", this.campos)
+                this.camposCargados = true                
             })
         },
     }

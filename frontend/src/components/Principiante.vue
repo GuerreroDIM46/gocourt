@@ -2,8 +2,12 @@
 
 export default {
     props: ['jugador'],
-    emits: [],
-    methods: {}
+    emits: ['editar-jugador', 'borrar-jugador'],
+    methods: {
+        editarJugador() {
+                        this.$emit('editar-jugador', this.jugador)
+        },
+    }
 }
 
 
@@ -54,9 +58,9 @@ export default {
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icono-fontawesome" size="lg" />
             </button>
             <button type="button" class="btn btn-outline-warning mr-1">
-                <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome" size="lg" />
+                <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome"  @click="editarJugador" size="lg" />
             </button>
-            <button type="button" class="btn btn-outline-danger">
+            <button type="button" class="btn btn-outline-danger" @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
                 <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
             </button>
         </div>

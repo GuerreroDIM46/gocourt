@@ -5,6 +5,8 @@ import Formulario from "@/components/Formulario.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
+import { Modal } from 'bootstrap'; 
+
 
 export default {
   components: { Federado, Principiante, Formulario },
@@ -13,7 +15,10 @@ export default {
       tipoSeleccionado: 'todos',
       campoSeleccionado: 'todos',
       paginaActual: 1,
-      tamanoPagina: 20
+      tamanoPagina: 5,
+      jugadorActual: null,
+      editando: false,
+      bsModal: null
     }
   },
   computed: {
@@ -39,12 +44,47 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes']),
+    ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes', 'crearJugador', 'actualizarJugador', 'eliminarJugador']),
     ...mapActions(useCamposAPIStore, ['cargarCampos']),
     cambiarPagina(nuevaPagina) {
       if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return;
-      this.paginaActual = nuevaPagina
+      this.paginaActual = nuevaPagina;
     },
+    abrirModalCrear() {
+      this.jugadorActual = null;
+      this.editando = false;
+      this.bsModal.show();
+    },
+    abrirModalEditar(jugador) {
+      this.jugadorActual = jugador;
+      console.log("jugador a editar: ", jugador);
+      this.editando = true;
+      this.bsModal.show();
+    },
+    manejarFormulario(jugador) {
+      if (this.editando) {
+        console.log("jugador actualizado (componente Jugadores.vue): ", jugador);
+        this.actualizarJugador(jugador).then(() => {
+          this.bsModal.hide();
+        });
+      } else {
+        this.crearJugador(jugador).then(() => {
+          this.bsModal.hide();
+        });
+      }
+    },
+    borrarJugador({ href }) {
+      // Imprime los valores recibidos en la consola del navegador
+        console.log("Href recibido:", href);
+        // Llama a eliminarJugador con los parámetros recibidos
+        this.eliminarJugador(href);
+    },
+    resetearPartidoyEditando() {
+      this.editando = false
+      this.jugadorActual = null
+      this.bsModal.hide()
+    }
+
   },
   watch: {
     tipoSeleccionado(newVal, oldVal) {
@@ -55,9 +95,11 @@ export default {
     }
   },
   mounted() {
-    this.cargarFederados()
-    this.cargarPrincipiantes()
-    this.cargarCampos()
+    this.cargarFederados();
+    this.cargarPrincipiantes();
+    this.cargarCampos();
+    let modalElement = this.$refs.formularioModal;
+    this.bsModal = new Modal(modalElement);
   }
 }
 </script>
@@ -65,22 +107,33 @@ export default {
 <template>
   <div class="container">
     <table class="card">
-      <tr class="card-header ">
+      <tr class="card-header">
         <td class="flexmio">
-          <!-- Paginación  -->
+          <!-- Paginación -->
           <ul class="pagination me-2 mb-2">
+            <!-- Primera Página -->
             <li class="page-item" :class="{ disabled: paginaActual === 1 }">
-              <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)">Previous</a>
+              <a class="page-link" href="#" @click="cambiarPagina(1)"><font-awesome-icon :icon="['fas', 'angle-double-left']" /></a>
             </li>
-            <li class="page-item" v-for="n in totalPaginas" :key="n" :class="{ active: n === paginaActual }">
-              <a class="page-link" href="#" @click="cambiarPagina(n)">{{ n }}</a>
+            <!-- Página Anterior -->
+            <li class="page-item" :class="{ disabled: paginaActual === 1 }">
+              <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)"><font-awesome-icon :icon="['fas', 'angle-left']" /></a>
             </li>
+            <!-- Página Actual -->
+            <li class="page-item active">
+              <a class="page-link" href="#">{{ paginaActual }}</a>
+            </li>
+            <!-- Página Siguiente -->
             <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
-              <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)">Next</a>
+              <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)"><font-awesome-icon :icon="['fas', 'angle-right']" /></a>
+            </li>
+            <!-- Última Página -->
+            <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
+              <a class="page-link" href="#" @click="cambiarPagina(totalPaginas)"><font-awesome-icon :icon="['fas', 'angle-double-right']" /></a>
             </li>
           </ul>
           <!-- Select para filtrar campos -->
-          <select v-model="this.campoSeleccionado" class="form-select selectauto me-2 mb-2">
+          <select v-model="campoSeleccionado" class="form-select selectauto me-2 mb-2">
             <option value="todos">Todos los campos</option>
             <option v-for="campo in campos" :value="campo.nombre" :key="campo._links.self.href">
               {{ campo.nombre }}
@@ -92,45 +145,42 @@ export default {
             <option value="federado">Federado</option>
             <option value="principiante">Principiante</option>
           </select>
-          <!-- Botón Nuevo Jugador, ahora alineado a la derecha -->
-          <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-            class="btn btn-outline-success btn-no-wrap me-2 mb-2 ms-auto" style="display: flex; align-items: center;">
-            <span class="btn-text" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-              Nuevo Jugador
-            </span>
-            <font-awesome-icon class="" :icon="['fas', 'user-plus']" />
+          <!-- Botón Nuevo Jugador -->
+          <button type="button" @click="abrirModalCrear" class="btn btn-outline-success btn-no-wrap me-2 mb-2 ms-auto">
+            <span class="btn-text">Nuevo Jugador</span>
+            <font-awesome-icon :icon="['fas', 'user-plus']" />
           </button>
         </td>
       </tr>
       <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
-        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" :jugador="jugador"></component>
+        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" 
+          :jugador="jugador"
+          @editar-jugador="abrirModalEditar(jugador)"
+          @borrar-jugador="borrarJugador"
+          ></component>
       </tr>
     </table>
-  </div>
-
-
-  <!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" ref="formularioModal" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header verdeclaro">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel"><font-awesome-icon :icon="['fas', 'pen-to-square']"
-              class="icono-fontawesome" size="lg" /> Jugador</h1>
-          <div class="crecer"></div>
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"><font-awesome-icon
-              :icon="['fas', 'xmark']" size="lg" /></button>
-        </div>
-        <div class="modal-body">
-          <Formulario></Formulario>
-        </div>
-        <div class="modal-footer verdeoscuro">
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" ref="formularioModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header verdeclaro">
+            <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ editando ? 'Editar Jugador' : 'Nuevo Jugador' }}</h1>
+            <button type="button" class="btn btn-danger ms-auto" @click="resetearPartidoyEditando" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+          </div>
+          <div class="modal-body">
+            <Formulario 
+              :jugador="jugadorActual" 
+              :editando="editando" 
+              @formulario-relleno="manejarFormulario" 
+              @formulario-actualizado="manejarFormulario"
+              ></Formulario>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-
 
 
 <style scoped>
@@ -148,7 +198,6 @@ export default {
 
 .btn-no-wrap {
   display: flex;
-  /* Asegura la alineación correcta de icono y texto */
   align-items: center;
 }
 
@@ -157,7 +206,6 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-grow: 1;
-  /* Opcional: permite que el texto ocupe el espacio disponible */
 }
 
 .centrar {

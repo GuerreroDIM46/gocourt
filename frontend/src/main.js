@@ -11,11 +11,11 @@ import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons' //iconos de muestra
-import { faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons' //iconos de muestra
+import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons' //iconos de muestra
+import { faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons' 
 
 
-library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark)
+library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight)
 
 
 
