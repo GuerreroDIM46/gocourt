@@ -34,6 +34,6 @@ export default {
 
 <style scoped>
 .read-the-docs {
-  color: #888;
+    color: #888;
 }
 </style>

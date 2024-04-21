@@ -5,7 +5,7 @@ export default {
     emits: ['editar-jugador', 'borrar-jugador'],
     methods: {
         editarJugador() {
-                        this.$emit('editar-jugador', this.jugador)
+            this.$emit('editar-jugador', this.jugador)
         },
     }
 }
@@ -44,28 +44,30 @@ export default {
 
         <!-- Segunda fila con DNI, club y acciones -->
         <tr class="jugador containerjugador">
-    <!-- Ajusta las columnas para ser responsivas -->
-    <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
-        <!-- Agrupa DNI y campo en un contenedor para mejor control -->
-        <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
-            <span class="fl"> - DNI: {{ jugador.dni }}</span>
-            <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
-        </div>
-        <!-- Contenedor para los botones, siempre en una sola fila -->
-        <div class="d-flex">
-            <div class="crecer"></div>
-            <button type="button" class="btn btn-outline-info mr-1">
-                <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icono-fontawesome" size="lg" />
-            </button>
-            <button type="button" class="btn btn-outline-warning mr-1">
-                <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome"  @click="editarJugador" size="lg" />
-            </button>
-            <button type="button" class="btn btn-outline-danger" @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
-                <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
-            </button>
-        </div>
-    </td>
-</tr>
+            <!-- Ajusta las columnas para ser responsivas -->
+            <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
+                <!-- Agrupa DNI y campo en un contenedor para mejor control -->
+                <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
+                    <span class="fl"> - DNI: {{ jugador.dni }}</span>
+                    <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
+                </div>
+                <!-- Contenedor para los botones, siempre en una sola fila -->
+                <div class="d-flex">
+                    <div class="crecer"></div>
+                    <button type="button" class="btn btn-outline-info mr-1">
+                        <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="icono-fontawesome" size="lg" />
+                    </button>
+                    <button type="button" class="btn btn-outline-warning mr-1">
+                        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="icono-fontawesome"
+                            @click="editarJugador" size="lg" />
+                    </button>
+                    <button type="button" class="btn btn-outline-danger"
+                        @click="$emit('borrar-jugador', { href: jugador._links.self.href })">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="icono-fontawesome" size="lg" />
+                    </button>
+                </div>
+            </td>
+        </tr>
     </div>
 </template>
 

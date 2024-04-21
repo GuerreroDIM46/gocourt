@@ -4,7 +4,7 @@ export default {
     emits: ['editar-jugador', 'borrar-jugador'],
     methods: {
         editarJugador() {
-            this.$emit('editar-jugador', this.jugador);
+            this.$emit('editar-jugador', this.jugador)
         },
     }
 }
@@ -57,11 +57,8 @@ export default {
 <style scoped>
 .casilla {
     border-bottom: 1px solid #ccc;
-    /* Añade una línea gris claro como separador */
     padding-bottom: 8px;
-    /* Opcional, añade espacio debajo del contenido antes del borde */
     margin-bottom: 10px;
-    /* Opcional, añade espacio después del borde */
 }
 
 .containerjugador {

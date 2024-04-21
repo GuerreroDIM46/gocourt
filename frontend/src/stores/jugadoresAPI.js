@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 import {
     getFederados,
     getPrincipiantes,
     postJugador,
     putJugador,
     deleteJugador
-} from '@/stores/APIservice';
+} from '@/stores/APIservice'
 
 export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
     state: () => ({
@@ -14,6 +14,7 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         jugadores: [],
         federadosCargados: false,
         principiantesCargados: false,
+        debeRecargar: false,   // para el watcher despues de crear o actualizar
     }),
     actions: {
         async cargarFederados() {
@@ -23,9 +24,9 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                     ...federado,
                     tipo: 'federado'
                 }));
-                this.federados = federadosConTipo;
-                this.federadosCargados = true;
-                this.actualizarTodosJugadores();
+                this.federados = federadosConTipo
+                this.federadosCargados = true
+                this.actualizarTodosJugadores()
             }
         },
         async cargarPrincipiantes() {
@@ -36,46 +37,46 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                     tipo: 'principiante'
                 }));
                 this.principiantes = principiantesConTipo;
-                this.principiantesCargados = true;
-                this.actualizarTodosJugadores();
+                this.principiantesCargados = true
+                this.actualizarTodosJugadores()
             }
         },
         actualizarTodosJugadores() {
-            this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre));
+            this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre))
             
         },
         async crearJugador(jugador) {
             console.log("Datos del jugador a enviar (JugadoresAPI): ", jugador)
-            const response = await postJugador(jugador);
+            const response = await postJugador(jugador)
             const { data } = response
-            const { _links, ...jugadorCreado } = data;
-            console.log("Datos del jugador creado devuelto por la api: ", jugadorCreado);
+            const { _links, ...jugadorCreado } = data
+            console.log("Datos del jugador creado devuelto por la api: ", jugadorCreado)
             if (response.status === 200 || response.status === 201) {
-                this.jugadores.push(jugadorCreado);
-                this.actualizarTodosJugadores();
+                this.jugadores.push(jugadorCreado)
+                this.actualizarTodosJugadores()
+                this.debeRecargar = true
             }
         },
         async actualizarJugador(jugador) {
             const { url, ...jugadorSinUrl } = jugador;
             console.log('jugador enviado desde el store la api: ', jugadorSinUrl)
             console.log('id de jugador (store): ', url)
-            const response = await putJugador(jugadorSinUrl, url);
+            const response = await putJugador(jugadorSinUrl, url)
             console.log(response)
-            const index = this.jugadores.findIndex(j => j._links.self.href === url);
-            console.log('Índice del jugador a actualizar en el store: ', index);
+            const index = this.jugadores.findIndex(j => j._links.self.href === url)
+            console.log('Índice del jugador a actualizar en el store: ', index)
             if (index !== -1) {
-                // Actualiza el jugador en el array usando el índice
-                // Asumiendo que la respuesta de la API es el jugador actualizado, de lo contrario usa jugadorSinUrl
                 this.jugadores[index] = {
                     ...this.jugadores[index], ...jugadorSinUrl
                 }
                 this.actualizarTodosJugadores();
+                this.debeRecargar = true
             }
         },
                 
         async eliminarJugador(jugadorId) {
             console.log("En el store, jugador a borrar: ", jugadorId)
-            const response = await deleteJugador(jugadorId);
+            const response = await deleteJugador(jugadorId)
             console.log("Respuesta de la api al borrar jugador: ", response)
             if (response.status === 200) {
                 const index = this.jugadores.findIndex(p => p._links.self.href === jugadorId)
@@ -84,5 +85,9 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                 }
             }
         },
+        resetRecarga() {
+            this.debeRecargar = false;
+            console.log("he accedido a reset recarga")
+        }
     }
-});
+})

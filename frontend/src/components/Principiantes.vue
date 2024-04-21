@@ -1,10 +1,10 @@
 
 <script>
-import navbar2 from "@/components/navbar2.vue";
-import Principiante from "@/components/Principiante.vue";
+import navbar2 from "@/components/navbar2.vue"
+import Principiante from "@/components/Principiante.vue"
 import FormularioPrincipiante from '@/components/FormularioPricipiante.vue'
-import { useJugadoresAPIStore } from '@/stores/jugadoresAPI';
-import { mapState, mapActions } from 'pinia';
+import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
+import { mapState, mapActions } from 'pinia'
 
 export default {
   components: { navbar2, Principiante, FormularioPrincipiante },
@@ -17,22 +17,22 @@ export default {
   computed: {
       ...mapState(useJugadoresAPIStore, ['principiantes']),
       principiantesPaginados() {
-          const inicio = (this.paginaActual - 1) * this.elementosPorPagina;
-          const fin = inicio + this.elementosPorPagina;
-          return this.principiantes.slice(inicio, fin);
+          const inicio = (this.paginaActual - 1) * this.elementosPorPagina
+          const fin = inicio + this.elementosPorPagina
+          return this.principiantes.slice(inicio, fin)
       },
       totalPaginas() {
-          return Math.ceil(this.principiantes.length / this.elementosPorPagina);
+          return Math.ceil(this.principiantes.length / this.elementosPorPagina)
       }
   },
   methods: {
     ...mapActions(useJugadoresAPIStore, ['cargarPrincipiantes']),
     cambiarPagina(pagina) {
-      this.paginaActual = pagina;
+      this.paginaActual = pagina
     }
   },
   mounted() {
-    this.cargarPrincipiantes();
+    this.cargarPrincipiantes()
   }
 }
 </script>

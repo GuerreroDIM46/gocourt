@@ -5,7 +5,7 @@ import Formulario from "@/components/Formulario.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
-import { Modal } from 'bootstrap'; 
+import { Modal } from 'bootstrap'
 
 
 export default {
@@ -18,6 +18,7 @@ export default {
       tamanoPagina: 5,
       jugadorActual: null,
       editando: false,
+      // viendo: false,
       bsModal: null
     }
   },
@@ -25,30 +26,33 @@ export default {
     ...mapState(useJugadoresAPIStore, ['jugadores']),
     ...mapState(useCamposAPIStore, ['campos']),
     jugadoresFiltrados() {
-      let filtrados = this.jugadores;
+      let filtrados = this.jugadores
       if (this.tipoSeleccionado !== 'todos') {
-        filtrados = filtrados.filter(jugador => jugador.tipo === this.tipoSeleccionado);
+        filtrados = filtrados.filter(jugador => jugador.tipo === this.tipoSeleccionado)
       }
       if (this.campoSeleccionado !== 'todos') {
-        filtrados = filtrados.filter(jugador => jugador.nombreCampo === this.campoSeleccionado);
+        filtrados = filtrados.filter(jugador => jugador.nombreCampo === this.campoSeleccionado)
       }
       return filtrados;
     },
     jugadoresPaginados() {
-      const start = (this.paginaActual - 1) * this.tamanoPagina;
-      const end = start + this.tamanoPagina;
-      return this.jugadoresFiltrados.slice(start, end);
+      const start = (this.paginaActual - 1) * this.tamanoPagina
+      const end = start + this.tamanoPagina
+      return this.jugadoresFiltrados.slice(start, end)
     },
     totalPaginas() {
-      return Math.ceil(this.jugadoresFiltrados.length / this.tamanoPagina);
+      return Math.ceil(this.jugadoresFiltrados.length / this.tamanoPagina)
+    },
+    jugadoresAPIStore() {           // para observar cambios en el store (debeRecargar)
+      return useJugadoresAPIStore()
     }
   },
   methods: {
     ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes', 'crearJugador', 'actualizarJugador', 'eliminarJugador']),
     ...mapActions(useCamposAPIStore, ['cargarCampos']),
     cambiarPagina(nuevaPagina) {
-      if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return;
-      this.paginaActual = nuevaPagina;
+      if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return
+      this.paginaActual = nuevaPagina
     },
     abrirModalCrear() {
       this.jugadorActual = null;
@@ -58,26 +62,26 @@ export default {
     abrirModalEditar(jugador) {
       this.jugadorActual = jugador;
       console.log("jugador a editar: ", jugador);
-      this.editando = true;
-      this.bsModal.show();
+      this.editando = true
+      this.bsModal.show()
     },
     manejarFormulario(jugador) {
       if (this.editando) {
-        console.log("jugador actualizado (componente Jugadores.vue): ", jugador);
+        console.log("jugador actualizado (componente Jugadores.vue): ", jugador)
         this.actualizarJugador(jugador).then(() => {
-          this.bsModal.hide();
-        });
+          this.bsModal.hide()
+          this.editando = false
+          this.jugadorActual = null
+        })
       } else {
         this.crearJugador(jugador).then(() => {
-          this.bsModal.hide();
-        });
+          this.bsModal.hide()
+        })
       }
     },
     borrarJugador({ href }) {
-      // Imprime los valores recibidos en la consola del navegador
-        console.log("Href recibido:", href);
-        // Llama a eliminarJugador con los parámetros recibidos
-        this.eliminarJugador(href);
+        console.log("Href recibido:", href)
+        this.eliminarJugador(href)
     },
     resetearPartidoyEditando() {
       this.editando = false
@@ -88,18 +92,27 @@ export default {
   },
   watch: {
     tipoSeleccionado(newVal, oldVal) {
-      if (newVal !== oldVal) this.paginaActual = 1;
+      if (newVal !== oldVal) this.paginaActual = 1
     },
     campoSeleccionado(newVal, oldVal) {
-      if (newVal !== oldVal) this.paginaActual = 1;
+      if (newVal !== oldVal) this.paginaActual = 1
+    },
+    'jugadoresAPIStore.debeRecargar': function(newValue) {
+    if (newValue) {
+      this.jugadoresAPIStore.cargarFederados() // Ultra Feo
+      this.jugadoresAPIStore.cargarPrincipiantes()
+      this.jugadoresAPIStore.actualizarTodosJugadores()
+      this.jugadoresAPIStore.resetRecarga()
+      console.log("Recargando jugadores...")
     }
+  }
   },
   mounted() {
-    this.cargarFederados();
-    this.cargarPrincipiantes();
-    this.cargarCampos();
-    let modalElement = this.$refs.formularioModal;
-    this.bsModal = new Modal(modalElement);
+    this.cargarFederados()
+    this.cargarPrincipiantes()
+    this.cargarCampos()
+    let modalElement = this.$refs.formularioModal
+    this.bsModal = new Modal(modalElement)
   }
 }
 </script>
@@ -171,7 +184,8 @@ export default {
           <div class="modal-body">
             <Formulario 
               :jugador="jugadorActual" 
-              :editando="editando" 
+              :editando="editando"
+              
               @formulario-relleno="manejarFormulario" 
               @formulario-actualizado="manejarFormulario"
               ></Formulario>

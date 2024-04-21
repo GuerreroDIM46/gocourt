@@ -1,6 +1,6 @@
 <script>
-import { mapState, mapActions } from 'pinia';
-import { useCamposAPIStore } from '@/stores/camposAPI';
+import { mapState, mapActions } from 'pinia'
+import { useCamposAPIStore } from '@/stores/camposAPI'
 
 export default {
   props: {
@@ -85,20 +85,20 @@ export default {
       this.resetForm();
     },
     resetForm() {
-      this.tipo = 'principiante';
-      this.nombre = '';
-      this.apellido1 = '';
-      this.apellido2 = '';
-      this.dni = '';
-      this.profesional = false;
-      this.handicap = 0;
-      this.puntuacionLargo = 0;
-      this.puntuacionCorto = 0;
-      this.campoSeleccionado = this.campos[0] || null;
+      this.tipo = 'principiante'
+      this.nombre = ''
+      this.apellido1 = ''
+      this.apellido2 = ''
+      this.dni = ''
+      this.profesional = false
+      this.handicap = 0
+      this.puntuacionLargo = 0
+      this.puntuacionCorto = 0
+      this.campoSeleccionado = this.campos[0] || null
     }
   },
   mounted() {
-    this.cargarCampos();
+    this.cargarCampos()
   }
 }
 </script>
@@ -166,7 +166,7 @@ export default {
           <button type="button" class="btn btn-secondary" @click="resetForm">Reset</button>
         </div>
         <div class="col-md-6 d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary">Enviar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
       </div>
     </form>
