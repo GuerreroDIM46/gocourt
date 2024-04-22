@@ -18,6 +18,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.RepositorySearchesResource;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,6 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 import es.mde.entidades.Federado;
 import es.mde.entidades.Jugador;
 import es.mde.entidades.Principiante;
+
 
 
 /**
@@ -74,20 +76,24 @@ public class ConfiguracionRest {
             @Override
             public RepositorySearchesResource process(RepositorySearchesResource searchResource) {
                 if (controllersRegistrados.containsKey(searchResource.getDomainType())) {
-                    Method[] metodos = controllersRegistrados.get(searchResource.getDomainType()).getDeclaredMethods();
+                    Class<?> controller = controllersRegistrados.get(searchResource.getDomainType());
+                    Method[] metodos = controller.getDeclaredMethods();
+                    URI uriController = linkTo(controller).toUri();
+                    String controllerPath = config.getBasePath() + uriController.getPath();
                     for (Method m : metodos) {
-                        if (!m.isAnnotationPresent(ResponseBody.class)) {
+                        if (!m.isAnnotationPresent(ResponseBody.class) || !m.isAnnotationPresent(GetMapping.class)) {
                             continue;
                         }
                         try {
-                            URI uri = linkTo(m).toUri();
-                            String path = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(),
-                                    config.getBasePath() + uri.getPath(), null, null).toString();
-                            path = URLDecoder.decode(path, "UTF-8");
+                            String pathMetodo = String.join("", m.getAnnotation(GetMapping.class).value());
+                            String pathRecurso = new URI(uriController.getScheme(), uriController.getUserInfo(),
+                                    uriController.getHost(), uriController.getPort(), controllerPath + pathMetodo, null,
+                                    null).toString();
                             String requestParams = Stream.of(m.getParameters())
                                     .filter(p -> p.isAnnotationPresent(RequestParam.class)).map(Parameter::getName)
                                     .collect(Collectors.joining(","));
-                            searchResource.add(Link.of(path + "{?" + requestParams + "}", m.getName()));
+                            searchResource.add(Link.of(
+                                    URLDecoder.decode(pathRecurso, "UTF-8") + "{?" + requestParams + "}", m.getName()));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -99,6 +105,7 @@ public class ConfiguracionRest {
 
         };
     }
+
 
     /**
      * Ver tambien <a href=

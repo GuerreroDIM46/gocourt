@@ -28,14 +28,13 @@ public class JugadorController {
     @GetMapping("/jugadores/search/jugadoresSinPaginacion")
     @ResponseBody
     public CollectionModel<PersistentEntityResource> getJugadoresSinPaginacion(PersistentEntityResourceAssembler assembler) {
-        System.err.println("prueba");
         List<Jugador> jugadores = jugadorDAO.getJugadoresSinPaginacion();
         return assembler.toCollectionModel(jugadores);
     }
     
     @GetMapping("/jugadores/search/jugadoresNivelSimilar")
     @ResponseBody
-    public CollectionModel<PersistentEntityResource> getJugadoresNivelSimilar(@RequestParam("id") Long id, PersistentEntityResourceAssembler assembler) {
+    public CollectionModel<PersistentEntityResource> getJugadoresNivelSimilar(@RequestParam Long id, PersistentEntityResourceAssembler assembler) {
         System.err.println("prueba");
         List<Jugador> jugadores = jugadorDAO.getJugadoresNivelSimilar(id);
         return assembler.toCollectionModel(jugadores);

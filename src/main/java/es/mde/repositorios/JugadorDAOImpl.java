@@ -44,10 +44,10 @@ public class JugadorDAOImpl implements JugadorDAOCustom{
             }
 
             if (indice > 0) {
-                jugadoresNivelSimilar.add(0, jugadoresPorHandicap.get(indice - 1));  // Añade en el índice 0 para mantener el orden
+                jugadoresNivelSimilar.add(0, jugadoresPorHandicap.get(indice - 1));  
             }
             if (indice > 1) {
-                jugadoresNivelSimilar.add(0, jugadoresPorHandicap.get(indice - 2));  // Añade en el índice 0 para mantener el orden
+                jugadoresNivelSimilar.add(0, jugadoresPorHandicap.get(indice - 2));  
             }
         }
         return jugadoresNivelSimilar;
