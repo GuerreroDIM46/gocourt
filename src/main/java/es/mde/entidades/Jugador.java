@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "TIPO")
 @DiscriminatorValue("JUGADOR")
-public class Jugador {
+public abstract class Jugador {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,8 @@ public class Jugador {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public abstract float getHandicap();
 
     public String getNombre() {
         return nombre;

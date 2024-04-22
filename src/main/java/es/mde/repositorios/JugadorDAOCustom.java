@@ -5,4 +5,7 @@ import es.mde.entidades.Jugador;
 
 public interface JugadorDAOCustom {
     List<Jugador> getJugadoresSinPaginacion();
+    
+    List<Jugador> getJugadoresNivelSimilar(Long id);
+    
 }

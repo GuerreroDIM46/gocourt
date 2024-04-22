@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.mde.entidades.Jugador;
 import es.mde.repositorios.JugadorDAO;
@@ -28,6 +30,14 @@ public class JugadorController {
     public CollectionModel<PersistentEntityResource> getJugadoresSinPaginacion(PersistentEntityResourceAssembler assembler) {
         System.err.println("prueba");
         List<Jugador> jugadores = jugadorDAO.getJugadoresSinPaginacion();
+        return assembler.toCollectionModel(jugadores);
+    }
+    
+    @GetMapping("/jugadores/search/jugadoresNivelSimilar")
+    @ResponseBody
+    public CollectionModel<PersistentEntityResource> getJugadoresNivelSimilar(@RequestParam("id") Long id, PersistentEntityResourceAssembler assembler) {
+        System.err.println("prueba");
+        List<Jugador> jugadores = jugadorDAO.getJugadoresNivelSimilar(id);
         return assembler.toCollectionModel(jugadores);
     }
 

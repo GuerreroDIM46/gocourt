@@ -19,7 +19,8 @@ public class Federado extends Jugador {
     public void setProfesional(boolean profesional) {
         this.profesional = profesional;
     }
-
+    
+    @Override
     public float getHandicap() {
         return handicap;
     }

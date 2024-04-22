@@ -26,8 +26,9 @@ public class Principiante extends Jugador {
     public void setPuntuacionCorto(float puntuacionCorto) {
         this.puntuacionCorto = puntuacionCorto;
     }
-
+    
+    @Override
     public float getHandicap() {
-        return (float) (49 + (72 * ((Math.log(30.0 / puntuacionLargo) + Math.log(70.0 / puntuacionCorto)))));
+        return (float) (49 + (72 * ((Math.log10(30.0 / puntuacionLargo) + Math.log10(70.0 / puntuacionCorto)))));
     }
 }
