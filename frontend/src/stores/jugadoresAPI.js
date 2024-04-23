@@ -14,7 +14,6 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         principiantes: [],
         jugadores: [],
         jugadoresSimilares: [],
-        jugadoresSimilaresCargados: false,
         federadosCargados: false,
         principiantesCargados: false,
         debeRecargar: false,   // para el watcher despues de crear o actualizar
@@ -57,11 +56,8 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                 const principiantesConTipo = principiantes.map(jugador => ({ ...jugador, tipo: 'principiante' }));
                 // Concatena los dos arrays
                 this.jugadoresSimilares = [...federadosConTipo, ...principiantesConTipo];
-                this.jugadoresSimilaresCargados = true;
-            } else {
-                this.jugadoresSimilaresCargados = false;
             }
-        }, 
+        },
         actualizarTodosJugadores() {
             this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre))
             

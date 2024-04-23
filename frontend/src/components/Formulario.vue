@@ -33,7 +33,7 @@ export default {
       handicap: 0,
       puntuacionLargo: '',
       puntuacionCorto: '',
-      url: ''
+      url:''
     }
   },
   computed: {
@@ -44,7 +44,7 @@ export default {
     jugador: {
       immediate: true,
       deep: true,
-      handler(nuevoValor) {
+      handler(nuevoValor, oldValor) {
         if (this.editando && nuevoValor) {
           this.tipo = nuevoValor.tipo
           this.nombre = nuevoValor.nombre
@@ -59,6 +59,9 @@ export default {
         } else {
           this.resetForm();
         }
+        if (this.viendo && nuevoValor) {
+          this.cargarJugadoresSimilares(nuevoValor);
+        }        
       }
     }
   },
@@ -72,7 +75,7 @@ export default {
         apellido1: this.apellido1,
         apellido2: this.apellido2,
         dni: this.dni,
-        campo: urlCampo,
+        campo: urlCampo,  
         tipo: this.tipo
       };
       if (this.tipo === 'federado') {
@@ -82,7 +85,7 @@ export default {
         nuevoJugador.puntuacionLargo = this.puntuacionLargo;
         nuevoJugador.puntuacionCorto = this.puntuacionCorto;
       }
-      if (this.editando && this.jugador._links.self.href) {
+      if(this.editando && this.jugador._links.self.href) {
         nuevoJugador.url = this.jugador._links.self.href
       }
       console.log("Datos del jugador a enviar (Formulario):", nuevoJugador);
@@ -106,22 +109,9 @@ export default {
       this.campoSeleccionado = this.campos[0] || null
     }
   },
-  watch: {
-    jugador: {
-      immediate: true,
-      deep: true,
-      handler(newJugador, oldJugador) {
-        if (this.viendo && newJugador && newJugador !== oldJugador) {
-          this.cargarJugadoresSimilares(newJugador);
-        }
-      }
-    }
-  },
   mounted() {
     this.cargarCampos()
-    if (this.jugador && this.jugador._links && this.jugador._links.self && this.jugador._links.self.href && this.viendo) {
-      this.cargarJugadoresSimilares(this.jugador);
-    }
+    // this.cargarJugadoresSimilares(this.jugador);
   }
 }
 </script>
@@ -184,8 +174,8 @@ export default {
           <input type="checkbox" class="form-check-input" id="profesional" v-model="profesional">
         </div>
       </div>
-      <!-- seccion viendo -->
-      <div class="casilla" v-if="viendo">
+<!-- seccion viendo -->
+<div class="casilla" v-if="viendo">
         <div>
           <div class="mb-2">
             <div class="jugador containerjugador">
@@ -230,11 +220,6 @@ export default {
 </template>
 
 <style scoped>
-.contenedorJugadores {
-  display: flex;
-  flex-direction: row;
-}
-
 .btn-primary {
   background-color: #70AD47 !important;
   border-color: #70AD47;
@@ -255,18 +240,5 @@ export default {
 .btn-secondary:hover {
   transform: scale(1.1);
   font-weight: 800;
-}
-
-.verdeclaro {
-  background-color: #70AD47;
-  color: white;
-  font-weight: 500;
-}
-
-.verdeoscuro {
-  background-color: #395623;
-  color: #CCCCCC;
-  font-weight: 500;
-  border: 1px;
 }
 </style>

@@ -8,6 +8,7 @@ const API_PRINCIPIANTES = host + 'principiantes';
 const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSinPaginacion';
 const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
 
+
 function llamadaAPI(method, body, path) {
     let config = {
         method: method ?? "get",
