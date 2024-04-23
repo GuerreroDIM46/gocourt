@@ -35,7 +35,6 @@ public class JugadorController {
     @GetMapping("/jugadores/search/jugadoresNivelSimilar")
     @ResponseBody
     public CollectionModel<PersistentEntityResource> getJugadoresNivelSimilar(@RequestParam Long id, PersistentEntityResourceAssembler assembler) {
-        System.err.println("prueba");
         List<Jugador> jugadores = jugadorDAO.getJugadoresNivelSimilar(id);
         return assembler.toCollectionModel(jugadores);
     }
