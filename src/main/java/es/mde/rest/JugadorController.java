@@ -38,5 +38,12 @@ public class JugadorController {
         List<Jugador> jugadores = jugadorDAO.getJugadoresNivelSimilar(id);
         return assembler.toCollectionModel(jugadores);
     }
+    
+    @GetMapping("/jugadores/search/federadosNivelSimilar")
+    @ResponseBody
+    public CollectionModel<PersistentEntityResource> getFederadosNivelSimilar(@RequestParam Long id, PersistentEntityResourceAssembler assembler) {
+        List<Jugador> jugadores2 = jugadorDAO.getFederadosNivelSimilar(id);
+        return assembler.toCollectionModel(jugadores2);
+    }
 
 }

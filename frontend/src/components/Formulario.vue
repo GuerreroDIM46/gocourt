@@ -111,7 +111,6 @@ export default {
   },
   mounted() {
     this.cargarCampos()
-    // this.cargarJugadoresSimilares(this.jugador);
   }
 }
 </script>

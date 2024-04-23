@@ -7,6 +7,7 @@ const API_FEDERADOSSINPAGINAR = host + 'federados/search/federadosSinPaginacion'
 const API_PRINCIPIANTES = host + 'principiantes';
 const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSinPaginacion';
 const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
+const API_FEDERADOSSIMILARES = host + 'federados/search/federadosNivelSimilar'
 
 
 function llamadaAPI(method, body, path) {
@@ -37,6 +38,12 @@ export function getPrincipiantes() {
 
 export function getJugadoresSimilares(id) {
     const url = `${API_JUGADORESSIMILARES}?id=${id}`;
+    console.log("lo que envia la funcion en APIservice es: ", url)
+    return llamadaAPI('get', null, url);
+}
+
+export function getFederadosSimilares(id) {
+    const url = `${API_FEDERADOSSIMILARES}?id=${id}`;
     console.log("lo que envia la funcion en APIservice es: ", url)
     return llamadaAPI('get', null, url);
 }

@@ -8,4 +8,6 @@ public interface JugadorDAOCustom {
     
     List<Jugador> getJugadoresNivelSimilar(Long id);
     
+    List<Jugador> getFederadosNivelSimilar(Long id);
+    
 }

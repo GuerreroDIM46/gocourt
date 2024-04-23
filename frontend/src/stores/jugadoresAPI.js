@@ -5,7 +5,8 @@ import {
     postJugador,
     putJugador,
     deleteJugador,
-    getJugadoresSimilares
+    getJugadoresSimilares,
+    getFederadosSimilares
 } from '@/stores/APIservice'
 
 export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
@@ -46,7 +47,12 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         async cargarJugadoresSimilares(jugador) {
             const jugadorId = jugador._links.self.href.split('/').pop()
             console.log("el jugadorId que le paso a quien sea es ", jugadorId)
-            const response = await getJugadoresSimilares(jugadorId)
+            let response;
+            if (jugador.tipo === 'federado') {
+                response = await getJugadoresSimilares(jugadorId);
+            } else if (jugador.tipo === 'principiante') {
+                response = await getFederadosSimilares(jugadorId);
+            }
             console.log(response)
             if (response && response.data && response.data._embedded) {
                 const federados = response.data._embedded.federados || [];
