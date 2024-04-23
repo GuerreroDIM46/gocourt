@@ -185,14 +185,6 @@ export default {
           </button>
         </td>
       </tr>
-      <!-- <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
-        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" 
-          :jugador="jugador"
-          @editar-jugador="abrirModalEditar(jugador)"
-          @ver-jugador="abrirModalVer(jugador)"
-          @borrar-jugador="borrarJugador"
-          ></component>
-      </tr> -->
       <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
         <Jugador 
           :jugador="jugador"
@@ -206,7 +198,7 @@ export default {
     <div class="modal fade" id="staticBackdrop" ref="formularioModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header verdeclaro">
+          <div class="modal-header verdeclaro" :class="{ 'verdeoscuro': viendo }">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ tituloModal }}</h1>
             <button type="button" class="btn btn-danger ms-auto" @click="salirModal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
           </div>

@@ -4,7 +4,8 @@ import {
     getPrincipiantes,
     postJugador,
     putJugador,
-    deleteJugador
+    deleteJugador,
+    getJugadoresSimilares
 } from '@/stores/APIservice'
 
 export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
@@ -12,6 +13,8 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         federados: [],
         principiantes: [],
         jugadores: [],
+        jugadoresSimilares: [],
+        jugadoresSimilaresCargados: false,
         federadosCargados: false,
         principiantesCargados: false,
         debeRecargar: false,   // para el watcher despues de crear o actualizar
@@ -41,6 +44,24 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                 this.actualizarTodosJugadores()
             }
         },
+        async cargarJugadoresSimilares(jugador) {
+            const jugadorId = jugador._links.self.href.split('/').pop()
+            console.log("el jugadorId que le paso a quien sea es ", jugadorId)
+            const response = await getJugadoresSimilares(jugadorId)
+            console.log(response)
+            if (response && response.data && response.data._embedded) {
+                const federados = response.data._embedded.federados || [];
+                const principiantes = response.data._embedded.principiantes || [];
+                // Añade un campo tipo a cada jugador para identificar si es federado o principiante
+                const federadosConTipo = federados.map(jugador => ({ ...jugador, tipo: 'federado' }));
+                const principiantesConTipo = principiantes.map(jugador => ({ ...jugador, tipo: 'principiante' }));
+                // Concatena los dos arrays
+                this.jugadoresSimilares = [...federadosConTipo, ...principiantesConTipo];
+                this.jugadoresSimilaresCargados = true;
+            } else {
+                this.jugadoresSimilaresCargados = false;
+            }
+        }, 
         actualizarTodosJugadores() {
             this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre))
             

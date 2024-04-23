@@ -6,6 +6,7 @@ const API_FEDERADOS = host + 'federados';
 const API_FEDERADOSSINPAGINAR = host + 'federados/search/federadosSinPaginacion';
 const API_PRINCIPIANTES = host + 'principiantes';
 const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSinPaginacion';
+const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
 
 function llamadaAPI(method, body, path) {
     let config = {
@@ -31,6 +32,12 @@ export function getFederados() {
 
 export function getPrincipiantes() {
     return llamadaAPI('get', null, API_PRINCIPIANTESSINPAGINAR);
+}
+
+export function getJugadoresSimilares(id) {
+    const url = `${API_JUGADORESSIMILARES}?id=${id}`;
+    console.log("lo que envia la funcion en APIservice es: ", url)
+    return llamadaAPI('get', null, url);
 }
 
 export function postJugador(jugador) {

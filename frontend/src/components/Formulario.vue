@@ -1,8 +1,11 @@
 <script>
+import JugadorSeleccionado from "@/components/JugadorSeleccionado.vue"
 import { mapState, mapActions } from 'pinia'
 import { useCamposAPIStore } from '@/stores/camposAPI'
+import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 
 export default {
+  components: { JugadorSeleccionado },
   props: {
     jugador: {
       type: Object,
@@ -30,11 +33,12 @@ export default {
       handicap: 0,
       puntuacionLargo: '',
       puntuacionCorto: '',
-      url:''
+      url: ''
     }
   },
   computed: {
-    ...mapState(useCamposAPIStore, ['campos'])
+    ...mapState(useCamposAPIStore, ['campos']),
+    ...mapState(useJugadoresAPIStore, ['jugadoresSimilares'])
   },
   watch: {
     jugador: {
@@ -60,6 +64,7 @@ export default {
   },
   methods: {
     ...mapActions(useCamposAPIStore, ['cargarCampos']),
+    ...mapActions(useJugadoresAPIStore, ['cargarJugadoresSimilares']),
     enviarFormulario() {
       const urlCampo = this.campoSeleccionado._links.self.href;
       const nuevoJugador = {
@@ -67,7 +72,7 @@ export default {
         apellido1: this.apellido1,
         apellido2: this.apellido2,
         dni: this.dni,
-        campo: urlCampo,  
+        campo: urlCampo,
         tipo: this.tipo
       };
       if (this.tipo === 'federado') {
@@ -77,7 +82,7 @@ export default {
         nuevoJugador.puntuacionLargo = this.puntuacionLargo;
         nuevoJugador.puntuacionCorto = this.puntuacionCorto;
       }
-      if(this.editando && this.jugador._links.self.href) {
+      if (this.editando && this.jugador._links.self.href) {
         nuevoJugador.url = this.jugador._links.self.href
       }
       console.log("Datos del jugador a enviar (Formulario):", nuevoJugador);
@@ -101,8 +106,22 @@ export default {
       this.campoSeleccionado = this.campos[0] || null
     }
   },
+  watch: {
+    jugador: {
+      immediate: true,
+      deep: true,
+      handler(newJugador, oldJugador) {
+        if (this.viendo && newJugador && newJugador !== oldJugador) {
+          this.cargarJugadoresSimilares(newJugador);
+        }
+      }
+    }
+  },
   mounted() {
     this.cargarCampos()
+    if (this.jugador && this.jugador._links && this.jugador._links.self && this.jugador._links.self.href && this.viendo) {
+      this.cargarJugadoresSimilares(this.jugador);
+    }
   }
 }
 </script>
@@ -165,46 +184,39 @@ export default {
           <input type="checkbox" class="form-check-input" id="profesional" v-model="profesional">
         </div>
       </div>
-
-
-
-
-
-
-
+      <!-- seccion viendo -->
       <div class="casilla" v-if="viendo">
-        <tr class="jugador containerjugador ">
-          <td class="fl">
-            <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
-            <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
-            <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
-            <strong>{{ jugador.nombre }}
-              {{ jugador.apellido1 }}
-              {{ jugador.apellido2 }}</strong>
-
-          </td>
-          <td class="crecer"></td>
-        </tr>
-        <tr class="jugador containerjugador">
-          <td class="d-flex flex-column flex-md-row align-items-md-center w-100">
-            <div class="d-flex flex-column mb-2 mb-md-0 flex-fill">
-              <span class="fl"> - DNI: {{ jugador.dni }}</span>
-              <span class="fl"> - Juega en: {{ jugador.nombreCampo }}</span>
-              <span v-if="jugador.tipo === 'federado'" class="fl"> - Su handicap es: {{ jugador.handicap }}</span>
-              <span v-if="jugador.tipo === 'principiante'" class="fl"> - Su handicap simulado es: {{ jugador.handicap.toFixed(1) }}</span>
-
+        <div>
+          <div class="mb-2">
+            <div class="jugador containerjugador">
+              <div class="fl">
+                <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
+                <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
+                <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
+              </div>
             </div>
-            <div class="d-flex">
-              <div class="crecer"></div>
+            <div class="jugador containerjugador">
+              <div class="fl"> - DNI: {{ jugador.dni }}</div>
             </div>
-          </td>
-        </tr>
+            <div class="jugador containerjugador">
+              <div class="fl"> - Juega en: {{ jugador.nombreCampo }}</div>
+            </div>
+            <div class="jugador containerjugador">
+              <div class="fl" v-if="jugador.tipo === 'federado'"> - Su handicap es: {{ jugador.handicap }}</div>
+              <div class="fl" v-if="jugador.tipo === 'principiante'"> - Su handicap simulado es: {{
+                jugador.handicap.toFixed(1) }}</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header verdeclaro"> Jugadores de Nivel Similar </div>
+            <ul class="list-group list-group-flush" v-for="similares in jugadoresSimilares" :key="similares._links.self.href">
+              <JugadorSeleccionado :jugador="similares"></JugadorSeleccionado>
+            </ul>
+          </div>
+        </div>
       </div>
-
-
-
-
-
+      <!-- fin viendo -->
       <div class="row mb-3">
         <div class="col-md-6">
           <button type="button" class="btn btn-secondary" @click="resetForm" v-if="!viendo">Reset</button>
@@ -218,6 +230,11 @@ export default {
 </template>
 
 <style scoped>
+.contenedorJugadores {
+  display: flex;
+  flex-direction: row;
+}
+
 .btn-primary {
   background-color: #70AD47 !important;
   border-color: #70AD47;
@@ -238,5 +255,18 @@ export default {
 .btn-secondary:hover {
   transform: scale(1.1);
   font-weight: 800;
+}
+
+.verdeclaro {
+  background-color: #70AD47;
+  color: white;
+  font-weight: 500;
+}
+
+.verdeoscuro {
+  background-color: #395623;
+  color: #CCCCCC;
+  font-weight: 500;
+  border: 1px;
 }
 </style>
