@@ -31,8 +31,8 @@ export default {
       dni: '',
       profesional: false,
       handicap: 0,
-      puntuacionLargo: '',
-      puntuacionCorto: '',
+      puntuacionLargo: 50,
+      puntuacionCorto: 50,
       url:''
     }
   },
@@ -104,8 +104,8 @@ export default {
       this.dni = ''
       this.profesional = false
       this.handicap = 0
-      this.puntuacionLargo = 0
-      this.puntuacionCorto = 0
+      this.puntuacionLargo = 50
+      this.puntuacionCorto = 50
       this.campoSeleccionado = this.campos[0] || null
     }
   },
@@ -149,18 +149,18 @@ export default {
         </div>
         <div class="col-md-6">
           <label for="dni" class="form-label">DNI:</label>
-          <input type="text" class="form-control" id="dni" v-model="dni" required>
+          <input type="text" class="form-control" id="dni" v-model="dni" pattern="[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]" title="El DNI debe tener 8 números seguidos de una letra" required>
         </div>
       </div>
       <!-- Controles específicos de tipo de jugador -->
       <div v-if="!viendo && tipo === 'principiante'" class="row mb-3">
         <div class="col-md-6">
           <label for="puntuacionLargo" class="form-label">Precisión larga distancia: {{ puntuacionLargo }}%</label>
-          <input type="range" class="form-range" id="puntuacionLargo" v-model="puntuacionLargo" min="0" max="100">
+          <input type="range" class="form-range" id="puntuacionLargo" v-model="puntuacionLargo" min="1" max="100">
         </div>
         <div class="col-md-6">
           <label for="puntuacionCorto" class="form-label">Precisión corta distancia: {{ puntuacionCorto }}%</label>
-          <input type="range" class="form-range" id="puntuacionCorto" v-model="puntuacionCorto" min="0" max="100">
+          <input type="range" class="form-range" id="puntuacionCorto" v-model="puntuacionCorto" min="1" max="100">
         </div>
       </div>
       <div v-if="!viendo && tipo === 'federado'" class="row mb-3">
