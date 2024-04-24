@@ -206,14 +206,15 @@ export default {
         </div>
       </div>
       <!-- fin viendo -->
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <button type="button" class="btn btn-secondary" @click="resetForm" v-if="!viendo">Reset</button>
-        </div>
-        <div class="col-md-6 d-flex justify-content-end">
-          <button type="submit" class="btn btn-primary" v-if="!viendo">Guardar</button>
-        </div>
-      </div>
+      <div class="d-flex">
+  <div>
+    <button type="button" class="btn btn-secondary" @click="resetForm" v-if="!viendo">Reset</button>
+  </div>
+  <div class="crecer"></div>
+  <div>
+    <button type="submit" class="btn btn-primary" v-if="!viendo">Guardar</button>
+  </div>
+</div>
     </form>
   </div>
 </template>
@@ -246,4 +247,9 @@ export default {
   color: white;
   font-weight: 500;
 }
+
+.crecer {
+  flex-grow: 1;
+}
+
 </style>
