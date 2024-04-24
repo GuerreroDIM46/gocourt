@@ -7,7 +7,7 @@ const API_FEDERADOSSINPAGINAR = host + 'federados/search/federadosSinPaginacion'
 const API_PRINCIPIANTES = host + 'principiantes';
 const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSinPaginacion';
 const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
-const API_FEDERADOSSIMILARES = host + 'federados/search/federadosNivelSimilar'
+const API_FEDERADOSSIMILARES = host + 'jugadores/search/federadosNivelSimilar'
 
 
 function llamadaAPI(method, body, path) {

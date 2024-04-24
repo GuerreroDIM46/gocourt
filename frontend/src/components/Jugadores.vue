@@ -16,11 +16,12 @@ export default {
       tipoSeleccionado: 'todos',
       campoSeleccionado: 'todos',
       paginaActual: 1,
-      tamanoPagina: 5,
+      tamanoPagina: 10,
       jugadorActual: null,
       editando: false,
       viendo: false,
-      bsModal: null
+      bsModal: null,
+      busqueda: ''
     }
   },
   computed: {
@@ -33,6 +34,12 @@ export default {
       }
       if (this.campoSeleccionado !== 'todos') {
         filtrados = filtrados.filter(jugador => jugador.nombreCampo === this.campoSeleccionado)
+      }
+      if (this.busqueda) {
+        const busquedaMinuscula = this.busqueda.toLowerCase();
+        filtrados = filtrados.filter(jugador => 
+          (`${jugador.nombre} ${jugador.apellido1} ${jugador.apellido2}`.toLowerCase().includes(busquedaMinuscula))
+        );
       }
       return filtrados;
     },
@@ -141,16 +148,18 @@ export default {
   <div class="container">
     <table class="card">
       <tr class="card-header">
-        <td class="flexmio">
+        <div class="row gy-2 gx-3 align-items-center">
           <!-- Paginación -->
-          <ul class="pagination me-2 mb-2">
+          <ul class="pagination me-2 mb-2 col-auto">
             <!-- Primera Página -->
             <li class="page-item" :class="{ disabled: paginaActual === 1 }">
-              <a class="page-link" href="#" @click="cambiarPagina(1)"><font-awesome-icon :icon="['fas', 'angle-double-left']" /></a>
+              <a class="page-link" href="#" @click="cambiarPagina(1)"><font-awesome-icon
+                  :icon="['fas', 'angle-double-left']" /></a>
             </li>
             <!-- Página Anterior -->
             <li class="page-item" :class="{ disabled: paginaActual === 1 }">
-              <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)"><font-awesome-icon :icon="['fas', 'angle-left']" /></a>
+              <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)"><font-awesome-icon
+                  :icon="['fas', 'angle-left']" /></a>
             </li>
             <!-- Página Actual -->
             <li class="page-item active">
@@ -158,66 +167,64 @@ export default {
             </li>
             <!-- Página Siguiente -->
             <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
-              <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)"><font-awesome-icon :icon="['fas', 'angle-right']" /></a>
+              <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)"><font-awesome-icon
+                  :icon="['fas', 'angle-right']" /></a>
             </li>
             <!-- Última Página -->
             <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
-              <a class="page-link" href="#" @click="cambiarPagina(totalPaginas)"><font-awesome-icon :icon="['fas', 'angle-double-right']" /></a>
+              <a class="page-link" href="#" @click="cambiarPagina(totalPaginas)"><font-awesome-icon
+                  :icon="['fas', 'angle-double-right']" /></a>
             </li>
           </ul>
+          <!-- nombre para filtrar jugadores -->
+          <div class="col-auto selectauto3">
+            <label class="visually-hidden" for="specificSizeInputGroupUsername">Username</label>
+            <div class="input-group mb-2 " style="flex-wrap: nowrap;">
+              <div class="input-group-text "><font-awesome-icon :icon="['fas', 'magnifying-glass']"
+                  class="icono-fontawesome" /></div>
+              <input type="text" class="form-control" placeholder="" v-model="busqueda">
+            </div>
+          </div>
+          <!-- Select para filtrar jugadores -->
+          <select v-model="tipoSeleccionado" class="form-select col-auto me-2 mb-2 selectauto">
+            <option value="todos">Todos</option>
+            <option value="federado">Federado</option>
+            <option value="principiante">Principiante</option>
+          </select>
           <!-- Select para filtrar campos -->
-          <select v-model="campoSeleccionado" class="form-select selectauto me-2 mb-2">
+          <select v-model="campoSeleccionado" class="form-select col-auto me-2 mb-2 selectauto2">
             <option value="todos">Todos los campos</option>
             <option v-for="campo in campos" :value="campo.nombre" :key="campo._links.self.href">
               {{ campo.nombre }}
             </option>
           </select>
-          <!-- Select para filtrar jugadores -->
-          <select v-model="tipoSeleccionado" class="form-select selectauto me-2 mb-2">
-            <option value="todos">Todos</option>
-            <option value="federado">Federado</option>
-            <option value="principiante">Principiante</option>
-          </select>
+          <!-- <input class="form-control mb-2 anchomaximo1" type="search" placeholder="Busqueda" aria-label="Search" v-model="busqueda"> -->
           <!-- Botón Nuevo Jugador -->
-          <button type="button" @click="abrirModalCrear" class="btn btn-outline-success btn-no-wrap me-2 mb-2 ms-auto">
+          <button type="button" @click="abrirModalCrear"
+            class="btn btn-outline-success btn-no-wrap mb-2  col-auto ms-auto">
             <span class="btn-text">Nuevo Jugador</span>
             <font-awesome-icon :icon="['fas', 'user-plus']" />
           </button>
-        </td>
+        </div>
       </tr>
-      <!-- <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
-        <component :is="jugador.tipo === 'federado' ? 'Federado' : 'Principiante'" 
-          :jugador="jugador"
-          @editar-jugador="abrirModalEditar(jugador)"
-          @ver-jugador="abrirModalVer(jugador)"
-          @borrar-jugador="borrarJugador"
-          ></component>
-      </tr> -->
       <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
-        <Jugador 
-          :jugador="jugador"
-          @editar-jugador="abrirModalEditar(jugador)"
-          @ver-jugador="abrirModalVer(jugador)"
-          @borrar-jugador="borrarJugador"
-          ></Jugador>
-      </tr> 
+        <Jugador :jugador="jugador" @editar-jugador="abrirModalEditar(jugador)" @ver-jugador="abrirModalVer(jugador)"
+          @borrar-jugador="borrarJugador"></Jugador>
+      </tr>
     </table>
     <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" ref="formularioModal" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" ref="formularioModal" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header verdeclaro">
+          <div class="modal-header verdeclaro" :class="{ 'verdeoscuro': viendo }">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">{{ tituloModal }}</h1>
-            <button type="button" class="btn btn-danger ms-auto" @click="salirModal" aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+            <button type="button" class="btn btn-danger ms-auto" @click="salirModal"
+              aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
           </div>
           <div class="modal-body">
-            <Formulario 
-              :jugador="jugadorActual" 
-              :editando="editando"
-              :viendo="viendo"
-              @formulario-relleno="manejarFormulario" 
-              @formulario-actualizado="manejarFormulario"
-              ></Formulario>
+            <Formulario :jugador="jugadorActual" :editando="editando" :viendo="viendo"
+              @formulario-relleno="manejarFormulario" @formulario-actualizado="manejarFormulario"></Formulario>
           </div>
         </div>
       </div>
@@ -227,9 +234,19 @@ export default {
 
 
 <style scoped>
+
 .selectauto {
   width: auto;
-  max-width: 90%;
+  max-width: 20%;
+}
+
+.selectauto2 {
+  width: auto;
+  max-width: 20%;
+}
+
+.selectauto3 {
+  width: 150px;
 }
 
 .flexmio {

@@ -240,4 +240,10 @@ export default {
   transform: scale(1.1);
   font-weight: 800;
 }
+
+.verdeclaro {
+  background-color: #70AD47;
+  color: white;
+  font-weight: 500;
+}
 </style>

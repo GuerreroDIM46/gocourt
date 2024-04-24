@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import es.mde.entidades.Federado;
 import es.mde.entidades.Jugador;
@@ -70,8 +71,11 @@ public class JugadorDAOImpl implements JugadorDAOCustom{
 
         List<Jugador> jugadoresFederadosNivelSimilar = new ArrayList<>();
         int indice = IntStream.range(0, jugadoresPorHandicap.size())
-                .filter(i -> jugadoresPorHandicap.get(i).getId().equals(id))
-                .findFirst().orElse(-1);
+                              .filter(i -> jugadoresPorHandicap.get(i)
+                                                               .getId()
+                                                               .equals(id))
+                              .findFirst()
+                              .orElse(-1);
 
         if (indice != -1) {
             int contador = 0;
@@ -96,5 +100,5 @@ public class JugadorDAOImpl implements JugadorDAOCustom{
 
         return jugadoresFederadosNivelSimilar;
     }
-
+   
 }
