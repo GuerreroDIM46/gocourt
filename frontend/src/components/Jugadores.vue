@@ -29,11 +29,11 @@ export default {
     ...mapState(useCamposAPIStore, ['campos']),
     jugadoresFiltrados() {
       let filtrados = this.jugadores
-      if (this.tipoSeleccionado !== 'todos') {
-        filtrados = filtrados.filter(jugador => jugador.tipo === this.tipoSeleccionado)
+      if (this.tipoSeleccionado != 'todos') {
+        filtrados = filtrados.filter(jugador => jugador.tipo == this.tipoSeleccionado)
       }
-      if (this.campoSeleccionado !== 'todos') {
-        filtrados = filtrados.filter(jugador => jugador.nombreCampo === this.campoSeleccionado)
+      if (this.campoSeleccionado != 'todos') {
+        filtrados = filtrados.filter(jugador => jugador.nombreCampo == this.campoSeleccionado)
       }
       if (this.busqueda) {
         const busquedaMinuscula = this.busqueda.toLowerCase();
@@ -119,10 +119,10 @@ export default {
   },
   watch: {
     tipoSeleccionado(newVal, oldVal) {
-      if (newVal !== oldVal) this.paginaActual = 1
+      if (newVal != oldVal) this.paginaActual = 1
     },
     campoSeleccionado(newVal, oldVal) {
-      if (newVal !== oldVal) this.paginaActual = 1
+      if (newVal != oldVal) this.paginaActual = 1
     },
     'jugadoresAPIStore.debeRecargar': function(newValue) {
     if (newValue) {
@@ -152,12 +152,12 @@ export default {
           <!-- Paginación -->
           <ul class="pagination me-2 mb-2 col-auto">
             <!-- Primera Página -->
-            <li class="page-item" :class="{ disabled: paginaActual === 1 }">
+            <li class="page-item" :class="{ disabled: paginaActual == 1 }">
               <a class="page-link" href="#" @click="cambiarPagina(1)"><font-awesome-icon
                   :icon="['fas', 'angle-double-left']" /></a>
             </li>
             <!-- Página Anterior -->
-            <li class="page-item" :class="{ disabled: paginaActual === 1 }">
+            <li class="page-item" :class="{ disabled: paginaActual == 1 }">
               <a class="page-link" href="#" @click="cambiarPagina(paginaActual - 1)"><font-awesome-icon
                   :icon="['fas', 'angle-left']" /></a>
             </li>
@@ -166,12 +166,12 @@ export default {
               <a class="page-link" href="#">{{ paginaActual }}</a>
             </li>
             <!-- Página Siguiente -->
-            <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
+            <li class="page-item" :class="{ disabled: paginaActual == totalPaginas }">
               <a class="page-link" href="#" @click="cambiarPagina(paginaActual + 1)"><font-awesome-icon
                   :icon="['fas', 'angle-right']" /></a>
             </li>
             <!-- Última Página -->
-            <li class="page-item" :class="{ disabled: paginaActual === totalPaginas }">
+            <li class="page-item" :class="{ disabled: paginaActual == totalPaginas }">
               <a class="page-link" href="#" @click="cambiarPagina(totalPaginas)"><font-awesome-icon
                   :icon="['fas', 'angle-double-right']" /></a>
             </li>

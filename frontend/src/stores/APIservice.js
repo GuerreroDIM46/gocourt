@@ -50,7 +50,7 @@ export function getFederadosSimilares(id) {
 
 export function postJugador(jugador) {
     const { tipo, ...jugadorSinTipo } = jugador;
-    const apiEndpoint = tipo === 'federado' ? API_FEDERADOS : API_PRINCIPIANTES;
+    const apiEndpoint = tipo == 'federado' ? API_FEDERADOS : API_PRINCIPIANTES;
     return llamadaAPI('post', jugadorSinTipo, apiEndpoint);
 }
 

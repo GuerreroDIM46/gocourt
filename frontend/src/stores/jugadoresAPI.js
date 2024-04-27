@@ -10,14 +10,14 @@ import {
 } from '@/stores/APIservice'
 
 export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
-    state: () => ({
+    state: () => ({        
         federados: [],
         principiantes: [],
         jugadores: [],
         jugadoresSimilares: [],
         federadosCargados: false,
         principiantesCargados: false,
-        debeRecargar: false,   // para el watcher despues de crear o actualizar
+        debeRecargar: false,   // para el watcher despues de crear o actualizar        
     }),
     actions: {
         async cargarFederados() {
@@ -48,9 +48,9 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             const jugadorId = jugador._links.self.href.split('/').pop()
             console.log("el jugadorId que le paso a quien sea es ", jugadorId)
             let response;
-            if (jugador.tipo === 'federado') {
+            if (jugador.tipo == 'federado') {
                 response = await getJugadoresSimilares(jugadorId);
-            } else if (jugador.tipo === 'principiante') {
+            } else if (jugador.tipo == 'principiante') {
                 response = await getFederadosSimilares(jugadorId);
             }
             console.log(response)
@@ -74,7 +74,7 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             const { data } = response
             const { _links, ...jugadorCreado } = data
             console.log("Datos del jugador creado devuelto por la api: ", jugadorCreado)
-            if (response.status === 200 || response.status === 201) {
+            if (response.status == 200 || response.status == 201) {
                 this.jugadores.push(jugadorCreado)
                 this.actualizarTodosJugadores()
                 this.debeRecargar = true
@@ -86,9 +86,9 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             console.log('id de jugador (store): ', url)
             const response = await putJugador(jugadorSinUrl, url)
             console.log(response)
-            const index = this.jugadores.findIndex(j => j._links.self.href === url)
+            const index = this.jugadores.findIndex(j => j._links.self.href == url)
             console.log('Índice del jugador a actualizar en el store: ', index)
-            if (index !== -1) {
+            if (index != -1) {
                 this.jugadores[index] = {
                     ...this.jugadores[index], ...jugadorSinUrl
                 }
@@ -101,9 +101,9 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             console.log("En el store, jugador a borrar: ", jugadorId)
             const response = await deleteJugador(jugadorId)
             console.log("Respuesta de la api al borrar jugador: ", response)
-            if (response.status === 200) {
-                const index = this.jugadores.findIndex(p => p._links.self.href === jugadorId)
-            if (index !== -1) {
+            if (response.status == 200) {
+                const index = this.jugadores.findIndex(p => p._links.self.href == jugadorId)
+            if (index != -1) {
                 this.jugadores.splice(index, 1)
                 }
             }

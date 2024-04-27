@@ -7,18 +7,9 @@ import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 export default {
   components: { JugadorSeleccionado },
   props: {
-    jugador: {
-      type: Object,
-      default: () => ({})
-    },
-    editando: {
-      type: Boolean,
-      default: false
-    },
-    viendo: {
-      type: Boolean,
-      default: false
-    }
+    jugador: {},
+    editando: {},
+    viendo: {}
   },
   emits: ['formulario-relleno', 'formulario-actualizado'],
   data() {
@@ -44,14 +35,14 @@ export default {
     jugador: {
       immediate: true,
       deep: true,
-      handler(nuevoValor, oldValor) {
+      handler(nuevoValor) {
         if (this.editando && nuevoValor) {
           this.tipo = nuevoValor.tipo
           this.nombre = nuevoValor.nombre
           this.apellido1 = nuevoValor.apellido1
           this.apellido2 = nuevoValor.apellido2
           this.dni = nuevoValor.dni
-          this.campoSeleccionado = this.campos.find(campo => campo._links.self.href === nuevoValor.campo) || this.campos[0]
+          this.campoSeleccionado = this.campos.find(campo => campo._links.self.href == nuevoValor.campo) || this.campos[0]
           this.profesional = nuevoValor.profesional
           this.handicap = nuevoValor.handicap
           this.puntuacionLargo = nuevoValor.puntuacionLargo
@@ -78,10 +69,10 @@ export default {
         campo: urlCampo,  
         tipo: this.tipo
       };
-      if (this.tipo === 'federado') {
+      if (this.tipo == 'federado') {
         nuevoJugador.profesional = this.profesional;
         nuevoJugador.handicap = this.handicap;
-      } else if (this.tipo === 'principiante') {
+      } else if (this.tipo == 'principiante') {
         nuevoJugador.puntuacionLargo = this.puntuacionLargo;
         nuevoJugador.puntuacionCorto = this.puntuacionCorto;
       }
@@ -153,7 +144,7 @@ export default {
         </div>
       </div>
       <!-- Controles específicos de tipo de jugador -->
-      <div v-if="!viendo && tipo === 'principiante'" class="row mb-3">
+      <div v-if="!viendo && tipo == 'principiante'" class="row mb-3">
         <div class="col-md-6">
           <label for="puntuacionLargo" class="form-label">Precisión larga distancia: {{ puntuacionLargo }}%</label>
           <input type="range" class="form-range" id="puntuacionLargo" v-model="puntuacionLargo" min="1" max="100">
@@ -163,7 +154,7 @@ export default {
           <input type="range" class="form-range" id="puntuacionCorto" v-model="puntuacionCorto" min="1" max="100">
         </div>
       </div>
-      <div v-if="!viendo && tipo === 'federado'" class="row mb-3">
+      <div v-if="!viendo && tipo == 'federado'" class="row mb-3">
         <div class="col-md-6">
           <label for="handicap" class="form-label">Handicap: {{ handicap }}</label>
           <input type="range" class="form-range" id="handicap" v-model="handicap" min="-40" max="100">
@@ -179,8 +170,8 @@ export default {
           <div class="mb-2">
             <div class="jugador containerjugador">
               <div class="fl">
-                <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
-                <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
+                <div v-if="jugador.tipo == 'federado'" class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.tipo == 'principiante'" class="badge bg-success me-2">Principiante</div>
                 <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
                 <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
               </div>
@@ -192,8 +183,8 @@ export default {
               <div class="fl"> - Juega en: {{ jugador.nombreCampo }}</div>
             </div>
             <div class="jugador containerjugador">
-              <div class="fl" v-if="jugador.tipo === 'federado'"> - Su handicap es: {{ jugador.handicap }}</div>
-              <div class="fl" v-if="jugador.tipo === 'principiante'"> - Su handicap simulado es: {{
+              <div class="fl" v-if="jugador.tipo == 'federado'"> - Su handicap es: {{ jugador.handicap }}</div>
+              <div class="fl" v-if="jugador.tipo == 'principiante'"> - Su handicap simulado es: {{
                 jugador.handicap.toFixed(1) }}</div>
             </div>
           </div>

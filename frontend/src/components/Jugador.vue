@@ -17,14 +17,14 @@ export default {
     <div class="casilla">
         <tr class="jugador containerjugador">
             <td class="fl">
-                <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
-                <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
+                <div v-if="jugador.tipo == 'federado'" class="badge bg-secondary me-2">Federado</div>
+                <div v-if="jugador.tipo == 'principiante'" class="badge bg-success me-2">Principiante</div>
                 <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
                 <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
             </td>
             <td class="crecer"></td>
 
-            <td v-if="jugador.tipo === 'principiante'" class="align-middle">
+            <td v-if="jugador.tipo == 'principiante'" class="align-middle">
                 <button type="button" class="btn btn-outline-primary" disabled>
                     PL: {{ jugador.puntuacionLargo }}
                 </button>

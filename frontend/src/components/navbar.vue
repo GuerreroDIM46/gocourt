@@ -1,33 +1,14 @@
 <script>
-// import { useAuthStore } from '@/stores/auth'
-// import { mapState, mapActions } from 'pinia'
 
-// export default {
-//   computed: {
-//     ...mapState(useAuthStore, ['tipoUsuario', 'esAdmin']),
-
-//     cambioUsuario: {
-//       get() {
-//         return this.esAdmin
-//       },
-//       set(value) {
-//         this.cambiarNivel()
-//       }
-//     }
-//   },
-//   methods: {
-//     ...mapActions(useAuthStore, ['cambiarNivel'])
-//   }
-// }
 </script>
 
 <template>
   <ul class="nav nav-tabs nav-fill">
     <li class="nav-item">
-      <router-link class="nav-link" :class="{ active: $route.path === '/jugadores' }" to="/jugadores">Jugadores</router-link>
+      <router-link class="nav-link" :class="{ active: $route.path == '/jugadores' }" to="/jugadores">Jugadores</router-link>
     </li>
     <li class="nav-item">
-      <router-link class="nav-link" :class="{ active: $route.path === '/partidos' }" to="/partidos">Partidos</router-link>
+      <router-link class="nav-link" :class="{ active: $route.path == '/partidos' }" to="/partidos">Partidos</router-link>
     </li>
   </ul>
 </template>

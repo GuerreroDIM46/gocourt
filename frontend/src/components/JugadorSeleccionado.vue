@@ -1,10 +1,7 @@
 <script>
 export default {
     props: {
-        jugador: {
-            type: Object,
-            required: true
-        }
+        jugador: {}
     }
 }
 </script>
@@ -15,15 +12,15 @@ export default {
             <div class="jugador-info">
                 <div class="jugador-datos">
                     <div class="nombre-apellidos">
-                        <div v-if="jugador.tipo === 'federado'" class="badge bg-secondary me-2">Federado</div>
-                        <div v-if="jugador.tipo === 'principiante'" class="badge bg-success me-2">Principiante</div>
+                        <div v-if="jugador.tipo == 'federado'" class="badge bg-secondary me-2">Federado</div>
+                        <div v-if="jugador.tipo == 'principiante'" class="badge bg-success me-2">Principiante</div>
                         <div v-if="jugador.profesional" class="badge bg-warning me-2">PRO</div>
                         <strong>{{ jugador.nombre }} {{ jugador.apellido1 }} {{ jugador.apellido2 }}</strong>
                     </div>
-                    <div v-if="jugador.tipo === 'federado'" class="handicap">
+                    <div v-if="jugador.tipo == 'federado'" class="handicap">
                         Handicap: {{ jugador.handicap.toFixed(1) }}
                     </div>
-                    <div v-if="jugador.tipo === 'principiante'" class="handicap">
+                    <div v-if="jugador.tipo == 'principiante'" class="handicap">
                         Handicap Calculado: {{ jugador.handicap.toFixed(1) }}
                     </div>
                 </div>
@@ -39,27 +36,21 @@ export default {
 .jugador-info-container {
     display: flex;
     justify-content: space-between;
-    /* Alinea los hijos al inicio y al final del contenedor */
     align-items: center;
-    /* Centra los hijos verticalmente */
     margin-bottom: 10px;
-    /* Espacio debajo del contenedor */
 }
 
 .jugador-info {
     flex-grow: 1;
-    /* Ocupa todo el espacio disponible */
 }
 
 .nombre-apellidos {
     display: flex;
     align-items: center;
-    /* Alinea los badges y el nombre verticalmente */
 }
 
 .handicap {
     margin-top: 5px;
-    /* Espacio entre nombre y handicap */
 }
 
 .btn-primary {
