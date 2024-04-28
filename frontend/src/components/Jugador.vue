@@ -4,10 +4,10 @@ export default {
     emits: ['editar-jugador', 'borrar-jugador', 'ver-jugador'],
     methods: {
         editarJugador() {
-            this.$emit('editar-jugador', this.jugador);
+            this.$emit('editar-jugador', this.jugador)
         },
         verJugador() {
-            this.$emit('ver-jugador', this.jugador);
+            this.$emit('ver-jugador', this.jugador)
         },
     }
 }

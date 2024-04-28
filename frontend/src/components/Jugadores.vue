@@ -36,12 +36,12 @@ export default {
         filtrados = filtrados.filter(jugador => jugador.nombreCampo == this.campoSeleccionado)
       }
       if (this.busqueda) {
-        const busquedaMinuscula = this.busqueda.toLowerCase();
+        const busquedaMinuscula = this.busqueda.toLowerCase()
         filtrados = filtrados.filter(jugador => 
           (`${jugador.nombre} ${jugador.apellido1} ${jugador.apellido2}`.toLowerCase().includes(busquedaMinuscula))
-        );
+        )
       }
-      return filtrados;
+      return filtrados
     },
     jugadoresPaginados() {
       const start = (this.paginaActual - 1) * this.tamanoPagina
@@ -56,11 +56,11 @@ export default {
     },
     tituloModal() {
       if (this.viendo) {
-        return 'Detalles de Jugador';
+        return 'Detalles de Jugador'
       } else if (this.editando) {
-        return 'Editar Jugador';
+        return 'Editar Jugador'
       } else {
-        return 'Nuevo Jugador';
+        return 'Nuevo Jugador'
       }
     }
   },
@@ -78,15 +78,15 @@ export default {
       this.bsModal.show()
     },
     abrirModalEditar(jugador) {
-      this.jugadorActual = jugador;
-      console.log("jugador a editar: ", jugador);
+      this.jugadorActual = jugador
+      console.log("jugador a editar: ", jugador)
       this.editando = true
       this.viendo = false
       this.bsModal.show()
     },
     abrirModalVer(jugador) {
-      this.jugadorActual = jugador;
-      console.log("jugador a ver: ", jugador);
+      this.jugadorActual = jugador
+      console.log("jugador a ver: ", jugador)
       this.editando = false
       this.viendo = true
       this.bsModal.show()

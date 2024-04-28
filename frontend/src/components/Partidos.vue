@@ -14,7 +14,7 @@ export default {
     },
     methods: { ...mapActions(useCamposAPIStore, ['cargarCampos']) },
     mounted(){
-        this.cargarCampos();
+        this.cargarCampos()
     }
 
 }
