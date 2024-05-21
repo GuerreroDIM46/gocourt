@@ -31,4 +31,9 @@ public class Principiante extends Jugador {
     public float getHandicap() {
         return (float) (49 + (72 * ((Math.log10(30.0 / puntuacionLargo) + Math.log10(70.0 / puntuacionCorto)))));
     }
+
+    @Override
+    public String getTipo() {
+        return "principiante";
+    }
 }

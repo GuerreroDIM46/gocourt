@@ -1,7 +1,9 @@
 package es.mde.entidades;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
+import java.util.Collection;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
@@ -14,6 +16,7 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -33,6 +36,9 @@ public abstract class Jugador {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAMPO")
     private Campo campo;
+    
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Puntuacion.class, mappedBy = "jugador")
+    private Collection<Puntuacion> puntuaciones = new ArrayList<>();
            
     public Jugador() {}
 
@@ -45,6 +51,8 @@ public abstract class Jugador {
     }
     
     public abstract float getHandicap();
+    
+    public abstract String getTipo();
 
     public String getNombre() {
         return nombre;
@@ -85,9 +93,22 @@ public abstract class Jugador {
     public void setCampo(Campo campo) {
         this.campo = campo;
     }
-    
-    public String getNombreCampo() {
+           
+    public Collection<Puntuacion> getPuntuaciones() {
+		return puntuaciones;
+	}
+
+	public void setPuntuaciones(Collection<Puntuacion> puntuaciones) {
+		this.puntuaciones = puntuaciones;
+	}
+
+	public String getNombreCampo() {
         return this.getCampo().getNombre();
+    }
+    
+    public void addPuntuacion(Puntuacion puntuacion) {
+        getPuntuaciones().add(puntuacion);
+        puntuacion.setJugador(this);
     }
        
 }

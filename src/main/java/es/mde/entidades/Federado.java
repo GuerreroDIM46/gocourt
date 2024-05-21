@@ -10,7 +10,7 @@ public class Federado extends Jugador {
     private boolean profesional;
     private float handicap;    
     
-    public Federado() {}
+    public Federado() {}    
 
     public boolean isProfesional() {
         return profesional;
@@ -28,7 +28,10 @@ public class Federado extends Jugador {
     public void setHandicap(float handicap) {
         this.handicap = handicap;
     }
-    
 
+    @Override
+    public String getTipo() {
+        return "federado";
+    }  
         
 }

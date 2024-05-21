@@ -25,6 +25,9 @@ public class Campo {
     
     @OneToMany(cascade = CascadeType.ALL, targetEntity = Jugador.class, mappedBy = "campo")
     private Collection<Jugador> jugadores = new ArrayList<>();
+    
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = Partido.class, mappedBy = "campo")
+    private Collection<Partido> partidos = new ArrayList<>();
    
     public Campo() {}
     
@@ -79,8 +82,25 @@ public class Campo {
     public Collection<Jugador> getJugadores() {
         return jugadores;
     }
-   
-    public void addJugador(Jugador jugador) {
+       
+    public Collection<Partido> getPartidos() {
+		return partidos;
+	}
+
+	public void setPartidos(Collection<Partido> partidos) {
+		this.partidos = partidos;
+	}
+
+	public void setJugadores(Collection<Jugador> jugadores) {
+		this.jugadores = jugadores;
+	}
+	
+	public void addPartido(Partido partido) {
+        getPartidos().add(partido);
+        partido.setCampo(this);
+    }
+
+	public void addJugador(Jugador jugador) {
         getJugadores().add(jugador);
         jugador.setCampo(this);
     }
