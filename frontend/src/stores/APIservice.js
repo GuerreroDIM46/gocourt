@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
+// const host = 'https://gocourtapitest.manabo.org/api/'
 const API_CAMPOS = host + 'campos'
 const API_FEDERADOS = host + 'federados'
 const API_FEDERADOSSINPAGINAR = host + 'federados/search/federadosSinPaginacion'

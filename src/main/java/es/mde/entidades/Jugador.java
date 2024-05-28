@@ -31,7 +31,7 @@ public abstract class Jugador {
     @Column(unique = true)  
     private Long id;
     
-    private String nombre, apellido1, apellido2, dni;
+    private String nombre, apellido1, apellido2, dni, telefono, email;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAMPO")
@@ -93,7 +93,23 @@ public abstract class Jugador {
     public void setCampo(Campo campo) {
         this.campo = campo;
     }
-           
+                   
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Collection<Puntuacion> getPuntuaciones() {
 		return puntuaciones;
 	}

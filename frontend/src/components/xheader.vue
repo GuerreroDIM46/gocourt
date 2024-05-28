@@ -2,7 +2,7 @@
   <header>
     <div class="d-flex" style="height: 10vh;">
       <div>
-        <img src="../assets/logo_gocourt.png" class="logofit">
+        <img src="../assets/logo_gocourt.png" class="logofit ms-2">
       </div>
       <div class="d-flex centrar crecer">
         <h1 style="font-style: italic; color: #395623;">GoCourt</h1>
