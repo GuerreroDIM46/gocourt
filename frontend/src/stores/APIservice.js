@@ -59,6 +59,6 @@ export function putJugador(jugador, id) {
     return llamadaAPI('patch', jugador, id)
 }
 
-export function deleteJugador(id) {
-    return llamadaAPI('delete', null, id)
+export function deleteEntidad(href) {
+    return llamadaAPI('delete', null, href)
 }

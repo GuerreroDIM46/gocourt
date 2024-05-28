@@ -4,7 +4,7 @@ import {
     getPrincipiantes,
     postJugador,
     putJugador,
-    deleteJugador,
+    deleteEntidad,
     getJugadoresSimilares,
     getFederadosSimilares
 } from '@/stores/APIservice'
@@ -23,30 +23,21 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         async cargarFederados() {
             const response = await getFederados()
             if (response.data._embedded) {
-                const federadosConTipo = response.data._embedded.federados.map(federado => ({
-                    ...federado,
-                    tipo: 'federado'
-                }))
-                this.federados = federadosConTipo
+                this.federados = response.data._embedded.federados
                 this.federadosCargados = true
-                this.actualizarTodosJugadores()
+                this.cargarJugadores()
             }
         },
         async cargarPrincipiantes() {
             const response = await getPrincipiantes()
-            if (response.data._embedded) {
-                const principiantesConTipo = response.data._embedded.principiantes.map(principiante => ({
-                    ...principiante,
-                    tipo: 'principiante'
-                }))
-                this.principiantes = principiantesConTipo
+            if (response.data._embedded) {                
+                this.principiantes = response.data._embedded.principiantes
                 this.principiantesCargados = true
-                this.actualizarTodosJugadores()
+                this.cargarJugadores()
             }
         },
         async cargarJugadoresSimilares(jugador) {
             const jugadorId = jugador._links.self.href.split('/').pop()
-            console.log("el jugadorId que le paso a quien sea es ", jugadorId)
             let response
             if (jugador.tipo == 'federado') {
                 response = await getJugadoresSimilares(jugadorId)
@@ -57,14 +48,10 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             if (response && response.data && response.data._embedded) {
                 const federados = response.data._embedded.federados || []
                 const principiantes = response.data._embedded.principiantes || []
-                // Añade un campo tipo a cada jugador para identificar si es federado o principiante
-                const federadosConTipo = federados.map(jugador => ({ ...jugador, tipo: 'federado' }))
-                const principiantesConTipo = principiantes.map(jugador => ({ ...jugador, tipo: 'principiante' }))
-                // Concatena los dos arrays
-                this.jugadoresSimilares = [...federadosConTipo, ...principiantesConTipo]
+                this.jugadoresSimilares = [...federados, ...principiantes]
             }
         },
-        actualizarTodosJugadores() {
+        cargarJugadores() {
             this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre))
 
         },
@@ -76,8 +63,8 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             console.log("Datos del jugador creado devuelto por la api: ", jugadorCreado)
             if (response.status == 200 || response.status == 201) {
                 this.jugadores.push(jugadorCreado)
-                this.actualizarTodosJugadores()
-                this.debeRecargar = true
+                this.cargarJugadores()
+                this.debeRecargar = !this.debeRecargar
             }
         },
         async actualizarJugador(jugador) {
@@ -92,25 +79,22 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
                 this.jugadores[index] = {
                     ...this.jugadores[index], ...jugadorSinUrl
                 }
-                this.actualizarTodosJugadores()
-                this.debeRecargar = true
+                this.cargarJugadores()
+                this.debeRecargar = !this.debeRecargar
             }
         },
 
         async eliminarJugador(jugadorId) {
             console.log("En el store, jugador a borrar: ", jugadorId)
-            const response = await deleteJugador(jugadorId)
+            const response = await deleteEntidad(jugadorId)
             console.log("Respuesta de la api al borrar jugador: ", response)
             if (response.status == 200) {
                 const index = this.jugadores.findIndex(p => p._links.self.href == jugadorId)
                 if (index != -1) {
                     this.jugadores.splice(index, 1)
+                    this.debeRecargar = !this.debeRecargar
                 }
             }
         },
-        resetRecarga() {
-            this.debeRecargar = false
-            console.log("he accedido a reset recarga")
-        }
     }
 })

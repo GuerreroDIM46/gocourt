@@ -149,31 +149,4 @@ export default {
     color: white;
 }
 
-.crecer {
-    flex-grow: 1;
-}
-
-.verdeclaro {
-    background-color: #70AD47;
-    color: white;
-    font-weight: 500;
-}
-
-.verdeoscuro {
-    background-color: #395623;
-    color: #CCCCCC;
-    font-weight: 500;
-    border: 1px;
-}
-
-.btn-outline-success:hover {
-    background-color: #70AD47 !important;
-    border-color: #70AD47;
-    color: white;
-}
-
-.btn-outline-success {
-    border-color: #395623;
-    color: #395623;
-}
 </style>

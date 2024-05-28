@@ -6,7 +6,6 @@ import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import BadgeDirective from 'primevue/badgedirective'
-import Home from '@/components/Home.vue'
 import App from './App.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -20,14 +19,13 @@ library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass,
 
 
 const NotFound = () => import('@/components/NotFound.vue')
-const Partidos = () => import('@/components/Partidos.vue')
-const Jugadores = () => import('@/components/Jugadores.vue')
+const Partidos = () => import('@/views/VistaPartidos.vue')
+const Jugadores = () => import('@/views/VistaJugadores.vue')
 
 
 
 const routes = [
     { path: '/', redirect: '/jugadores'},
-    { path: '/home', component: Home, name: 'home' },
     { path: '/partidos', component: Partidos, name: 'partidos' },
     { path: '/jugadores', component: Jugadores, name: 'jugadores' },
     { path: '/:pathMatch(.*)', component: NotFound, name: 'notfound'}
