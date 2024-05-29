@@ -20,7 +20,7 @@ public class Puntuacion {
     private Long id;
     
     private float puntuacion;
-	private String estado;
+    private boolean aceptado;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JUGADOR")
@@ -48,19 +48,15 @@ public class Puntuacion {
 		this.puntuacion = puntuacion;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
 	public boolean isAceptado() {
-		return this.estado == "aceptado";
-	}
+		return this.aceptado;
+	}	
 
-	public Jugador getJugador() {
+	public void setAceptado(boolean aceptado) {
+        this.aceptado = aceptado;
+    }
+
+    public Jugador getJugador() {
 		return jugador;
 	}
 
