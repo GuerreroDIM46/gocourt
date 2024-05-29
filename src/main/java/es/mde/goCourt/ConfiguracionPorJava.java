@@ -2,9 +2,7 @@ package es.mde.goCourt;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Properties;
-
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,10 +15,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import es.mde.rest.ConfiguracionRest;
 import jakarta.persistence.EntityManager;
@@ -46,12 +40,9 @@ public class ConfiguracionPorJava {
 
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-//      JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter(); // O pedirlo como parametro y que haga el Autowired
         em.setJpaVendorAdapter(vendorAdapter);
 
-        em.setPackagesToScan(entidades); // leer valor de propiedades? pero solo para las entidades anotadas
-        // em.setMappingResources("jpa/Usuario.orm.xml", "jpa/Cuaderno.orm.xml"); //para escanear archivos xml...
-        // leerValorDePropiedades?
+        em.setPackagesToScan(entidades); 
 
         Properties jpaProperties = new Properties()
 
@@ -80,14 +71,7 @@ public class ConfiguracionPorJava {
     public ObjectMapper getObjectMapper() {
 
         ObjectMapper mapper = new ObjectMapper();
-//        mapper.addMixIn(Cliente.class, MixIns.Clientes.class);
-//        mapper.addMixIn(Libro.class, MixIns.Libros.class);
-//        mapper.addMixIn(Cuaderno.class, MixIns.Cuadernos.class);
-
         return mapper;
     }
-    
-   
-
 
 }

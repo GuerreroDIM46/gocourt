@@ -26,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import es.mde.entidades.Federado;
 import es.mde.entidades.Jugador;
+import es.mde.entidades.Partido;
 import es.mde.entidades.Principiante;
 
 
@@ -70,6 +71,7 @@ public class ConfiguracionRest {
         controllersRegistrados.put(Jugador.class, JugadorController.class);
         controllersRegistrados.put(Federado.class, FederadoController.class);
         controllersRegistrados.put(Principiante.class, PrincipianteController.class);
+        controllersRegistrados.put(Partido.class, PartidoController.class);
 
         return new RepresentationModelProcessor<RepositorySearchesResource>() {
 

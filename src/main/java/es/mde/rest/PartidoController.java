@@ -1,0 +1,49 @@
+package es.mde.rest;
+
+import java.util.List;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.webmvc.PersistentEntityResource;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import es.mde.entidades.Partido;
+import es.mde.repositorios.PartidoDAO;
+
+@RepositoryRestController
+@Configuration
+public class PartidoController {
+
+    private PartidoDAO partidoDAO;
+
+    public PartidoController(PartidoDAO partidoDAO) {
+        this.partidoDAO = partidoDAO;
+    }
+
+    @GetMapping("/partidos/search/partidosHistoricos")
+    @ResponseBody
+    public CollectionModel<PersistentEntityResource> getPartidosHistoricos(
+            PersistentEntityResourceAssembler assembler) {
+        List<Partido> partidos = partidoDAO.getPartidosHistoricos();
+        return assembler.toCollectionModel(partidos);
+    }
+
+    @GetMapping("/partidos/search/partidosValidados")
+    @ResponseBody
+    public CollectionModel<PersistentEntityResource> getPartidosValidados(
+            PersistentEntityResourceAssembler assembler) {
+        List<Partido> partidos = partidoDAO.getPartidosValidados();
+        return assembler.toCollectionModel(partidos);
+    }
+
+    @GetMapping("/partidos/search/partidosPorConfirmar")
+    @ResponseBody
+    public CollectionModel<PersistentEntityResource> getPartidosPorConfirmar(
+            PersistentEntityResourceAssembler assembler) {
+        List<Partido> partidos = partidoDAO.getPartidosPorConfirmar();
+        return assembler.toCollectionModel(partidos);
+    }
+    
+}

@@ -33,12 +33,18 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
 
 7. **Despliegue en Internet:**  
     * API: 
-        - https://gocourt-5ef625746984.herokuapp.com/api
-        - https://gocourtapi.manabo.org/api
+        - https://gocourt-5ef625746984.herokuapp.com/api  
+  
     * Web: 
         - https://gocourt.netlify.app  
-        - https://gocourt.manabo.org
 
+    * Servidor Testing:
+        - https://gocourtapitest.manabo.org  
+        - https://gocourttest.manabo.org  
+    
+    * Aplicacion alternativa:
+        - https://gocourtapi.manabo.org  
+        - https://gocourt.manabo.org  
 
 ## Interfaz de usuario
 

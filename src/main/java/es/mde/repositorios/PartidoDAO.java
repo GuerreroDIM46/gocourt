@@ -9,6 +9,6 @@ import es.mde.entidades.Campo;
 import es.mde.entidades.Partido;
 
 @RepositoryRestResource(path = "partidos", itemResourceRel = "partido", collectionResourceRel = "partidos")
-public interface PartidoDAO extends JpaRepository<Partido, Long> {
+public interface PartidoDAO extends JpaRepository<Partido, Long>, PartidoDAOCustom {
 	List<Partido> findByCampo(Campo campo);
 }
