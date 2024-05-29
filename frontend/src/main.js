@@ -4,10 +4,11 @@ import * as bootstrap from 'bootstrap'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
+import { format } from 'date-fns'
+import { es } from 'date-fns/locale'
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import BadgeDirective from 'primevue/badgedirective'
 import App from './App.vue'
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons' //iconos de muestra
@@ -45,4 +46,7 @@ app.use(router)
 app.use(pinia)
 app.use(PrimeVue)
 app.directive('badge', BadgeDirective)
+app.config.globalProperties.$formatDate = (date, formatStr = 'PPpp') => {
+    return format(new Date(date), formatStr, { locale: es })
+}
 app.mount('#app')

@@ -1,39 +1,96 @@
-
 <script>
+import { usePartidosAPIStore } from '@/stores/partidosAPI'
+import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
 import { mapState, mapActions } from 'pinia'
-import { useCamposAPIStore } from '@/stores/camposAPI'
-import Partido from "@/components/Partido.vue"
+import Partido from '@/components/Partido.vue'
 
 export default {
-    components: { Partido },
+    components: {
+        Partido
+    },
     data() {
-        return {}
+        return {
+            activeTab: 'sinConfirmar',
+        }
     },
     computed: {
-        ...mapState(useCamposAPIStore, ['campos'])
+        ...mapState(usePartidosAPIStore, ['partidos', 'partidosHistoricos', 'partidosValidados', 'partidosPorConfirmar']),
+        ...mapState(usePuntuacionesAPIStore, ['debeRecargar']),
     },
-    methods: { ...mapActions(useCamposAPIStore, ['cargarCampos']) },
-    mounted(){
-        this.cargarCampos()
-    }
-
+    methods: {
+        ...mapActions(usePartidosAPIStore, ['cargarPartidos', 'cargarPartidosHistoricos', 'cargarPartidosValidados', 'cargarPartidosPorConfirmar']),
+        setActiveTab(tab) {
+            this.activeTab = tab;
+        },
+        setVistaInicial() {
+            this.activeTab = 'sinConfirmar'
+        }
+    },
+    mounted() {
+        Promise.all([
+            this.cargarPartidosPorConfirmar(),
+            this.cargarPartidosValidados(),
+            this.cargarPartidosHistoricos()
+        ]).then(() => {
+            this.setVistaInicial();
+        })        
+    },
 }
 </script>
 
+
 <template>
     <div class="container">
-        <h1 class="titulo p-4">Listado de campos</h1>
-
-        <ul>
-            <li v-for="campo in campos" :key = "campo._links.self.href">
-                <Partido :camposprop = "campo"></Partido>
+        <ul class="nav nav-tabs nav-fill mt-1">
+            <li class="nav-item me-1" @click="setActiveTab('sinConfirmar')">
+                <div :class="['nav-link', { active: activeTab == 'sinConfirmar' }]">Sin Confirmar</div>
+            </li>
+            <li class="nav-item me-1" @click="setActiveTab('pendientes')">
+                <div :class="['nav-link', { active: activeTab == 'pendientes' }]">Pendientes</div>
+            </li>
+            <li class="nav-item " @click="setActiveTab('jugados')">
+                <div :class="['nav-link', { active: activeTab == 'jugados' }]">Jugados</div>
             </li>
         </ul>
+        <table class="card">
+            <tr v-if="this.activeTab == 'sinConfirmar'" v-for="partido in partidosPorConfirmar" :key="partido._links.self.href">
+                <Partido 
+                :partido="partido"
+                :activeTab="activeTab"
+                ></Partido>
+            </tr>
+            <tr v-if="this.activeTab == 'pendientes'" v-for="partido in partidosValidados" :key="partido._links.self.href">
+                <Partido 
+                :partido="partido"
+                :activeTab="activeTab"
+                ></Partido>
+            </tr>
+            <tr v-if="this.activeTab == 'jugados'" v-for="partido in partidosHistoricos" :key="partido._links.self.href">
+                <Partido 
+                :partido="partido"
+                :activeTab="activeTab"
+                ></Partido>
+            </tr>
+        </table>
     </div>
+
 </template>
 
 <style scoped>
-.read-the-docs {
-    color: #888;
+.nav-tabs .nav-link {
+    background-color: #395623;
+    color: #CCCCCC;
+    font-weight: 500;
+    border: solid, 2px;
+    border-color: #395623;
 }
+
+.nav-tabs .nav-link.active {
+    background-color: #70AD47;
+    color: white;
+    font-weight: 500;
+
+}
+
+
 </style>

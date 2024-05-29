@@ -3,6 +3,10 @@ import axios from 'axios'
 const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
 // const host = 'https://gocourtapitest.manabo.org/api/'
 const API_CAMPOS = host + 'campos'
+const API_PARTIDOS = host + 'partidos'
+const API_PARTIDOSHISTORICOS = host + 'partidos/search/partidosHistoricos'
+const API_PARTIDOSVALIDADOS = host + 'partidos/search/partidosValidados'
+const API_PARTIDOSPORCONFIRMAR = host + 'partidos/search/partidosPorConfirmar'
 const API_FEDERADOS = host + 'federados'
 const API_FEDERADOSSINPAGINAR = host + 'federados/search/federadosSinPaginacion'
 const API_PRINCIPIANTES = host + 'principiantes'
@@ -29,6 +33,26 @@ export function getCampos() {
     return llamadaAPI('get', null, API_CAMPOS)
 }
 
+export function getPartidos() {
+    return llamadaAPI('get', null, API_PARTIDOS)
+}
+
+export function getPartidosHistoricos() {
+    return llamadaAPI('get', null, API_PARTIDOSHISTORICOS)
+}
+
+export function getPartidosValidados() {
+    return llamadaAPI('get', null, API_PARTIDOSVALIDADOS)
+}
+
+export function getPartidosPorConfirmar() {
+    return llamadaAPI('get', null, API_PARTIDOSPORCONFIRMAR)
+}
+
+export function getPuntuaciones() {
+    return llamadaAPI('get', null, API_PUNTUACIONES)
+}
+
 export function getFederados() {
     return llamadaAPI('get', null, API_FEDERADOSSINPAGINAR)
 }
@@ -46,6 +70,11 @@ export function getJugadoresSimilares(id) {
 export function getFederadosSimilares(id) {
     const url = `${API_FEDERADOSSIMILARES}?id=${id}`
     console.log("lo que envia la funcion en APIservice es: ", url)
+    return llamadaAPI('get', null, url)
+}
+
+export function getPartidoPuntuaciones(id) {
+    const url = `${API_PARTIDOS}/${id}/puntuaciones`
     return llamadaAPI('get', null, url)
 }
 
