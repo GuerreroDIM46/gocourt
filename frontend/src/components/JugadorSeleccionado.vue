@@ -66,13 +66,14 @@ export default {
     margin-top: 5px;
 }
 .btn-primary {
-    background-color: #70AD47 !important;
+    background-color: #70AD47;
     border-color: #70AD47;
     color: white;
 }
 .btn-primary:hover {
-    transform: scale(1.1);
-    font-weight: 800;
+    background-color: white;
+    border-color: #70AD47;
+    color: #70AD47;
 }
 .crecer {
     flex-grow: 1;

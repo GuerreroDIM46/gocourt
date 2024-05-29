@@ -13,6 +13,7 @@ const API_PRINCIPIANTES = host + 'principiantes'
 const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSinPaginacion'
 const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
 const API_FEDERADOSSIMILARES = host + 'jugadores/search/federadosNivelSimilar'
+const API_PUNTUACIONES = host + 'puntuaciones'
 
 
 function llamadaAPI(method, body, path) {
@@ -82,6 +83,14 @@ export function postJugador(jugador) {
     const { tipo, ...jugadorSinTipo } = jugador
     const apiEndpoint = tipo == 'federado' ? API_FEDERADOS : API_PRINCIPIANTES
     return llamadaAPI('post', jugadorSinTipo, apiEndpoint)
+}
+
+export function postPartido(partido) {
+    return llamadaAPI('post', partido, API_PARTIDOS)
+}
+
+export function postAsignacion(asignacion) {
+    return llamadaAPI('post', asignacion, API_PUNTUACIONES)
 }
 
 export function putJugador(jugador, id) {

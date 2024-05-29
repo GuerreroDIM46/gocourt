@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getPuntuaciones } from '@/stores/APIservice.js'
+import { getPuntuaciones, postAsignacion } from '@/stores/APIservice.js'
 
 export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
     state: () => ({

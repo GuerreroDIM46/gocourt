@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import {
     getPartidos,
+    postPartido,
     getPartidoPuntuaciones,
     getPartidosHistoricos,
     getPartidosPorConfirmar,
@@ -46,7 +47,22 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
         async cargarPartidos() {
             return await this.cargarPartidosGenerales(getPartidos, "partidos");
         },
-        
+        async enviarPartido(partido) {
+            const response = await postPartido(partido);
+            if (response.status == 200 || response.status == 201) {
+                const { _links, ...partidoCreado } = response.data;
+                this.partidos.push(partidoCreado);
+                console.log(
+                    "Datos del partido creado devuelto por la api: ",
+                    partidoCreado
+                );
+                this.cargarPartidos();
+                const url = _links.self.href;
+                console.log("link del partido devuelto por la api", url)
+                this.debeRecargar = true
+                return url;
+            }
+        },
         async cargarPartidosHistoricos() {
             return await this.cargarPartidosGenerales(
                 getPartidosHistoricos,

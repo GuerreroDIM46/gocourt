@@ -4,7 +4,7 @@
 
 <template>
   <ul class="nav nav-tabs nav-fill">
-    <li class="nav-item">
+    <li class="nav-item me-1">
       <router-link class="nav-link" :class="{ active: $route.path == '/jugadores' }" to="/jugadores">Jugadores</router-link>
     </li>
     <li class="nav-item">

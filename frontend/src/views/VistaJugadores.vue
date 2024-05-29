@@ -5,6 +5,8 @@ import JugadorSeleccionado from "@/components/JugadorSeleccionado.vue"
 import { mapState, mapActions } from 'pinia'
 import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
+import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
+import { usePartidosAPIStore } from '@/stores/partidosAPI'
 import { Modal } from 'bootstrap'
 
 
@@ -25,10 +27,14 @@ export default {
             bsModalCrearEditarJugador: null,
             bsModalConfirmacion: null,
             bsModalVerJugador: null,
+            bsModalCrearPartido: null,
             busqueda: '',
             estado: '',
             jugador: {},
             similar: {},
+            campoSeleccionadoPartido: '',
+            fechaSeleccionada: '',
+            horaSeleccionada: '',
         }
     },
     computed: {
@@ -68,6 +74,8 @@ export default {
                 return 'Editar Jugador'
             } else if (this.estado == 'creando') {
                 return 'Nuevo Jugador'
+            } else if (this.estado == 'asignando') {
+                return 'Selecciona los detalles del partido'
             }
         },
 
@@ -75,6 +83,8 @@ export default {
     methods: {
         ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes', 'crearJugador', 'actualizarJugador', 'eliminarJugador', 'cargarJugadoresSimilares']),
         ...mapActions(useCamposAPIStore, ['cargarCampos']),
+        ...mapActions(usePuntuacionesAPIStore, ['crearAsignacion']),
+        ...mapActions(usePartidosAPIStore, ['enviarPartido']),
         cambiarPagina(nuevaPagina) {
             if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return
             this.paginaActual = nuevaPagina
@@ -94,13 +104,22 @@ export default {
                 console.log('estado: ', this.estado)
                 console.log('jugador viendo: ', jugador)
                 this.bsModalVerJugador.show();
-            }
+            } else if (this.estado == 'asignando') {
+                console.log('estado: ', this.estado)
+                console.log('jugador actual: ', jugador)
+                console.log('jugador similar: ', this.jugadorSimilar)
+                this.bsModalVerJugador.hide();
+                this.bsModalCrearPartido.show();
+            } 
         },
         ocultarModal() {
             if (this.estado == 'creando' || this.estado == 'editando') {
                 this.bsModalCrearEditarJugador.hide()
             } else if (this.estado == 'viendo') {
                 this.bsModalVerJugador.hide()
+            } else if (this.estado == 'asignando') {
+                this.bsModalCrearPartido.hide()
+                this.abrirModal('viendo', this.jugadorActual)
             }
 
         },
@@ -108,11 +127,17 @@ export default {
             if (this.estado == 'creando' || this.estado == 'editando') {
                 this.ocultarModal()
                 this.bsModalConfirmacion.show()
-            }
+            } else if (this.estado == 'asignando') {
+                this.bsModalCrearPartido.hide()
+                this.bsModalConfirmacion.show()
+            } 
         },
         ocultarModalCreado() {
             if (this.estado == 'creando' || this.estado == 'editando') {
                 this.bsModalConfirmacion.hide()
+            } else if (this.estado == 'asignando') {
+                this.bsModalConfirmacion.hide()
+                this.abrirModal('viendo', this.jugadorActual)
             }
         },
         manejarFormulario(jugador) {
@@ -127,18 +152,33 @@ export default {
                 })
             }
         },
-
-
         borrarJugador({ href }) {
             console.log("Href recibido:", href)
             this.eliminarJugador(href)
         },
-        salirModal() {
-            this.editando = false
-            this.viendo = false
-            this.jugadorActual = null
-            this.bsModal.hide()
-        }
+        async crearPartido() {
+            const partido = {
+                campo: this.campoSeleccionadoPartido,
+                cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00Z`,
+            }
+            const partidoURL = await this.enviarPartido(partido)
+            const asignacion1 = {
+                aceptado: false,
+                jugador: this.jugadorActual._links.self.href,
+                partido: partidoURL
+            }
+            const asignacion2 = {
+                aceptado: false,
+                jugador: this.jugadorSimilar._links.self.href,
+                partido: partidoURL
+            }
+            const asignacion1URL = await this.crearAsignacion(asignacion1)
+            const asignacion2URL = await this.crearAsignacion(asignacion2)
+            console.log('asignaciones devueltas', asignacion1URL)
+            console.log('asignaciones devueltas', asignacion2URL)
+            this.mostrarModalCreado()
+        },
+
 
     },
     watch: {
@@ -173,6 +213,7 @@ export default {
         this.bsModalCrearEditarJugador = new Modal(this.$refs.modalCrearEditarJugador)
         this.bsModalVerJugador = new Modal(this.$refs.modalVerJugador)
         this.bsModalConfirmacion = new Modal(this.$refs.modalConfirmacion)
+        this.bsModalCrearPartido = new Modal(this.$refs.modalCrearPartido)
     }
 }
 </script>
@@ -344,6 +385,50 @@ export default {
             </div>
         </div>
     </div>
+    <!-- Modal creacion de partidos-->
+    <div class="modal fade" id="modalCrearPartido" ref="modalCrearPartido" tabindex="-1"
+        aria-labelledby="modalCrearPartidoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeclaro" :class="{ 'verdeoscuro': this.estado == 'viendo' }">
+                    <h1 class="modal-title fs-5" id="modalCrearPartidoLabel">{{ tituloModal }}</h1>
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"  @click="ocultarModal"
+                        aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="row">
+                            <div class="col-md-12 form-group mb-3">
+                                <label for="campo">Campo</label>
+                                <select id="campo" class="form-select" v-model="campoSeleccionadoPartido">
+                                    <option v-for="campo in campos" :key="campo._links.self.href"
+                                        :value="campo._links.self.href">{{
+                            campo.nombre }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="fecha">Fecha</label>
+                                <input type="date" id="fecha" class="form-control" v-model="fechaSeleccionada" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-3">
+                                <label for="hora">Hora</label>
+                                <input type="time" id="hora" class="form-control" v-model="horaSeleccionada" required>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="ocultarModal">Cancelar</button>
+                            <div class="ml-auto">
+                                <button type="button" class="btn btn-primary"
+                                    @click="crearPartido">Confirmar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
         <!-- Modal Confirmacion -->
     <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel"
         aria-hidden="true">
@@ -354,12 +439,15 @@ export default {
                         jugador</h1>
                     <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">Edicion de
                         jugador</h1>
+                    <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">Creacion de
+                        partido</h1>
                     <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
                         aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
                 </div>
                 <div class="modal-body d-flex align-items-center justify-content-center">
                     <h5 v-if="this.estado == 'creando'" style="text-align:justify;">Jugador creado correctamente</h5>
                     <h5 v-if="this.estado == 'editando'" style="text-align:justify;">Jugador editado correctamente</h5>
+                    <h5 v-if="this.estado == 'asignando'" style="text-align:justify;">Partido creado correctamente</h5>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pues muy bien</button>
@@ -456,6 +544,26 @@ export default {
     /* Color del texto al pasar el mouse */
 }
 
+.btn-primary {
+    background-color: #70AD47;
+    border-color: #70AD47;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: white;
+    border-color: #70AD47;
+    color: #70AD47;
+}
+.btn-secondary {
+    background-color: #395623 ;
+    border-color: #395623;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: white;
+    border-color: #395623;
+    color: #395623;
+}
 .btn-outline-success:hover {
     background-color: #70AD47 !important;
     border-color: #70AD47;

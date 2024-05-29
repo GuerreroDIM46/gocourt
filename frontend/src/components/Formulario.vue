@@ -201,22 +201,24 @@ export default {
 
 <style scoped>
 .btn-primary {
-    background-color: #70AD47 !important;
+    background-color: #70AD47;
     border-color: #70AD47;
     color: white;
 }
 .btn-primary:hover {
-    transform: scale(1.1);
-    font-weight: 800;
+    background-color: white;
+    border-color: #70AD47;
+    color: #70AD47;
 }
 .btn-secondary {
-    background-color: #395623 !important;
+    background-color: #395623 ;
     border-color: #395623;
     color: white;
 }
 .btn-secondary:hover {
-    transform: scale(1.1);
-    font-weight: 800;
+    background-color: white;
+    border-color: #395623;
+    color: #395623;
 }
 .crecer {
     flex-grow: 1;

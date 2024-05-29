@@ -116,7 +116,7 @@ export default {
 }
 
 .icono-fontawesome:hover {
-    transform: scale(1.5);
+    transform: scale(1.2);
 }
 
 .btn-outline-primary {
