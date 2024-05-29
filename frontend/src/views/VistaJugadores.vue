@@ -304,6 +304,12 @@ export default {
                                     <div class="fl"> - DNI: {{ this.jugadorActual.dni }}</div>
                                 </div>
                                 <div class="jugador containerjugador">
+                                    <div class="fl"> - Su telefono es: {{ this.jugadorActual.telefono }}</div>
+                                </div>
+                                <div class="jugador containerjugador">
+                                    <div class="fl"> - Su correo electronico es: {{ this.jugadorActual.email }}</div>
+                                </div>
+                                <div class="jugador containerjugador">
                                     <div class="fl"> - Juega en: {{ this.jugadorActual.nombreCampo }}</div>
                                 </div>
                                 <div class="jugador containerjugador">
@@ -313,7 +319,8 @@ export default {
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'principiante'"> - Su handicap
                                         simulado
                                         es: {{
-                                        this.jugadorActual.handicap.toFixed(1) }}</div>
+                                        this.jugadorActual.handicap.toFixed(1) }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="card">
