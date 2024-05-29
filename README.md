@@ -32,9 +32,8 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
    2. Librería: pendiente developer
 
 7. **Despliegue en Internet:**  
-    * API: 
-        - https://gocourt-5ef625746984.herokuapp.com/api  
-  
+    * API:
+        - https://gocourt-5ef625746984.herokuapp.com/api    
     * Web: 
         - https://gocourt.netlify.app  
 
@@ -42,7 +41,7 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
         - https://gocourtapitest.manabo.org  
         - https://gocourttest.manabo.org  
     
-    * Aplicacion alternativa:
+    * Aplicacion alternativa:  
         - https://gocourtapi.manabo.org  
         - https://gocourt.manabo.org  
 

@@ -304,10 +304,14 @@ export default {
                                     <div class="fl"> - DNI: {{ this.jugadorActual.dni }}</div>
                                 </div>
                                 <div class="jugador containerjugador">
-                                    <div class="fl"> - Su telefono es: {{ this.jugadorActual.telefono }}</div>
+                                    <div class="fl"> - Su telefono es: 
+                                        <a :href="'tel:' + jugadorActual.telefono">{{ jugadorActual.telefono }}</a>
+                                    </div>
                                 </div>
                                 <div class="jugador containerjugador">
-                                    <div class="fl"> - Su correo electronico es: {{ this.jugadorActual.email }}</div>
+                                    <div class="fl"> - Su correo electronico es:
+                                        <a :href="'mailto:' + jugadorActual.email">{{ jugadorActual.email }}</a>
+                                    </div>
                                 </div>
                                 <div class="jugador containerjugador">
                                     <div class="fl"> - Juega en: {{ this.jugadorActual.nombreCampo }}</div>
