@@ -31,30 +31,10 @@ public class EmailController {
 
     @Autowired
     private PuntuacionDAO puntuacionDAO;
-
-    @PostMapping("/sendEmailDePrueba")
-    public String sendEmailDePrueba() {
-        String to = "sirxavor@gmail.com"; // Cambia esto al correo de destino para la prueba
-        String subject = "Correo de Prueba";
-        String templateName = "registration"; 
-
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("name", "majo");
-
-        try {
-            emailService.sendHtmlEmail(to, subject, templateName, variables);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return "Error al enviar el correo: " + e.getMessage();
-        }
-        
-        return "Correo de prueba enviado con éxito";
-    }
     
     @PostMapping("/sendComunicadoAsignacionDePartido")
     public String sendComunicadoAsignacionDePartido(@RequestBody Map<String, Long> ids) {
         try {
-            // Obtener datos de las entidades proporcionadas
             Partido partido = partidoDAO.findById(ids.get("partidoId")).orElse(null);
             Puntuacion puntuacion1 = puntuacionDAO.findById(ids.get("puntuacion1Id")).orElse(null);
             Puntuacion puntuacion2 = puntuacionDAO.findById(ids.get("puntuacion2Id")).orElse(null);
@@ -73,6 +53,7 @@ public class EmailController {
             String nombreJugador1 = puntuacion1.getJugador().getNombre();
             String jugador2 = puntuacion2.getNombreCompleto();  
             String emailJugador1 = puntuacion1.getJugador().getEmail();
+            Long puntuacion1Id = puntuacion1.getId();
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("campo", campo);
@@ -80,9 +61,11 @@ public class EmailController {
             variables.put("hora", hora);
             variables.put("jugador1", nombreJugador1);
             variables.put("jugador2", jugador2);
+            variables.put("aceptarInvitacion", "http://localhost:8080/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true" );
+            variables.put("rechazarInvitacion", "http://localhost:8080/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false" );
 
-//            String to = emailJugador1;
-            String to = "sirxavor@gmail.com";
+            String to = emailJugador1;
+//            String to = "sirxavor@gmail.com";
             String subject = "Comunicado de Asignación de Partido";
             String templateName = "asignacionPartido"; 
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
-// const host = 'https://gocourtapitest.manabo.org/api/'
+// const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
+const host = 'https://gocourtapitest.manabo.org/api/'
 const API_CAMPOS = host + 'campos'
 const API_PARTIDOS = host + 'partidos'
 const API_PARTIDOSHISTORICOS = host + 'partidos/search/partidosHistoricos'
@@ -102,7 +102,7 @@ export function deleteEntidad(href) {
     return llamadaAPI('delete', null, href)
 }
 
-export function sendSolicitudPartido(body) {
+export function sendSolicitudPartido(json) {
     const url = `${API_EMAIL}/sendComunicadoAsignacionDePartido`
-    return llamadaAPI('post', body, url)
+    return llamadaAPI('post', json, url)
 }

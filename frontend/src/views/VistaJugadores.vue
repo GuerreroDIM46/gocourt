@@ -165,12 +165,12 @@ export default {
             }
             const partidoURL = await this.enviarPartido(partido)
             const asignacion1 = {
-                aceptado: false,
+                // aceptado: false,
                 jugador: this.jugadorActual._links.self.href,
                 partido: partidoURL
             }
             const asignacion2 = {
-                aceptado: false,
+                // aceptado: false,
                 jugador: this.jugadorSimilar._links.self.href,
                 partido: partidoURL
             }

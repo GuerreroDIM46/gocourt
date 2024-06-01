@@ -5,21 +5,21 @@ export const useEmailAPIStore = defineStore('emailAPI', {
     actions: {
         async enviarEmailsSolicitud(urlPartido, urlAsignacion1, urlAsignacion2) {
 
-            const partidoId = extractIdFromUrl(urlPartido)
-            const puntuacion1Id = extractIdFromUrl(urlAsignacion1)
-            const puntuacion2Id = extractIdFromUrl(urlAsignacion2)
+            const apartidoId = extractIdFromUrl(urlPartido)
+            const apuntuacion1Id = extractIdFromUrl(urlAsignacion1)
+            const apuntuacion2Id = extractIdFromUrl(urlAsignacion2)
 
             const bodyCorreo1 = {
-                "partidoId": partidoId,
-                "puntuacion1Id": puntuacion1Id,
-                "puntuacion2Id": puntuacion2Id
+                partidoId: apartidoId,
+                puntuacion1Id: apuntuacion1Id,
+                puntuacion2Id: apuntuacion2Id
             }
             const bodyCorreo2 = {
-                "partidoId": partidoId,
-                "puntuacion1Id": puntuacion2Id,
-                "puntuacion2Id": puntuacion1Id
+                partidoId: apartidoId,
+                puntuacion1Id: apuntuacion2Id,
+                puntuacion2Id: apuntuacion1Id
             }
-
+            console.log('el body que estoy enviando' + bodyCorreo1)
             const response1 = await sendSolicitudPartido(bodyCorreo1)
             const response2 = await sendSolicitudPartido(bodyCorreo2)
 

@@ -28,6 +28,7 @@ import es.mde.entidades.Federado;
 import es.mde.entidades.Jugador;
 import es.mde.entidades.Partido;
 import es.mde.entidades.Principiante;
+import es.mde.entidades.Puntuacion;
 
 
 
@@ -72,6 +73,7 @@ public class ConfiguracionRest {
         controllersRegistrados.put(Federado.class, FederadoController.class);
         controllersRegistrados.put(Principiante.class, PrincipianteController.class);
         controllersRegistrados.put(Partido.class, PartidoController.class);
+        controllersRegistrados.put(Puntuacion.class, PuntuacionController.class);
 
         return new RepresentationModelProcessor<RepositorySearchesResource>() {
 
