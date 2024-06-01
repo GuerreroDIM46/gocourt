@@ -9,15 +9,15 @@ export const useEmailAPIStore = defineStore('emailAPI', {
             const puntuacion1Id = extractIdFromUrl(urlAsignacion1)
             const puntuacion2Id = extractIdFromUrl(urlAsignacion2)
 
-    const bodyCorreo1 = {
-                partidoId: partidoId,
-                puntuacion1Id: puntuacion1Id,
-                puntuacion2Id: puntuacion2Id
+            const bodyCorreo1 = {
+                "partidoId": partidoId,
+                "puntuacion1Id": puntuacion1Id,
+                "puntuacion2Id": puntuacion2Id
             }
             const bodyCorreo2 = {
-                partidoId: partidoId,
-                puntuacion1Id: puntuacion2Id,
-                puntuacion2Id: puntuacion1Id
+                "partidoId": partidoId,
+                "puntuacion1Id": puntuacion2Id,
+                "puntuacion2Id": puntuacion1Id
             }
 
             const response1 = await sendSolicitudPartido(bodyCorreo1)
