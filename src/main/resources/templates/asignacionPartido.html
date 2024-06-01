@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comunicado de Asignación de Partido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007BFF;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .button-decline {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Estimado/a [[${jugador1}]]</h1>
+        <p>
+            Nos complace informarle que se le ha asignado un partido de golf en el campo <strong>[[${campo}]]</strong> el día <strong>[[${fecha}]]</strong> a las <strong>[[${hora}]]</strong>. Su oponente será <strong>[[${jugador2}]]</strong>.
+        </p>
+        <p>
+            Por favor, confirme su asistencia utilizando uno de los siguientes enlaces:
+        </p>
+        <p>
+            <a href="#" class="button">Confirmar Asistencia</a>
+        </p>
+        <p>
+            Si no puede asistir, haga clic en el siguiente enlace:
+        </p>
+        <p>
+            <a href="#" class="button button-decline">Rechazar Invitación</a>
+        </p>
+        <p>
+            Gracias por su atención. ¡Le deseamos un excelente juego!
+        </p>
+        <p>
+            Atentamente,
+            <br>
+            El equipo de GoCourt
+        </p>
+    </div>
+</body>
+</html>

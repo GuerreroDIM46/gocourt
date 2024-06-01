@@ -14,6 +14,7 @@ const API_PRINCIPIANTESSINPAGINAR = host + 'principiantes/search/principiantesSi
 const API_JUGADORESSIMILARES = host + 'jugadores/search/jugadoresNivelSimilar'
 const API_FEDERADOSSIMILARES = host + 'jugadores/search/federadosNivelSimilar'
 const API_PUNTUACIONES = host + 'puntuaciones'
+const API_EMAIL = host + 'email'
 
 
 function llamadaAPI(method, body, path) {
@@ -99,4 +100,9 @@ export function putJugador(jugador, id) {
 
 export function deleteEntidad(href) {
     return llamadaAPI('delete', null, href)
+}
+
+export function sendSolicitudPartido(body) {
+    const url = `${API_EMAIL}/sendComunicadoAsignacionDePartido`
+    return llamadaAPI('post', body, url)
 }

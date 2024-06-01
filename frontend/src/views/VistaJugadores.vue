@@ -7,6 +7,7 @@ import { useJugadoresAPIStore } from '@/stores/jugadoresAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
 import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
 import { usePartidosAPIStore } from '@/stores/partidosAPI'
+import { useEmailAPIStore } from '@/stores/emailAPI'
 import { Modal } from 'bootstrap'
 
 
@@ -85,6 +86,7 @@ export default {
         ...mapActions(useCamposAPIStore, ['cargarCampos']),
         ...mapActions(usePuntuacionesAPIStore, ['crearAsignacion']),
         ...mapActions(usePartidosAPIStore, ['enviarPartido']),
+        ...mapActions(useEmailAPIStore, ['enviarEmailsSolicitud']),
         cambiarPagina(nuevaPagina) {
             if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return
             this.paginaActual = nuevaPagina
@@ -176,6 +178,7 @@ export default {
             const asignacion2URL = await this.crearAsignacion(asignacion2)
             console.log('asignaciones devueltas', asignacion1URL)
             console.log('asignaciones devueltas', asignacion2URL)
+            this.enviarEmailsSolicitud(partidoURL, asignacion1URL, asignacion2URL)
             this.mostrarModalCreado()
         },
 
