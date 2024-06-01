@@ -64,8 +64,8 @@ public class EmailController {
             variables.put("aceptarInvitacion", "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true" );
             variables.put("rechazarInvitacion", "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false" );
 
-            String to = emailJugador1;
-//            String to = "sirxavor@gmail.com";
+//            String to = emailJugador1;
+            String to = "sirxavor@gmail.com";
             String subject = "Comunicado de Asignación de Partido";
             String templateName = "asignacionPartido"; 
 
