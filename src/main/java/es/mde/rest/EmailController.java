@@ -54,6 +54,7 @@ public class EmailController {
     @PostMapping("/sendComunicadoAsignacionDePartido")
     public String sendComunicadoAsignacionDePartido(@RequestBody Map<String, Long> ids) {
         try {
+            // Obtener datos de las entidades proporcionadas
             Partido partido = partidoDAO.findById(ids.get("partidoId")).orElse(null);
             Puntuacion puntuacion1 = puntuacionDAO.findById(ids.get("puntuacion1Id")).orElse(null);
             Puntuacion puntuacion2 = puntuacionDAO.findById(ids.get("puntuacion2Id")).orElse(null);
@@ -93,6 +94,6 @@ public class EmailController {
             return "Error al enviar el correo: " + e.getMessage();
         }
     }
-
+   
    
 }
