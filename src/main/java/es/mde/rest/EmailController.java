@@ -54,6 +54,9 @@ public class EmailController {
             String jugador2 = puntuacion2.getNombreCompleto();  
             String emailJugador1 = puntuacion1.getJugador().getEmail();
             Long puntuacion1Id = puntuacion1.getId();
+            String aceptarInvitacionUrl = "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
+            String rechazarInvitacionUrl = "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
+
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("campo", campo);
@@ -61,9 +64,9 @@ public class EmailController {
             variables.put("hora", hora);
             variables.put("jugador1", nombreJugador1);
             variables.put("jugador2", jugador2);
-            variables.put("hrefAceptarInvitacion", "href=\"https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true\"" );
-            variables.put("hrefRechazarInvitacion", "href=\"https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false\"" );
-
+            variables.put("aceptarInvitacion", aceptarInvitacionUrl);
+            variables.put("rechazarInvitacion", rechazarInvitacionUrl);
+            
 //            String to = emailJugador1;
             String to = "sirxavor@gmail.com";
             String subject = "Comunicado de Asignación de Partido";
