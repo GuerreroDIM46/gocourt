@@ -2,7 +2,7 @@ package es.mde.rest;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,7 +18,7 @@ public class PuntuacionController {
 		this.puntuacionDAO = puntuacionDAO;
 	}
 
-	@PatchMapping("/puntuaciones/search/actualizarAsistencia")
+	@GetMapping("/puntuaciones/search/actualizarAsistencia")
 	@ResponseBody
 	public String patchActualizarAsistencia(@RequestParam Long id, @RequestParam boolean aceptado) {
 		return puntuacionDAO.actualizarAsistencia(id, aceptado);
