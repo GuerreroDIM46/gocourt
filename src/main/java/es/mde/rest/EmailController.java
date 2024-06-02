@@ -61,8 +61,8 @@ public class EmailController {
             variables.put("hora", hora);
             variables.put("jugador1", nombreJugador1);
             variables.put("jugador2", jugador2);
-            variables.put("aceptarInvitacion", "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true" );
-            variables.put("rechazarInvitacion", "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false" );
+            variables.put("hrefAceptarInvitacion", "href=\"https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true\"" );
+            variables.put("hrefRechazarInvitacion", "href=\"https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false\"" );
 
 //            String to = emailJugador1;
             String to = "sirxavor@gmail.com";
