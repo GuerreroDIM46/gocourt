@@ -22,6 +22,8 @@ import jakarta.mail.MessagingException;
 @RequestMapping("/api/email")
 public class EmailController {
 	
+//	private String direccionAPI = "https://gocourtapitest.manabo.org/api/";
+	private String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
 	
     @Autowired
     private EmailService emailService;
@@ -53,10 +55,10 @@ public class EmailController {
             String nombreJugador1 = puntuacion1.getJugador().getNombre();
             String jugador2 = puntuacion2.getNombreCompleto();  
             String emailJugador1 = puntuacion1.getJugador().getEmail();
-            Long puntuacion1Id = puntuacion1.getId();
-            String aceptarInvitacionUrl = "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
-            String rechazarInvitacionUrl = "https://gocourtapitest.manabo.org/api/puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
-
+            Long puntuacion1Id = puntuacion1.getId();                       
+            String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
+            String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
+            
 
             Map<String, Object> variables = new HashMap<>();
             variables.put("campo", campo);
@@ -67,8 +69,8 @@ public class EmailController {
             variables.put("aceptarInvitacion", aceptarInvitacionUrl);
             variables.put("rechazarInvitacion", rechazarInvitacionUrl);
             
-//            String to = emailJugador1;
-            String to = "sirxavor@gmail.com";
+            String to = emailJugador1;
+//            String to = "sirxavor@gmail.com";
             String subject = "Comunicado de Asignación de Partido";
             String templateName = "asignacionPartido"; 
 
