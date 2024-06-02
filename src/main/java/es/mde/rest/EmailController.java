@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,8 @@ import jakarta.mail.MessagingException;
 @RequestMapping("/api/email")
 public class EmailController {
 	
-//	private String direccionAPI = "https://gocourtapitest.manabo.org/api/";
-	private String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
+    @Value("${api.direccion}")
+    private String direccionAPI;
 	
     @Autowired
     private EmailService emailService;
@@ -45,9 +46,6 @@ public class EmailController {
                 return "Error: No se encontraron algunas entidades.";
             }
             
-//        	String direccionAPI = "https://gocourtapitest.manabo.org/api/";
-        	String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
-
             String campo = partido.getNombreCampo();
             LocalDateTime fechaHora = partido.getCuando();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
