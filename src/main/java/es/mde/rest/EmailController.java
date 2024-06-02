@@ -23,8 +23,8 @@ import jakarta.mail.MessagingException;
 @RequestMapping("/api/email")
 public class EmailController {
 	
-    @Value("${api.direccion}")
-    private String direccionAPI;
+//    @Value("${api.direccion}")
+//    private String direccionAPI;
 	
     @Autowired
     private EmailService emailService;
@@ -45,7 +45,7 @@ public class EmailController {
             if (partido == null || puntuacion1 == null || puntuacion2 == null) {
                 return "Error: No se encontraron algunas entidades.";
             }
-            
+            String direccionAPI = "https://gocourtapitest.manabo.org/api/";
             String campo = partido.getNombreCampo();
             LocalDateTime fechaHora = partido.getCuando();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -71,7 +71,6 @@ public class EmailController {
             variables.put("rechazarInvitacion", rechazarInvitacionUrl);
             
             String to = emailJugador1;
-//            String to = "sirxavor@gmail.com";
             String subject = "Comunicado de Asignación de Partido";
             String templateName = "asignacionPartido"; 
 
