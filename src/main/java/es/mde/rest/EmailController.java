@@ -45,7 +45,7 @@ public class EmailController {
             if (partido == null || puntuacion1 == null || puntuacion2 == null) {
                 return "Error: No se encontraron algunas entidades.";
             }
-            String direccionAPI = "https://gocourtapitest.manabo.org/api/";
+            String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
             String campo = partido.getNombreCampo();
             LocalDateTime fechaHora = partido.getCuando();
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
