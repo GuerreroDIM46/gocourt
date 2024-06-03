@@ -56,6 +56,7 @@ public class EmailInicializerService {
         String hora = fechaHora.toLocalTime().format(timeFormatter);        
         String nombreJugador1 = puntuacion1.getJugador().getNombre();
         String jugador2 = puntuacion2.getNombreCompleto();
+        String emailJugador1 = Puntuacion1.getJugador().getEmail();
         String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
         String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
         String aceptarIntercambioUrl = direccionAPI;
@@ -63,6 +64,7 @@ public class EmailInicializerService {
         
 
         Map<String, Object> variables = new HashMap<>();
+        variables.put("emailJugador1", emailJugador1);
         variables.put("campo", campo);
         variables.put("fecha", fecha);
         variables.put("hora", hora);
@@ -92,8 +94,8 @@ public class EmailInicializerService {
     private void enviarEmailSugerencia(Partido partido, Puntuacion puntuacion1, Puntuacion puntuacion2) {
         try {
             Map<String, Object> variables = obtenerVariablesEmail(partido, puntuacion1, puntuacion2);
-            String to = (String) variables.get("emailJugador1");
-            String subject = "Comunicado de Asignación de Partido";
+            String to = (String) variables.get("to");
+            String subject = "Solicitud de intercambio de numeros de telefono";
             String templateName = "sugerenciaCompartirTelefono";
 
             emailService.sendHtmlEmail(to, subject, templateName, variables);
