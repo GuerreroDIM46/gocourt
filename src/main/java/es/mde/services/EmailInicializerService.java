@@ -101,9 +101,5 @@ public class EmailInicializerService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }
-
-            
-    
-    
+    }    
 }
