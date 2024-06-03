@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Comunicado de Asignación de Partido</title>
+    <title>Intercambio de Números de Teléfono</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: #fff;
+            background: #ffffff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -30,13 +30,10 @@
             padding: 10px 20px;
             margin: 10px 0;
             font-size: 16px;
-            color: #fff;
+            color: #ffffff;
             background-color: #70AD47;
             border-radius: 5px;
             text-decoration: none;
-        }
-        .button-decline {
-            background-color: #395623;
         }
     </style>
 </head>
@@ -44,21 +41,22 @@
     <div class="container">
         <h1>Estimado/a [[${jugador1}]]</h1>
         <p>
-            Nos complace informarle que se le ha asignado un partido de golf en el campo <strong>[[${campo}]]</strong> el día <strong>[[${fecha}]]</strong> a las <strong>[[${hora}]]</strong>. Su oponente será <strong>[[${jugador2}]]</strong>.
+            Nos complace informarte que tanto tú como tu oponente <strong>[[${jugador2}]]</strong> han aceptado compartir sus números de teléfono para coordinar la nueva fecha del partido de golf.
         </p>
         <p>
-            Por favor, confirme su asistencia utilizando uno de los siguientes enlaces:
-        </p>
-<p>
-            <a th:href="${aceptarInvitacion}" class="button">Confirmar Asistencia</a>
+            Aquí tienes el número de teléfono de <strong>[[${jugador2}]]</strong>: <strong>[[${telefonoJugador2}]]</strong>.
         </p>
         <p>
-            Si no puede asistir, haga clic en el siguiente enlace:
+            Por favor, ponte en contacto con <strong>[[${jugador2}]]</strong> para coordinar la nueva fecha del partido.
         </p>
         <p>
-            <a th:href="${rechazarInvitacion}" class="button button-decline">Rechazar Invitación</a>
+            Si consiguen llegar a un acuerdo sobre la fecha y lugar del partido, por favor, hagan clic en el siguiente botón para introducir los detalles del partido:
+        </p>
         <p>
-            Gracias por su atención. ¡Le deseamos un excelente juego!
+            <a href="[[${introducirDetallesPartido}]]" class="button">Introducir Detalles del Partido</a>
+        </p>
+        <p>
+            Gracias por tu colaboración y esperamos que puedan encontrar una fecha adecuada para el partido.
         </p>
         <p>
             Atentamente,

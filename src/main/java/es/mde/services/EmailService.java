@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-
+import es.mde.entidades.Puntuacion;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
@@ -38,4 +38,13 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    
+    public void enviarTelefonoYEnlaceFormulario() {
+        
+    }
+
+    
+
+    
+    
 }

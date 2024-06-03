@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.mde.entidades.Puntuacion;
+import es.mde.services.EmailService;
+import es.mde.services.EmailInicializerService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -14,6 +16,8 @@ public class PuntuacionDAOImpl implements PuntuacionDAOCustom {
     PuntuacionDAO puntuacionDAO;
     @PersistenceContext
     EntityManager entityManager;
+    @Autowired
+    EmailInicializerService emailInicializerService;
     
     public String actualizarAsistencia(Long id, boolean aceptado) {
     	
@@ -25,6 +29,11 @@ public class PuntuacionDAOImpl implements PuntuacionDAOCustom {
         
     	puntuacion.setAceptado(aceptado); 
     	puntuacionDAO.save(puntuacion);
+    	
+    	if (aceptado == false) {
+    	    emailInicializerService.inicializarSugerencia(id);
+    	}
+    	    
     	return aceptado ? "Asistencia confirmada." : "Invitación rechazada.";
     }
 

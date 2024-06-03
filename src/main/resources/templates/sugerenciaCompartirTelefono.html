@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Comunicado de Asignación de Partido</title>
+    <title>Intercambio de Números de Teléfono para Coordinar Partido</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background: #fff;
+            background: #ffffff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -30,7 +30,7 @@
             padding: 10px 20px;
             margin: 10px 0;
             font-size: 16px;
-            color: #fff;
+            color: #ffffff;
             background-color: #70AD47;
             border-radius: 5px;
             text-decoration: none;
@@ -44,21 +44,25 @@
     <div class="container">
         <h1>Estimado/a [[${jugador1}]]</h1>
         <p>
-            Nos complace informarle que se le ha asignado un partido de golf en el campo <strong>[[${campo}]]</strong> el día <strong>[[${fecha}]]</strong> a las <strong>[[${hora}]]</strong>. Su oponente será <strong>[[${jugador2}]]</strong>.
+            Lamentablemente se ha rechazado el partido de golf en el campo <strong>[[${campo}]]</strong> el día <strong>[[${fecha}]]</strong> a las <strong>[[${hora}]]</strong> contra <strong>[[${jugador2}]]</strong>.
         </p>
         <p>
-            Por favor, confirme su asistencia utilizando uno de los siguientes enlaces:
-        </p>
-<p>
-            <a th:href="${aceptarInvitacion}" class="button">Confirmar Asistencia</a>
+            Si el problema es la incompatibilidad de horarios, sugerimos intercambiar los números de teléfono con tu oponente, [[${jugador2}]], para coordinar una nueva fecha.
         </p>
         <p>
-            Si no puede asistir, haga clic en el siguiente enlace:
+            ¿Aceptas intercambiar tu número de teléfono con [[${jugador2}]] para coordinar la nueva fecha del partido?
         </p>
         <p>
-            <a th:href="${rechazarInvitacion}" class="button button-decline">Rechazar Invitación</a>
+            <a href="[[${aceptarIntercambio}]]" class="button">Aceptar Intercambio</a>
+        </p>
         <p>
-            Gracias por su atención. ¡Le deseamos un excelente juego!
+            Si no deseas intercambiar tu número de teléfono, haz clic en el siguiente enlace:
+        </p>
+        <p>
+            <a href="[[${rechazarIntercambio}]]" class="button button-decline">Rechazar Intercambio</a>
+        </p>
+        <p>
+            Gracias por tu comprensión y esperamos que puedan encontrar una fecha adecuada para el partido.
         </p>
         <p>
             Atentamente,
@@ -68,3 +72,4 @@
     </div>
 </body>
 </html>
+
