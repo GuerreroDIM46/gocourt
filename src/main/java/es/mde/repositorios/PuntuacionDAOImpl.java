@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.mde.entidades.Puntuacion;
-import es.mde.services.EmailService;
 import es.mde.services.EmailInicializerService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
