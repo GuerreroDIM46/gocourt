@@ -21,7 +21,7 @@ public class EmailService {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${from.address}")
+    @Value("${spring.mail.username}")
     private String fromAddress;
     
     public void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> variables) throws MessagingException {

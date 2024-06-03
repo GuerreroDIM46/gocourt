@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import es.mde.entidades.Partido;
@@ -24,6 +25,9 @@ public class EmailInicializerService {
     
     @Autowired
     private EmailService emailService;
+    
+    @Value("${api.direccion}")
+    private String direccionAPI;
 
     public Map<String, Object> prepareVariablesForAsignacionDePartido(Long partidoId, Long puntuacion1Id, Long puntuacion2Id) {
         Partido partido = partidoDAO.findById(partidoId).orElse(null);
@@ -49,10 +53,7 @@ public class EmailInicializerService {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String fecha = fechaHora.toLocalDate().format(dateFormatter);
-        String hora = fechaHora.toLocalTime().format(timeFormatter);
-        
-        String direccionAPI = "https://gocourtapitest.manabo.org/api/";
-//        String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
+        String hora = fechaHora.toLocalTime().format(timeFormatter);        
         String nombreJugador1 = puntuacion1.getJugador().getNombre();
         String jugador2 = puntuacion2.getNombreCompleto();
         String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
