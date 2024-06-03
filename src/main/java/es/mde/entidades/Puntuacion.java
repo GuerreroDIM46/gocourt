@@ -20,7 +20,7 @@ public class Puntuacion {
     private Long id;
     
     private float puntuacion;
-    private boolean aceptado;
+    private boolean aceptado, compartidoTelefono;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JUGADOR")
@@ -54,6 +54,14 @@ public class Puntuacion {
 
 	public void setAceptado(boolean aceptado) {
         this.aceptado = aceptado;
+    }	
+
+    public boolean isCompartidoTelefono() {
+        return compartidoTelefono;
+    }
+
+    public void setCompartidoTelefono(boolean comparteTelefono) {
+        this.compartidoTelefono = comparteTelefono;
     }
 
     public Jugador getJugador() {

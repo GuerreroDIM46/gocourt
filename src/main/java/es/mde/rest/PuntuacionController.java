@@ -12,16 +12,23 @@ import es.mde.repositorios.PuntuacionDAO;
 @Configuration
 public class PuntuacionController {
 
-	private PuntuacionDAO puntuacionDAO;
+    private PuntuacionDAO puntuacionDAO;
 
-	public PuntuacionController(PuntuacionDAO puntuacionDAO) {
-		this.puntuacionDAO = puntuacionDAO;
-	}
+    public PuntuacionController(PuntuacionDAO puntuacionDAO) {
+        this.puntuacionDAO = puntuacionDAO;
+    }
 
-	@GetMapping("/puntuaciones/search/actualizarAsistencia")
-	@ResponseBody
-	public String patchActualizarAsistencia(@RequestParam Long id, @RequestParam boolean aceptado) {
-		return puntuacionDAO.actualizarAsistencia(id, aceptado);
-	}
+    @GetMapping("/puntuaciones/search/actualizarAsistencia")
+    @ResponseBody
+    public String patchActualizarAsistencia(@RequestParam Long id, @RequestParam boolean aceptado) {
+        return puntuacionDAO.actualizarAsistencia(id, aceptado);
+    }
+
+    @GetMapping("/puntuaciones/search/actualizarCompartidoTelefono")
+    @ResponseBody
+    public String patchActualizarCompartidoTelefono(@RequestParam Long id,
+            @RequestParam boolean compartidoTelefono) {
+        return puntuacionDAO.actualizarCompartidoTelefono(id, compartidoTelefono);
+    }
 
 }

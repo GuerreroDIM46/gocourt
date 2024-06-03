@@ -18,13 +18,13 @@ import jakarta.mail.MessagingException;
 public class EmailInicializerService {
     
     @Autowired
-    private PartidoDAO partidoDAO;
+    PartidoDAO partidoDAO;
 
     @Autowired
-    private PuntuacionDAO puntuacionDAO;
+    PuntuacionDAO puntuacionDAO;
     
     @Autowired
-    private EmailService emailService;
+    EmailService emailService;
     
     @Value("${api.direccion}")
     private String direccionAPI;
@@ -47,7 +47,6 @@ public class EmailInicializerService {
         Puntuacion puntuacion2 = Puntuacion2;       
         
         Long puntuacion1Id = puntuacion1.getId();
-        Long puntuacion2Id = puntuacion2.getId();
         String campo = partido.getNombreCampo();
         LocalDateTime fechaHora = partido.getCuando();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -57,11 +56,12 @@ public class EmailInicializerService {
         String nombreJugador1 = puntuacion1.getJugador().getNombre();
         String jugador2 = puntuacion2.getNombreCompleto();
         String emailJugador1 = Puntuacion1.getJugador().getEmail();
+        String telefonoJugador2 = puntuacion2.getJugador().getTelefono();
         String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
         String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
-        String aceptarIntercambioUrl = direccionAPI;
-        String rechazarIntercambioUrl = direccionAPI;
-        
+        String aceptarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=true";
+        String rechazarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=false";
+        String introducirDetallesPartidoURL = direccionAPI;
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("emailJugador1", emailJugador1);
@@ -70,11 +70,12 @@ public class EmailInicializerService {
         variables.put("hora", hora);
         variables.put("jugador1", nombreJugador1);
         variables.put("jugador2", jugador2);
+        variables.put("telefonoJugador2", telefonoJugador2);
         variables.put("aceptarInvitacion", aceptarInvitacionUrl);
         variables.put("rechazarInvitacion", rechazarInvitacionUrl);
         variables.put("aceptarIntercambio", aceptarIntercambioUrl);
         variables.put("rechazarIntercambio", rechazarIntercambioUrl);
-
+        variables.put("introducirDetallesPartido", introducirDetallesPartidoURL);
         return variables;
     }
 
@@ -91,10 +92,10 @@ public class EmailInicializerService {
         enviarEmailSugerencia(partido, puntuacion2, puntuacion1);
     }
 
-    private void enviarEmailSugerencia(Partido partido, Puntuacion puntuacion1, Puntuacion puntuacion2) {
+    public void enviarEmailSugerencia(Partido partido, Puntuacion puntuacion1, Puntuacion puntuacion2) {
         try {
             Map<String, Object> variables = obtenerVariablesEmail(partido, puntuacion1, puntuacion2);
-            String to = (String) variables.get("to");
+            String to = (String) variables.get("emailJugador1");
             String subject = "Solicitud de intercambio de numeros de telefono";
             String templateName = "sugerenciaCompartirTelefono";
 
@@ -103,5 +104,27 @@ public class EmailInicializerService {
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-    }    
+    } 
+    
+    public void inicializarEmailCompartirTelefono(Partido partido, Puntuacion puntuacion1, Puntuacion puntuacion2) {
+        enviarEmailCompartirTelefono(partido, puntuacion1, puntuacion2);
+        enviarEmailCompartirTelefono(partido, puntuacion2, puntuacion1);
+    }
+
+    private void enviarEmailCompartirTelefono(Partido partido, Puntuacion puntuacion1, Puntuacion puntuacion2) {
+        try {
+            Map<String, Object> variables = obtenerVariablesEmail(partido, puntuacion1, puntuacion2);
+            String to = (String) variables.get("emailJugador1");
+            String subject = "Envio de numeros de telefono contendientes de golf";
+            String templateName = "envioTelefonoMovil";
+
+            emailService.sendHtmlEmail(to, subject, templateName, variables);
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    
 }

@@ -16,13 +16,13 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailService {
 
     @Autowired
-    private JavaMailSender mailSender;
+    JavaMailSender mailSender;
 
     @Autowired
-    private TemplateEngine templateEngine;
+    TemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
-    private String fromAddress;
+    String fromAddress;
     
     public void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> variables) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
