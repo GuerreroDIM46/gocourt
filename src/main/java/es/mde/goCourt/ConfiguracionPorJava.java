@@ -23,7 +23,6 @@ import jakarta.persistence.EntityManagerFactory;
 @Configuration
 @PropertySource({ 
     "classpath:config/rest.properties", 
-    // "classpath:config/database.properties",
     "classpath:config/jackson.properties" })
 @EnableTransactionManagement
 @EnableJpaRepositories("${misRepositorios}")

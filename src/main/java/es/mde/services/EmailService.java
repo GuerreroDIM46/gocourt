@@ -40,12 +40,4 @@ public class EmailService {
         mailSender.send(message);
     }
     
-    public void enviarTelefonoYEnlaceFormulario() {
-        
-    }
-
-    
-
-    
-    
 }

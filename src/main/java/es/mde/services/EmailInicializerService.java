@@ -51,7 +51,8 @@ public class EmailInicializerService {
         String fecha = fechaHora.toLocalDate().format(dateFormatter);
         String hora = fechaHora.toLocalTime().format(timeFormatter);
         
-        String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
+        String direccionAPI = "https://gocourtapitest.manabo.org/api/";
+//        String direccionAPI = "https://gocourt-5ef625746984.herokuapp.com/api/";
         String nombreJugador1 = puntuacion1.getJugador().getNombre();
         String jugador2 = puntuacion2.getNombreCompleto();
         String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
