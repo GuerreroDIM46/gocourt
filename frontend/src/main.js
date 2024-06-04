@@ -22,6 +22,7 @@ library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass,
 const NotFound = () => import('@/components/NotFound.vue')
 const Partidos = () => import('@/views/VistaPartidos.vue')
 const Jugadores = () => import('@/views/VistaJugadores.vue')
+const LandingPage = () => import('@/views/LandingPage.vue')
 
 
 
@@ -29,6 +30,7 @@ const routes = [
     { path: '/', redirect: '/jugadores'},
     { path: '/partidos', component: Partidos, name: 'partidos' },
     { path: '/jugadores', component: Jugadores, name: 'jugadores' },
+    { path: '/landingPage/:id', component: LandingPage, name: 'landingPage' },
     { path: '/:pathMatch(.*)', component: NotFound, name: 'notfound'}
     
 ]

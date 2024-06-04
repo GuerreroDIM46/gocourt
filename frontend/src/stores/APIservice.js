@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
-// const host = 'https://gocourtapitest.manabo.org/api/'
+// const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
+const host = 'https://gocourtapitest.manabo.org/api/'
 const API_CAMPOS = host + 'campos'
 const API_PARTIDOS = host + 'partidos'
 const API_PARTIDOSHISTORICOS = host + 'partidos/search/partidosHistoricos'
@@ -37,6 +37,11 @@ export function getCampos() {
 
 export function getPartidos() {
     return llamadaAPI('get', null, API_PARTIDOS)
+}
+
+export function getPartido(id) {
+    const url = `${API_PARTIDOS}/${id}`
+    return llamadaAPI('get', null, url)
 }
 
 export function getPartidosHistoricos() {
@@ -88,6 +93,10 @@ export function postJugador(jugador) {
 
 export function postPartido(partido) {
     return llamadaAPI('post', partido, API_PARTIDOS)
+}
+
+export function putPartido(partido, id) {
+    return llamadaAPI('patch', partido, id)
 }
 
 export function postAsignacion(asignacion) {
