@@ -39,7 +39,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(useJugadoresAPIStore, ['jugadores', 'jugadoresSimilares']),
+        ...mapState(useJugadoresAPIStore, ['jugadores', 'jugadoresSimilares', 'jugadoresCargados']),
         ...mapState(useCamposAPIStore, ['campos']),
         jugadoresFiltrados() {
             let filtrados = this.jugadores
@@ -283,6 +283,13 @@ export default {
                         <font-awesome-icon :icon="['fas', 'user-plus']" />
                     </button>
                 </div>
+                <div class="container mt-5 mb-3" v-if="jugadoresCargados == false">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Carganding...</span>
+            </div>
+        </div>
+    </div>
             </tr>
             <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
                 <Jugador 

@@ -15,8 +15,7 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         principiantes: [],
         jugadores: [],
         jugadoresSimilares: [],
-        federadosCargados: false,
-        principiantesCargados: false,
+        jugadoresCargados: false,
         debeRecargar: false,   // para el watcher despues de crear o actualizar        
     }),
     actions: {
@@ -24,7 +23,6 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             const response = await getFederados()
             if (response.data._embedded) {
                 this.federados = response.data._embedded.federados
-                this.federadosCargados = true
                 this.cargarJugadores()
             }
         },
@@ -32,7 +30,6 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
             const response = await getPrincipiantes()
             if (response.data._embedded) {                
                 this.principiantes = response.data._embedded.principiantes
-                this.principiantesCargados = true
                 this.cargarJugadores()
             }
         },
@@ -53,7 +50,7 @@ export const useJugadoresAPIStore = defineStore('jugadoresAPI', {
         },
         cargarJugadores() {
             this.jugadores = [...this.federados, ...this.principiantes].sort((a, b) => a.nombre.localeCompare(b.nombre))
-
+            this.jugadoresCargados = true
         },
         async crearJugador(jugador) {
             console.log("Datos del jugador a enviar (JugadoresAPI): ", jugador)
