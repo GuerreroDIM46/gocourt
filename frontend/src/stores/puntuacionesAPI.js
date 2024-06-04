@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getPuntuaciones, postAsignacion } from '@/stores/APIservice.js'
+import { getPuntuaciones, postAsignacion, putPuntuacion } from '@/stores/APIservice.js'
 
 export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
     state: () => ({
@@ -38,7 +38,6 @@ export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
             const response = await putPuntuacion(asignacionSinUrl, url)
             if (response.status == 200 || response.status == 201) {    
                 console.log(response.data)
-                this.debeRecargar = !this.debeRecargar
             }        
         },
     }

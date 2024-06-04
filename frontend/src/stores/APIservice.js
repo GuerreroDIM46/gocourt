@@ -115,3 +115,7 @@ export function sendSolicitudPartido(json) {
     const url = `${API_EMAIL}/sendComunicadoAsignacionDePartido`
     return llamadaAPI('post', json, url)
 }
+
+export function putPuntuacion(asignacion, href) {
+    return llamadaAPI('patch', asignacion, href)
+}

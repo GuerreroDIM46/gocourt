@@ -28,6 +28,9 @@ public class EmailInicializerService {
     
     @Value("${api.direccion}")
     private String direccionAPI;
+    
+    @Value("${app.direccion}")
+    private String direccionApp;
 
     public Map<String, Object> prepareVariablesForAsignacionDePartido(Long partidoId, Long puntuacion1Id, Long puntuacion2Id) {
         Partido partido = partidoDAO.findById(partidoId).orElse(null);
@@ -45,7 +48,7 @@ public class EmailInicializerService {
         Partido partido = Partido;
         Puntuacion puntuacion1 = Puntuacion1;
         Puntuacion puntuacion2 = Puntuacion2;       
-        
+        Long partidoId = partido.getId();
         Long puntuacion1Id = puntuacion1.getId();
         String campo = partido.getNombreCampo();
         LocalDateTime fechaHora = partido.getCuando();
@@ -61,7 +64,7 @@ public class EmailInicializerService {
         String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
         String aceptarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=true";
         String rechazarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=false";
-        String introducirDetallesPartidoURL = direccionAPI;
+        String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoId;
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("emailJugador1", emailJugador1);

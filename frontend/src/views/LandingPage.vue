@@ -2,7 +2,7 @@
 import { mapState, mapActions } from 'pinia'
 import { usePartidosAPIStore } from '@/stores/partidosAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
-
+import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
 
 export default {
     data() {
@@ -10,61 +10,78 @@ export default {
             campoSeleccionado: '',
             fecha: '',
             hora: '',
+            datosCargados: false,
         }
     },
     computed: {
         ...mapState(useCamposAPIStore, ['campos']),
         ...mapState(usePartidosAPIStore, ['partidoCompleto']),
-        partido() {
-            return this.partidoCompleto;
-        }
     },
     methods: {
         ...mapActions(usePartidosAPIStore, ['actualizarPartido', 'cargarPartido']),
         ...mapActions(useCamposAPIStore, ['cargarCampos']),
-        async submitForm() {
+        ...mapActions(usePuntuacionesAPIStore, ['actualizarPuntuacion']),
+        async enviarFormularioPartido() {
             const datosPartido = {
                 campo: this.campoSeleccionado,
                 cuando: `${this.fecha}T${this.hora}:00Z`,
-                url: this.partido._links.self.href
+                url: this.partidoCompleto._links.self.href
             }
-            console.log('datos enviados', datosPartido)
-            await this.actualizarPartido(datosPartido)
+            const asignacion1 ={
+                aceptado: true,
+                url: this.partidoCompleto.puntuaciones[0]._links.self.href
+            }
+            const asignacion2 ={
+                aceptado: true,
+                url: this.partidoCompleto.puntuaciones[1]._links.self.href
+            }
+            console.log('datos enviados: partido', datosPartido)
+            console.log('datos enviados: asignacion1', asignacion1)
+            console.log('datos enviados: asignacion2', asignacion2)
+            await Promise.all([
+                this.actualizarPartido(datosPartido),
+                this.actualizarPuntuacion(asignacion1),
+                this.actualizarPuntuacion(asignacion2)
+            ])
         },
+        
         cerrarVentana() {
             this.$router.go(-1)
         },
         async cargarDatosPartido() {
             await this.cargarPartido(this.$route.params.id);
-            if (this.partido) {
-                this.campoSeleccionado = this.campos.find(campo => campo.nombre == this.partido.nombreCampo)
-                this.fecha = this.partido.cuando.split('T')[0];
-                this.hora = this.partido.cuando.split('T')[1].substring(0, 5);
+            if (this.partidoCompleto) {
+                this.campoSeleccionado = this.partidoCompleto.nombreCampo;
+                this.fecha = this.partidoCompleto.cuando.split('T')[0];
+                this.hora = this.partidoCompleto.cuando.split('T')[1].substring(0, 5);
                 console.log('el partido completo es:', this.partidoCompleto)
             }
+            this.datosCargados = true;
         }
     },
-    mounted() {
-        this.cargarCampos();
-        this.cargarDatosPartido();
+    async mounted() {
+        await this.cargarCampos()
+        await this.cargarDatosPartido()
     }
 }
 </script>
 
+
+
 <template>
-    <div class="container mt-5 mb-3">
+    <div class="container mt-5 mb-3" v-if="datosCargados">
         <h2>Introducir Detalles del Partido: </h2>
         <strong class="ms-3">
             {{ partidoCompleto.puntuaciones[0].nombreCompleto }}
         </strong> vs.
         <strong> {{ partidoCompleto.puntuaciones[1].nombreCompleto }}
         </strong>
-        <form @submit.prevent="submitForm">
+        <form @submit.prevent="enviarFormularioPartido">
             <div class="mb-3 mt-3">
                 <label for="campo">Campo</label>
                 <select id="campo" class="form-select" v-model="campoSeleccionado">
                     <option v-for="campo in campos" :key="campo._links.self.href" :value="campo._links.self.href">
-                        {{ campoSeleccionado.nombre }}
+                        {{ campo.nombre }}
                     </option>
                 </select>
             </div>
@@ -84,7 +101,15 @@ export default {
             </div>
         </form>
     </div>
+    <div class="container mt-5 mb-3" v-else>
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Carganding...</span>
+            </div>
+        </div>
+    </div>
 </template>
+
 
 <style scoped>
 .container {
