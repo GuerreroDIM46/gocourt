@@ -28,7 +28,8 @@ Para el cómputo de la llamada "puntuacioń calculada", se tienen en cuenta dato
 6. **URLs** del proyecto:  
    1. Repositorio proyecto: 
         - [GitLab](https://git.institutomilitar.com/menadim46/gocourt)  
-        - [GitHub](https://github.com/GuerreroDIM46/gocourt.git)  
+        - [GitHub](https://github.com/GuerreroDIM46/gocourt.git)
+        - [Manabo](https://git.manabo.org/GuerreroDIM46/GoCourt-Final.git)   
    2. Librería: pendiente developer
 
 7. **Despliegue en Internet:**  
