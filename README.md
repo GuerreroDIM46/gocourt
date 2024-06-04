@@ -53,4 +53,4 @@ Figura 1:
 
 
 Figura 2:  
-![Figura 2](https://git.institutomilitar.com/menadim46/gocourt/-/wikis/imgs/interfaz2.png)
+![Figura 2](https://git.institutomilitar.com/menadim46/gocourt/-/wikis/imgs/interfaz2.png) 
