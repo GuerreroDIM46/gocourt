@@ -47,6 +47,7 @@ export default {
                 this.actualizarPuntuacion(asignacion2)
             ])
             this.partidoEnviado = true
+            console.log('envio al metodo: ', this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href )
             this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
         },
 
