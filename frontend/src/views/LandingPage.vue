@@ -3,6 +3,7 @@ import { mapState, mapActions } from 'pinia'
 import { usePartidosAPIStore } from '@/stores/partidosAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
 import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
+import { useEmailAPIStore } from '@/stores/emailAPI'
 
 export default {
     data() {
@@ -22,6 +23,7 @@ export default {
         ...mapActions(usePartidosAPIStore, ['actualizarPartido', 'cargarPartido']),
         ...mapActions(useCamposAPIStore, ['cargarCampos']),
         ...mapActions(usePuntuacionesAPIStore, ['actualizarPuntuacion']),
+        ...mapActions(useEmailAPIStore, ['enviarEmailsPartidoAceptado']),
         async enviarFormularioPartido() {
             const datosPartido = {
                 campo: this.campoSeleccionado._links.self.href,
@@ -45,6 +47,7 @@ export default {
                 this.actualizarPuntuacion(asignacion2)
             ])
             this.partidoEnviado = true
+            this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
         },
 
         cerrarVentana() {
