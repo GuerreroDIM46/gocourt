@@ -25,18 +25,31 @@ public class PuntuacionDAOImpl implements PuntuacionDAOCustom {
 
     public String actualizarAsistencia(Long id, boolean aceptado) {
 
-        Puntuacion puntuacion = puntuacionDAO.findById(id).orElse(null);
+        Puntuacion puntuacion1 = puntuacionDAO.findById(id).orElse(null);
 
-        if (puntuacion == null) {
+        if (puntuacion1 == null) {
             return "Error: No se encontró la puntuación.";
         }
 
-        puntuacion.setAceptado(aceptado);
-        puntuacionDAO.save(puntuacion);
+        puntuacion1.setAceptado(aceptado);
+        puntuacionDAO.save(puntuacion1);
 
         if (aceptado == false) {
             emailInicializerService.inicializarSugerencia(id);
         }
+        
+        if (aceptado == true) {
+            Partido partido = puntuacion1.getPartido();
+            Puntuacion puntuacion2 = partido.getPuntuaciones()
+                                            .stream()
+                                            .filter(p -> !p.equals(puntuacion1))
+                                            .findFirst()
+                                            .orElse(null);
+            if (puntuacion2.isAceptado()) {
+                emailInicializerService.inicializarEmailEnvioPartidoAceptado(partido, puntuacion1, puntuacion2);
+            }
+        }
+        
 
         return aceptado ? "Asistencia confirmada." : "Invitación rechazada.";
     }

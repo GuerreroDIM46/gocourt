@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { sendSolicitudPartido } from '@/stores/APIservice.js';
+import { sendSolicitudPartido, sendPartidoAceptado } from '@/stores/APIservice.js';
 
 export const useEmailAPIStore = defineStore('emailAPI', {
     actions: {
@@ -25,7 +25,19 @@ export const useEmailAPIStore = defineStore('emailAPI', {
 
             console.log('Respuesta del correo 1:', response1)
             console.log('Respuesta del correo 2:', response2)
+        },        
+    },
+    async enviarEmailsSolicitud(urlPartido, urlAsignacion1, urlAsignacion2) {
+        const apartidoId = extractIdFromUrl(urlPartido)
+        const apuntuacion1Id = extractIdFromUrl(urlAsignacion1)
+        const apuntuacion2Id = extractIdFromUrl(urlAsignacion2)
+        const body = {
+            partidoId: apartidoId,
+            puntuacion1Id: apuntuacion1Id,
+            puntuacion2Id: apuntuacion2Id
         }
+        const response = await sendPartidoAceptado(body)
+        console.log('Respuesta del correo 1:', response)
     }
 })
 
