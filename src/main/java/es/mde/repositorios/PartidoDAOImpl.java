@@ -96,8 +96,8 @@ public class PartidoDAOImpl implements PartidoDAOCustom {
     public List<Partido> getPartidosByCampoYFechaHora(Long campoId, LocalDateTime localDateTime) {
         return partidoDAO.findAll()
                 .stream()
-                .filter(p -> p.getCuando() == localDateTime)
-                .filter(p -> p.getCampo().getId() == campoId)
+                .filter(p -> p.getCuando().equals(localDateTime))
+                .filter(p -> p.getCampo().getId().equals(campoId))
                 .collect(Collectors.toList());        
     }
     
