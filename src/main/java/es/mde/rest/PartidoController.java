@@ -1,5 +1,6 @@
 package es.mde.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +53,13 @@ public class PartidoController {
             PersistentEntityResourceAssembler assembler) {
         List<Partido> partidos = partidoDAO.getPartidosPorConfirmar();
         return assembler.toCollectionModel(partidos);
+    }
+    
+    @GetMapping("/partidos/search/partidosCoincidentes")
+    public ResponseEntity<List<Partido>> getCoincidentes(@RequestBody Partido partido) {
+        List<Partido> partidos = new ArrayList<Partido>();
+        partidos = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
+        return new ResponseEntity<List<Partido>>(partidos, HttpStatus.OK);
     }
     
     @PostMapping
