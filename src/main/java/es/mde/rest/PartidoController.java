@@ -1,23 +1,16 @@
 package es.mde.rest;
 
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.mde.entidades.Partido;
 import es.mde.repositorios.PartidoDAO;
-import es.mde.services.PartidoService;
 
 @RepositoryRestController
 @Configuration
@@ -29,9 +22,6 @@ public class PartidoController {
         this.partidoDAO = partidoDAO;
     }
     
-    @Autowired
-    private PartidoService partidoService;
-
     @GetMapping("/partidos/search/partidosHistoricos")
     @ResponseBody
     public CollectionModel<PersistentEntityResource> getPartidosHistoricos(

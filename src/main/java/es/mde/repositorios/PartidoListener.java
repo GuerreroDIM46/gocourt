@@ -1,28 +1,28 @@
 package es.mde.repositorios;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import es.mde.entidades.Partido;
-import es.mde.services.PartidoService;
 import jakarta.persistence.PrePersist;
 
 @Component
 public class PartidoListener {
 
-    PartidoDAO partidoDAO;
-
     @Autowired
-    public void init(PartidoDAO partidoDAO) {
-        this.partidoDAO = partidoDAO;
+    private PartidoDAO partidoDAO;
+    
+    private boolean isPartidoValido(Partido partido) {
+        List<Partido> partidosCoincidentes = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
+        return partidosCoincidentes.isEmpty();
     }
-    
-    @Autowired
-    PartidoService partidoService;
-    
+
     @PrePersist
-    public void validacionAntesDeGuardar(Partido partido) {        
-        if (!partidoService.isPartidoValido(partido)) {
-            throw new PartidoMismoHorarioException("Partidos concurrentes en el tiempo y en el espacio fail");
+    public void validacionAntesDeGuardar(Partido partido) { 
+        System.err.println("Es valido el partido? " + isPartidoValido(partido));
+        if (!isPartidoValido(partido)) {
+            
+            throw new PartidoMismoHorarioException("Partidos concurrentes en el tiempo y en el espacio fallan");
         }
     }
     
