@@ -58,7 +58,8 @@ public class PartidoController {
     
     @GetMapping("/partidos/search/partidosCoincidentes")
     @ResponseBody
-    public ResponseEntity<List<Partido>> getCoincidentes(@RequestParam Partido partido) {
+    public ResponseEntity<List<Partido>> getCoincidentes(@RequestParam Long partidoId) {
+        Partido partido = partidoDAO.getById(partidoId);
         List<Partido> partidos = new ArrayList<Partido>();
         partidos = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
         return new ResponseEntity<List<Partido>>(partidos, HttpStatus.OK);
