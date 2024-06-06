@@ -14,7 +14,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(usePartidosAPIStore, ['partidos', 'partidosHistoricos', 'partidosValidados', 'partidosPorConfirmar']),
+        ...mapState(usePartidosAPIStore, ['partidos', 'partidosHistoricos', 'partidosValidados', 'partidosPorConfirmar', 'partidosCargados']),
         ...mapState(usePuntuacionesAPIStore, ['debeRecargar']),
     },
     methods: {
@@ -52,6 +52,13 @@ export default {
                 <div :class="['nav-link', { active: activeTab == 'jugados' }]">Jugados</div>
             </li>
         </ul>
+        <div class="container mt-5 mb-3" v-if="partidosCargados == false">
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Carganding...</span>
+                        </div>
+                    </div>
+                </div>
         <table class="card">
             <tr v-if="this.activeTab == 'sinConfirmar'" v-for="partido in partidosPorConfirmar" :key="partido._links.self.href">
                 <Partido 

@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from "pinia"
 import {
     getPartidos,
     postPartido,
@@ -16,7 +16,8 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
         partidosHistoricos: [],
         partidosValidados: [],
         partidosPorConfirmar: [],
-        partidoCompleto: []
+        partidoCompleto: [],
+        partidosCargados: false
     }),
 
     actions: {
@@ -32,14 +33,15 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
                         const partidoId = this.obtenerId(partido);
                         const puntuacionesResponse = await getPartidoPuntuaciones(
                             partidoId
-                        );
+                        )
                         partido.puntuaciones =
                             puntuacionesResponse.data._embedded.puntuaciones
                         return partido;
                     })
-                );
+                )
                 console.log("Partidos con puntuaciones:", this[propiedadPartidos])
-                return true;
+                this.partidosCargados = true
+                return true
             }
             this[propiedadPartidos] = []
             return false

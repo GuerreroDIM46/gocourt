@@ -1,11 +1,15 @@
 package es.mde.repositorios;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.convert.Jsr310Converters.DateToLocalDateConverter;
 import org.springframework.transaction.annotation.Transactional;
+import es.mde.entidades.Campo;
+import es.mde.entidades.Jugador;
 import es.mde.entidades.Partido;
 import es.mde.entidades.Puntuacion;
 import jakarta.persistence.EntityManager;
@@ -72,6 +76,29 @@ public class PartidoDAOImpl implements PartidoDAOCustom {
                 .filter(this::esDespuesDeAhora)
                 .filter(this::algunaPuntuacionNoAceptada)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Partido> getPartidosByJugadorYFecha(Jugador jugador, LocalDate localDate) {
+        return partidoDAO.findAll()
+                .stream()
+                .filter(partido -> partido.getPuntuaciones()
+                                          .stream()
+                                          .anyMatch(puntuacion -> puntuacion.getJugador()
+                                                                            .equals(jugador)))
+                .filter(partido -> partido.getCuando()
+                                          .toLocalDate()
+                                          .equals(localDate))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Partido> getPartidosByCampoYFechaHora(Long campoId, LocalDateTime localDateTime) {
+        return partidoDAO.findAll()
+                .stream()
+                .filter(p -> p.getCuando() == localDateTime)
+                .filter(p -> p.getCampo().getId() == campoId)
+                .collect(Collectors.toList());        
     }
     
 }

@@ -112,7 +112,7 @@ export default {
                 console.log('jugador similar: ', this.jugadorSimilar)
                 this.bsModalVerJugador.hide();
                 this.bsModalCrearPartido.show();
-            } 
+            }
         },
         ocultarModal() {
             if (this.estado == 'creando' || this.estado == 'editando') {
@@ -131,7 +131,7 @@ export default {
             } else if (this.estado == 'asignando') {
                 this.bsModalCrearPartido.hide()
                 this.bsModalConfirmacion.show()
-            } 
+            }
         },
         ocultarModalCreado() {
             if (this.estado == 'creando' || this.estado == 'editando') {
@@ -283,20 +283,16 @@ export default {
                     </button>
                 </div>
                 <div class="container mt-5 mb-3" v-if="jugadoresCargados == false">
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Carganding...</span>
-            </div>
-        </div>
-    </div>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Carganding...</span>
+                        </div>
+                    </div>
+                </div>
             </tr>
             <tr v-for="jugador in jugadoresPaginados" :key="jugador._links.self.href">
-                <Jugador 
-                    :jugador="jugador" 
-                    @editar-jugador="abrirModal('editando', jugador)"
-                    @ver-jugador="abrirModal('viendo', jugador)" 
-                    @borrar-jugador="borrarJugador"
-                ></Jugador>
+                <Jugador :jugador="jugador" @editar-jugador="abrirModal('editando', jugador)"
+                    @ver-jugador="abrirModal('viendo', jugador)" @borrar-jugador="borrarJugador"></Jugador>
             </tr>
         </table>
         <!-- Modal creacion y edicion de jugadores-->
@@ -310,10 +306,7 @@ export default {
                             aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
                     </div>
                     <div class="modal-body">
-                        <Formulario 
-                            :jugador="jugadorActual" 
-                            :estado="estado" 
-                            @formulario-relleno="manejarFormulario" 
+                        <Formulario :jugador="jugadorActual" :estado="estado" @formulario-relleno="manejarFormulario"
                             @formulario-actualizado="manejarFormulario">
                         </Formulario>
                     </div>
@@ -346,15 +339,15 @@ export default {
                                         <div v-if="this.jugadorActual.profesional" class="badge bg-warning me-2">PRO
                                         </div>
                                         <strong>{{ this.jugadorActual.nombre }} {{ this.jugadorActual.apellido1 }} {{
-                                            this.jugadorActual.apellido2
-                                            }}</strong>
+                            this.jugadorActual.apellido2
+                        }}</strong>
                                     </div>
                                 </div>
                                 <div class="jugador containerjugador">
                                     <div class="fl"> - DNI: {{ this.jugadorActual.dni }}</div>
                                 </div>
                                 <div class="jugador containerjugador">
-                                    <div class="fl"> - Su telefono es: 
+                                    <div class="fl"> - Su telefono es:
                                         <a :href="'tel:' + jugadorActual.telefono">{{ jugadorActual.telefono }}</a>
                                     </div>
                                 </div>
@@ -368,12 +361,12 @@ export default {
                                 </div>
                                 <div class="jugador containerjugador">
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'federado'"> - Su handicap es: {{
-                                        this.jugadorActual.handicap }}
+                            this.jugadorActual.handicap }}
                                     </div>
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'principiante'"> - Su handicap
                                         simulado
                                         es: {{
-                                        this.jugadorActual.handicap.toFixed(1) }}
+                            this.jugadorActual.handicap.toFixed(1) }}
                                     </div>
                                 </div>
                             </div>
@@ -381,12 +374,9 @@ export default {
                                 <div class="card-header verdeclaro"> Jugadores de Nivel Similar </div>
                                 <ul class="list-group list-group-flush" v-for="similar in this.jugadoresSimilares"
                                     :key="similar._links.self.href">
-                                    <JugadorSeleccionado 
-                                        :jugadorSimilar="similar" 
-                                        :jugadorViendo="this.jugadorActual"
+                                    <JugadorSeleccionado :jugadorSimilar="similar" :jugadorViendo="this.jugadorActual"
                                         @abrir-modal-jugador-asignar="abrirModal('asignando', similar, this.jugadorActual)"
-                                        @cambiar-jugador="abrirModal('viendo', similar)"
-                                    ></JugadorSeleccionado>
+                                        @cambiar-jugador="abrirModal('viendo', similar)"></JugadorSeleccionado>
                                 </ul>
                             </div>
                         </div>
@@ -402,7 +392,7 @@ export default {
             <div class="modal-content">
                 <div class="modal-header verdeclaro" :class="{ 'verdeoscuro': this.estado == 'viendo' }">
                     <h1 class="modal-title fs-5" id="modalCrearPartidoLabel">{{ tituloModal }}</h1>
-                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"  @click="ocultarModal"
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" @click="ocultarModal"
                         aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
                 </div>
                 <div class="modal-body">
@@ -428,10 +418,9 @@ export default {
                         </div>
                         <div class="d-flex justify-content-between">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            @click="ocultarModal">Cancelar</button>
+                                @click="ocultarModal">Cancelar</button>
                             <div class="ml-auto">
-                                <button type="button" class="btn btn-primary"
-                                    @click="crearPartido">Confirmar</button>
+                                <button type="button" class="btn btn-primary" @click="crearPartido">Confirmar</button>
                             </div>
                         </div>
                     </div>
@@ -439,9 +428,9 @@ export default {
             </div>
         </div>
     </div>
-        <!-- Modal Confirmacion -->
-    <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1" aria-labelledby="modalConfirmacionLabel"
-        aria-hidden="true">
+    <!-- Modal Confirmacion -->
+    <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1"
+        aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header verdeoscuro">
@@ -449,7 +438,8 @@ export default {
                         jugador</h1>
                     <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">Edicion de
                         jugador</h1>
-                    <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">Creacion de
+                    <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">Creacion
+                        de
                         partido</h1>
                     <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
                         aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
@@ -559,21 +549,25 @@ export default {
     border-color: #70AD47;
     color: white;
 }
+
 .btn-primary:hover {
     background-color: white;
     border-color: #70AD47;
     color: #70AD47;
 }
+
 .btn-secondary {
-    background-color: #395623 ;
+    background-color: #395623;
     border-color: #395623;
     color: white;
 }
+
 .btn-secondary:hover {
     background-color: white;
     border-color: #395623;
     color: #395623;
 }
+
 .btn-outline-success:hover {
     background-color: #70AD47 !important;
     border-color: #70AD47;
