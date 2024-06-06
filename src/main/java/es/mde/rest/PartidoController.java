@@ -62,11 +62,5 @@ public class PartidoController {
         List<Partido> partidos  = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
         return assembler.toCollectionModel(partidos);
     }
-    
-    @PostMapping
-    public ResponseEntity<Partido> crearPartido(@RequestBody Partido partido) {
-        Partido nuevoPartido = partidoService.crearPartido(partido);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPartido);
-    }
-    
+   
 }
