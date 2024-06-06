@@ -9,12 +9,15 @@ export default {
         return this.$route.path == '/estado' ? 'Retar' : 'Asignar';
         }
     },
-    emits: ['abrir-modal-jugador-asignar'],
+    emits: ['abrir-modal-jugador-asignar', 'cambiar-jugador'],
     methods: {
         abrirModalJugadorAsignar() {
             console.log('jugador actual en jugadorseleccionado: ', this.jugadorViendo)
             console.log('jugador similar en jugadorseleccionado: ', this.jugadorSimilar)
             this.$emit('abrir-modal-jugador-asignar', this.jugadorViendo, this.jugadorSimilar)
+        },
+        cambiarJugador() {
+            this.$emit('cambiar-jugador', this.jugadorSimilar)
         }
     }
 }
@@ -24,7 +27,7 @@ export default {
     <li class="list-group-item">
         <div class="jugador-info-container">
             <div class="jugador-info">
-                <div class="jugador-datos">
+                <div class="jugador-datos cursor-pointer" @click="cambiarJugador">
                     <div class="nombre-apellidos">
                         <div v-if="jugadorSimilar.tipo == 'federado'" class="badge bg-secondary me-2">Federado</div>
                         <div v-if="jugadorSimilar.tipo == 'principiante'" class="badge bg-success me-2">Principiante
@@ -77,5 +80,8 @@ export default {
 }
 .crecer {
     flex-grow: 1;
+}
+.cursor-pointer {
+    cursor: pointer;
 }
 </style>

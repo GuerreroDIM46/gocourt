@@ -123,7 +123,6 @@ export default {
                 this.bsModalCrearPartido.hide()
                 this.abrirModal('viendo', this.jugadorActual)
             }
-
         },
         mostrarModalCreado() {
             if (this.estado == 'creando' || this.estado == 'editando') {
@@ -385,8 +384,9 @@ export default {
                                     <JugadorSeleccionado 
                                         :jugadorSimilar="similar" 
                                         :jugadorViendo="this.jugadorActual"
-                                        @abrir-modal-jugador-asignar="abrirModal('asignando', similar, this.jugadorActual)">
-                                    </JugadorSeleccionado>
+                                        @abrir-modal-jugador-asignar="abrirModal('asignando', similar, this.jugadorActual)"
+                                        @cambiar-jugador="abrirModal('viendo', similar)"
+                                    ></JugadorSeleccionado>
                                 </ul>
                             </div>
                         </div>

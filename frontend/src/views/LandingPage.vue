@@ -92,7 +92,6 @@ export default {
             <p>
                 <strong>Campo:</strong> {{ campoSeleccionado.nombre }}
             </p>
-            <button type="button" class="btn btn-secondary" @click="cerrarVentana">Cerrar</button>
         </div>
         <div v-if="!partidoEnviado">
             <h2>Introducir Detalles del Partido: </h2>
