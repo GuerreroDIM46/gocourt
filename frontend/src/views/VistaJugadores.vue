@@ -412,8 +412,22 @@ export default {
                                 <input type="date" id="fecha" class="form-control" v-model="fechaSeleccionada" required>
                             </div>
                             <div class="col-md-6 form-group mb-3">
+
+
                                 <label for="hora">Hora</label>
-                                <input type="time" id="hora" class="form-control" v-model="horaSeleccionada" required>
+
+                                <Datepicker
+                                    v-model="horaSeleccionada"
+                                    type="time"
+                                    format="HH:mm"
+                                    :minute-increment="20"
+                                    :min-time="new Date(0, 0, 0, 9, 0)"
+                                    :max-time="new Date(0, 0, 0, 20, 0)"
+                                    class="form-control"
+                                    />
+
+
+                                <!-- <input type="time" id="hora" class="form-control" v-model="horaSeleccionada" required> -->
                             </div>
                         </div>
                         <div class="d-flex justify-content-between">
