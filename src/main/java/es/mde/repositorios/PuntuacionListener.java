@@ -18,6 +18,7 @@ public class PuntuacionListener {
         PuntuacionListener.partidoDAO = partidoDAO;
     }
     
+    @PreUpdate
     @PrePersist
     public void validacionPuntuacion(Puntuacion puntuacion) {
         List<Partido> partidosCoincidentes = partidoDAO.getPartidosConfirmadosByJugadorYFecha(

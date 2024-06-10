@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import es.mde.entidades.Partido;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 @Component
 public class PartidoListener {
@@ -17,6 +18,7 @@ public class PartidoListener {
         PartidoListener.partidoDAO = partidoDAO;
     }
 
+    @PreUpdate
     @PrePersist
 	public void validacionPartido(Partido partido) {
 		    List<Partido> partidosCoincidentes = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());

@@ -90,8 +90,20 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
             const { url, ...partidoSinUrl } = partido
             console.log('partido enviado desde el store la api: ', partidoSinUrl)
             console.log('id de partido (store): ', url)
-            const response = await putPartido(partidoSinUrl, url)
-            return response
+            try {
+                const response = await putPartido(partidoSinUrl, url)
+                if (response.status == 200) {
+                    return 'OK'
+                }
+            } catch (error) {
+                if (error.response && error.response.status == 409) {
+                    console.log("Ya existe un partido programado para ese horario en ese campo.");
+                    return "error";
+                } else {
+                    console.error("Error al enviar el partido: ", error);
+                    throw error;
+                }
+            }
         },
         async cargarPartidosHistoricos() {
             return await this.cargarPartidosGenerales(

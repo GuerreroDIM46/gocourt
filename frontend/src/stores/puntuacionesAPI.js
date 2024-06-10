@@ -45,10 +45,21 @@ export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
         },
         async actualizarPuntuacion(asignacion) {
             const { url, ...asignacionSinUrl } = asignacion
-            const response = await putPuntuacion(asignacionSinUrl, url)
-            if (response.status == 200 || response.status == 201) {    
-                console.log(response.data)
-            }        
+            try {
+                const response = await putPuntuacion(asignacionSinUrl, url)
+                if (response.status == 200 || response.status == 201) {
+                    console.log(response.data)
+                    return 'OK'
+                }
+            } catch (error) {
+                if (error.response && error.response.status == 409) {
+                    console.log("El jugador ya tiene partido ese dia.");
+                    return "error";
+                } else {
+                    console.error("Error al enviar el partido: ", error);
+                    throw error;
+                }
+            }
         },
         async eliminarPuntuacion(puntuacionHref) {
             const response = await deleteEntidad(puntuacionHref)

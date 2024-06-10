@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-// const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
+const host = 'https://gocourt-5ef625746984.herokuapp.com/api/'
 // const host = 'https://gocourtapitest.manabo.org/api/'
-const host = 'http://localhost:8080/api/'
+// const host = 'http://localhost:8080/api/'
 const API_CAMPOS = host + 'campos'
 const API_PARTIDOS = host + 'partidos'
 const API_PARTIDOSHISTORICOS = host + 'partidos/search/partidosHistoricos'

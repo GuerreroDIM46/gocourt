@@ -10,9 +10,14 @@ export default {
         return {
             campoSeleccionado: '',
             fecha: '',
-            hora: '',
+            horaSeleccionada: '',
+            minutoSeleccionado: '',
             datosCargados: false,
-            partidoEnviado: false
+            partidoEnviado: false,
+            horas: ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+            minutos: ['00', '20', '40'],
+            error: '',
+            bsModalError: null,
         }
     },
     computed: {
@@ -27,7 +32,7 @@ export default {
         async enviarFormularioPartido() {
             const datosPartido = {
                 campo: this.campoSeleccionado._links.self.href,
-                cuando: `${this.fecha}T${this.hora}:00Z`,
+                cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
                 url: this.partidoCompleto._links.self.href
             }
             const asignacion1 = {
@@ -39,18 +44,31 @@ export default {
                 url: this.partidoCompleto.puntuaciones[1]._links.self.href
             }
             console.log('datos enviados: partido', datosPartido)
-            console.log('datos enviados: asignacion1', asignacion1)
-            console.log('datos enviados: asignacion2', asignacion2)
-            await Promise.all([
-                this.actualizarPartido(datosPartido),
-                this.actualizarPuntuacion(asignacion1),
-                this.actualizarPuntuacion(asignacion2)
-            ])
-            this.partidoEnviado = true
-            console.log('envio al metodo: ', this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href )
-            this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
+            const partidoRetorno = await this.actualizarPartido(datosPartido)
+            if (partidoRetorno == 'error') {
+                this.mostrarModalError("partido")
+            } else {
+                console.log('datos enviados: asignacion1', asignacion1)
+                const asignacion1Retorno = await this.actualizarPuntuacion(asignacion1)
+                if (asignacion1Retorno == 'error') {
+                    this.mostrarModalError("asignacion1")
+                } else {
+                    console.log('datos enviados: asignacion2', asignacion2)
+                    const asignacion2Retorno = await this.actualizarPuntuacion(asignacion2)
+                    if (asignacion2Retorno == 'error') {
+                        this.mostrarModalError("asignacion2")
+                    } else {
+                        this.partidoEnviado = true
+                        console.log('envio al metodo: ', this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
+                        this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
+                    }
+                }
+            }
         },
-
+        mostrarModalError(error) {
+            this.error = error
+            this.bsModalError.show()
+        },
         cerrarVentana() {
             this.$router.go(-1)
         },
@@ -59,7 +77,9 @@ export default {
             if (this.partidoCompleto) {
                 this.campoSeleccionado = this.campos.find(campo => campo.nombre == this.partidoCompleto.nombreCampo)
                 this.fecha = this.partidoCompleto.cuando.split('T')[0]
-                this.hora = this.partidoCompleto.cuando.split('T')[1].substring(0, 5)
+                hora = this.partidoCompleto.cuando.split('T')[1]
+                this.horaSeleccionada = hora.split(':')[0]
+                this.minutoSeleccionado = hora.split(':')[1]
                 console.log('el partido completo es:', this.partidoCompleto)
             }
             this.datosCargados = true;
@@ -68,6 +88,7 @@ export default {
     mounted() {
         this.cargarCampos()
         this.cargarDatosPartido()
+        this.bsModalError = new Modal(this.$refs.modalError)
     }
 }
 </script>
@@ -114,8 +135,18 @@ export default {
                     <input type="date" class="form-control" id="fecha" v-model="fecha" required>
                 </div>
                 <div class="mb-3">
-                    <label for="hora" class="form-label">Hora</label>
-                    <input type="time" class="form-control" id="hora" v-model="hora" required>
+                    <label for="hora">Hora</label>
+                                <div class="input-group">
+                                    <select class="form-control text-center" v-model="horaSeleccionada" required>
+                                        <option v-for="hora in horas" :key="hora" :value="hora">{{ hora }}</option>
+                                    </select>
+                                    <select class="form-control text-center" v-model="minutoSeleccionado" required>
+                                        <option v-for="minuto in minutos" :key="minuto" :value="minuto">{{ minuto }}
+                                        </option>
+                                    </select>
+                                    <span class="input-group-text"><i class="pi pi-clock"
+                                            style="font-size: 1rem"></i></span>
+                                </div>
                 </div>
                 <div class="d-flex justify-content-between mt-5">
                     <button type="button" class="btn btn-secondary" @click="cerrarVentana">Cancelar</button>
@@ -129,6 +160,33 @@ export default {
             <div class="d-flex justify-content-center">
                 <div class="spinner-border" role="status">
                     <span class="visually-hidden">Carganding...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Error -->
+    <div class="modal fade" id="modalError" ref="modalError" tabindex="-1" aria-labelledby="modalErrorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeoscuro">
+                    <h1 class="modal-title fs-5" id="modalConfirmacionLabel">
+                        Error</h1>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya esiste un partido en ese horario
+                        en ese campo
+                    </h5>
+                    <h5 v-if="this.error == 'asignacion1'" style="text-align:justify;">{{ partidoCompleto.puntuaciones[0].nombreCompleto }}
+                        ya tiene partido asinado ese dia
+                    </h5>
+                    <h5 v-if="this.error == 'asignacion2'" style="text-align:justify;">{{ partidoCompleto.puntuaciones[1].nombreCompleto }}
+                        ya tiene partido asinado ese dia
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        >Mejor pruebo otra vez</button>
                 </div>
             </div>
         </div>
