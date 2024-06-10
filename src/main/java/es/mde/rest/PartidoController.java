@@ -45,12 +45,5 @@ public class PartidoController {
         List<Partido> partidos = partidoDAO.getPartidosPorConfirmar();
         return assembler.toCollectionModel(partidos);
     }
-    
-    @GetMapping("/partidos/search/partidosCoincidentes")
-    @ResponseBody
-    public CollectionModel<PersistentEntityResource> getCoincidentes(@RequestBody Partido partido, PersistentEntityResourceAssembler assembler) {
-        List<Partido> partidos  = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
-        return assembler.toCollectionModel(partidos);
-    }
    
 }
