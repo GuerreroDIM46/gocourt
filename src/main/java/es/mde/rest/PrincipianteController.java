@@ -25,7 +25,6 @@ public class PrincipianteController {
     @GetMapping("/principiantes/search/principiantesSinPaginacion")
     @ResponseBody
     public CollectionModel<PersistentEntityResource> getPrincipiantesSinPaginacion(PersistentEntityResourceAssembler assembler) {
-        System.err.println("prueba");
         List<Principiante> principiantes = principianteDAO.getPrincipiantesSinPaginacion();
 
         return assembler.toCollectionModel(principiantes);

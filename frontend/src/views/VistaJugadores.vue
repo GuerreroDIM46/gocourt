@@ -29,8 +29,10 @@ export default {
             bsModalConfirmacion: null,
             bsModalVerJugador: null,
             bsModalCrearPartido: null,
+            bsModalError: null,
             busqueda: '',
             estado: '',
+            error: '',
             jugador: {},
             similar: {},
             campoSeleccionadoPartido: '',
@@ -87,8 +89,8 @@ export default {
     methods: {
         ...mapActions(useJugadoresAPIStore, ['cargarFederados', 'cargarPrincipiantes', 'crearJugador', 'actualizarJugador', 'eliminarJugador', 'cargarJugadoresSimilares']),
         ...mapActions(useCamposAPIStore, ['cargarCampos']),
-        ...mapActions(usePuntuacionesAPIStore, ['crearAsignacion']),
-        ...mapActions(usePartidosAPIStore, ['enviarPartido']),
+        ...mapActions(usePuntuacionesAPIStore, ['crearAsignacion', 'eliminarPuntuacion']),
+        ...mapActions(usePartidosAPIStore, ['enviarPartido', 'eliminarPartido']),
         ...mapActions(useEmailAPIStore, ['enviarEmailsSolicitud']),
         cambiarPagina(nuevaPagina) {
             if (nuevaPagina < 1 || nuevaPagina > this.totalPaginas) return
@@ -126,6 +128,16 @@ export default {
                 this.bsModalCrearPartido.hide()
                 this.abrirModal('viendo', this.jugadorActual)
             }
+        },
+        mostrarModalError(error) {
+            this.error = error
+            this.bsModalCrearPartido.hide()
+            this.bsModalError.show()
+        },
+        ocultarModalError() {
+            this.bsModalError.show()
+            this.error = ''
+            this.bsModalCrearPartido.show()
         },
         mostrarModalCreado() {
             if (this.estado == 'creando' || this.estado == 'editando') {
@@ -165,24 +177,38 @@ export default {
                 campo: this.campoSeleccionadoPartido,
                 cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
             }
-            console.log('la hora del partideo es: ', partido.cuando)
+            console.log('la hora del partido es: ', partido.cuando)
             const partidoURL = await this.enviarPartido(partido)
-            const asignacion1 = {
-                // aceptado: false,
-                jugador: this.jugadorActual._links.self.href,
-                partido: partidoURL
+            console.log(partidoURL)
+            if (partidoURL == 'error') {
+                this.mostrarModalError("partido")
+            } else {
+                const asignacion1 = {
+                    jugador: this.jugadorActual._links.self.href,
+                    partido: partidoURL
+                }
+                const asignacion2 = {
+                    jugador: this.jugadorSimilar._links.self.href,
+                    partido: partidoURL
+                }
+                const asignacion1URL = await this.crearAsignacion(asignacion1)
+                if (asignacion1URL == 'error') {
+                    this.eliminarPartido(partidoURL)
+                    this.mostrarModalError("asignacion1")
+                } else {
+                    const asignacion2URL = await this.crearAsignacion(asignacion2)
+                    if (asignacion2URL == 'error') {
+                        this.eliminarAsignacion(asignacion1URL)
+                        this.eliminarPartido(partidoURL)
+                        this.mostrarModalError("asignacion2")
+                    } else {
+                        console.log('asignaciones devueltas', asignacion1URL)
+                        console.log('asignaciones devueltas', asignacion2URL)
+                        this.enviarEmailsSolicitud(partidoURL, asignacion1URL, asignacion2URL)
+                        this.mostrarModalCreado()
+                    }
+                }
             }
-            const asignacion2 = {
-                // aceptado: false,
-                jugador: this.jugadorSimilar._links.self.href,
-                partido: partidoURL
-            }
-            const asignacion1URL = await this.crearAsignacion(asignacion1)
-            const asignacion2URL = await this.crearAsignacion(asignacion2)
-            console.log('asignaciones devueltas', asignacion1URL)
-            console.log('asignaciones devueltas', asignacion2URL)
-            this.enviarEmailsSolicitud(partidoURL, asignacion1URL, asignacion2URL)
-            this.mostrarModalCreado()
         },
 
 
@@ -220,6 +246,7 @@ export default {
         this.bsModalVerJugador = new Modal(this.$refs.modalVerJugador)
         this.bsModalConfirmacion = new Modal(this.$refs.modalConfirmacion)
         this.bsModalCrearPartido = new Modal(this.$refs.modalCrearPartido)
+        this.bsModalError = new Modal(this.$refs.modalError)
     }
 }
 </script>
@@ -343,8 +370,8 @@ export default {
                                         <div v-if="this.jugadorActual.profesional" class="badge bg-warning me-2">PRO
                                         </div>
                                         <strong>{{ this.jugadorActual.nombre }} {{ this.jugadorActual.apellido1 }} {{
-                                            this.jugadorActual.apellido2
-                                            }}</strong>
+                            this.jugadorActual.apellido2
+                        }}</strong>
                                     </div>
                                 </div>
                                 <div class="jugador containerjugador">
@@ -365,12 +392,12 @@ export default {
                                 </div>
                                 <div class="jugador containerjugador">
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'federado'"> - Su handicap es: {{
-                                        this.jugadorActual.handicap }}
+                            this.jugadorActual.handicap }}
                                     </div>
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'principiante'"> - Su handicap
                                         simulado
                                         es: {{
-                                        this.jugadorActual.handicap.toFixed(1) }}
+                            this.jugadorActual.handicap.toFixed(1) }}
                                     </div>
                                 </div>
                             </div>
@@ -417,16 +444,7 @@ export default {
                             </div>
                             <div class="col-md-6 form-group mb-3">
                                 <label for="hora">Hora</label>
-                                <!-- <input type="time"
-                                id="hora"
-                                class="form-control"
-                                v-model="horaSeleccionada"
-                                min="08:00"
-                                max="20:00"
-                                step="1200"  
-                                required> -->
                                 <div class="input-group">
-                                                                      
                                     <select class="form-control text-center" v-model="horaSeleccionada" required>
                                         <option v-for="hora in horas" :key="hora" :value="hora">{{ hora }}</option>
                                     </select>
@@ -434,7 +452,8 @@ export default {
                                         <option v-for="minuto in minutos" :key="minuto" :value="minuto">{{ minuto }}
                                         </option>
                                     </select>
-                                    <span class="input-group-text"><i class="pi pi-clock" style="font-size: 1rem"></i></span>  
+                                    <span class="input-group-text"><i class="pi pi-clock"
+                                            style="font-size: 1rem"></i></span>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -451,39 +470,74 @@ export default {
             </div>
         </div>
     </div>
-        <!-- Modal Confirmacion -->
-        <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1"
-            aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header verdeoscuro">
-                        <h1 v-if="this.estado == 'creando'" class="modal-title fs-5" id="modalConfirmacionLabel">
-                            Creacion de
-                            jugador</h1>
-                        <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">
-                            Edicion de
-                            jugador</h1>
-                        <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">
-                            Creacion
-                            de
-                            partido</h1>
-                        <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
-                            aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
-                    </div>
-                    <div class="modal-body d-flex align-items-center justify-content-center">
-                        <h5 v-if="this.estado == 'creando'" style="text-align:justify;">Jugador creado correctamente
-                        </h5>
-                        <h5 v-if="this.estado == 'editando'" style="text-align:justify;">Jugador editado correctamente
-                        </h5>
-                        <h5 v-if="this.estado == 'asignando'" style="text-align:justify;">Partido creado correctamente
-                        </h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pues muy bien</button>
-                    </div>
+    <!-- Modal Confirmacion -->
+    <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1"
+        aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeoscuro">
+                    <h1 v-if="this.estado == 'creando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                        Creacion de
+                        jugador</h1>
+                    <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                        Edicion de
+                        jugador</h1>
+                    <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                        Creacion
+                        de
+                        partido</h1>
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
+                        aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <h5 v-if="this.estado == 'creando'" style="text-align:justify;">Jugador creado correctamente
+                    </h5>
+                    <h5 v-if="this.estado == 'editando'" style="text-align:justify;">Jugador editado correctamente
+                    </h5>
+                    <h5 v-if="this.estado == 'asignando'" style="text-align:justify;">Partido creado correctamente
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pues muy bien</button>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Modal Error -->
+    <div class="modal fade" id="modalError" ref="modalError" tabindex="-1" aria-labelledby="modalErrorLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header verdeoscuro">
+                    <h1 class="modal-title fs-5" id="modalConfirmacionLabel">
+                        Error</h1>
+                </div>
+                <div class="modal-body d-flex align-items-center justify-content-center">
+                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya esiste un partido en ese horario
+                        en ese campo
+                    </h5>
+                    <h5 v-if="this.error == 'asignacion1'" style="text-align:justify;">{{ this.jugadorActual.nombre }}
+                        {{ this.jugadorActual.apellido1 }} {{
+                            this.jugadorActual.apellido2
+                        }} ya tiene partido asinado ese dia
+                    </h5>
+                    <h5 v-if="this.error == 'asignacion2'" style="text-align:justify;">{{ this.jugadorSimilar.nombre }}
+                        {{ this.jugadorSimilar.apellido1 }} {{
+                            this.jugadorSimilar.apellido2
+                        }} ya tiene partido asinado ese dia
+                    </h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        @click="ocultarModalError">Mejor pruebo otra vez</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 </template>
 
 

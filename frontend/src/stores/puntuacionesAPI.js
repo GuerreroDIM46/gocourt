@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getPuntuaciones, postAsignacion, putPuntuacion } from '@/stores/APIservice.js'
+import { getPuntuaciones, postAsignacion, putPuntuacion, deleteEntidad } from '@/stores/APIservice.js'
 
 export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
     state: () => ({
@@ -21,16 +21,26 @@ export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
             })
         },
         async crearAsignacion(asignacion) {
-            const response = await postAsignacion(asignacion)
-            if (response.status == 200 || response.status == 201) {
-                const { _links, ...asignacionCreada } = response.data
-                this.puntuaciones.push(asignacionCreada)
-                console.log("Datos de la asignacion creada devuelta por la api: ", asignacionCreada)
-                this.cargarPuntuaciones()
-                const url = _links.self.href
-                console.log("link de la asignacion devuelta por la api", url)
-                this.debeRecargar = !this.debeRecargar
-                return url
+            try {
+                const response = await postAsignacion(asignacion)
+                if (response.status == 200 || response.status == 201) {
+                    const { _links, ...asignacionCreada } = response.data
+                    this.puntuaciones.push(asignacionCreada)
+                    console.log("Datos de la asignacion creada devuelta por la api: ", asignacionCreada)
+                    this.cargarPuntuaciones()
+                    const url = _links.self.href
+                    console.log("link de la asignacion devuelta por la api", url)
+                    this.debeRecargar = !this.debeRecargar
+                    return url
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 409) {
+                    console.log("El jugador ya tiene un partido ese dia.");
+                    return "error";
+                } else {
+                    console.error("Error al enviar el partido: ", error);
+                    throw error; 
+                }
             }
         },
         async actualizarPuntuacion(asignacion) {
@@ -40,5 +50,9 @@ export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
                 console.log(response.data)
             }        
         },
+        async eliminarPuntuacion(puntuacionHref) {
+            const response = await deleteEntidad(puntuacionHref)
+            console.log("Respuesta de la api al borrar partido: ", response)
+        },   
     }
 })

@@ -17,7 +17,7 @@ public interface PartidoDAOCustom {
 	
 	List<Partido> getPartidosPorConfirmar();
 	
-	List<Partido> getPartidosByJugadorYFecha(Jugador jugador, LocalDate localDate);
+	List<Partido> getPartidosConfirmadosByJugadorYFecha(Long jugadorId, LocalDate localDate);
 	
 	List<Partido> getPartidosByCampoYFechaHora(Long campoId, LocalDateTime localDateTime);
 

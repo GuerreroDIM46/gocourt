@@ -7,7 +7,8 @@ import {
     getPartidosPorConfirmar,
     getPartidosValidados,
     putPartido,
-    getPartido
+    getPartido,
+    deleteEntidad
 } from "@/stores/APIservice.js";
 
 export const usePartidosAPIStore = defineStore("partidosAPI", {
@@ -63,19 +64,26 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
             this.partidoCompleto = partido           
         },
         async enviarPartido(partido) {
-            const response = await postPartido(partido);
-            if (response.status == 200 || response.status == 201) {
-                const { _links, ...partidoCreado } = response.data
-                this.partidos.push(partidoCreado);
-                console.log(
-                    "Datos del partido creado devuelto por la api: ",
-                    partidoCreado
-                );
-                this.cargarPartidos();
-                const url = _links.self.href
-                console.log("link del partido devuelto por la api", url)
-                this.debeRecargar = true
-                return url
+            try {
+                const response = await postPartido(partido);
+                if (response.status === 200 || response.status === 201) {
+                    const { _links, ...partidoCreado } = response.data;
+                    this.partidos.push(partidoCreado);
+                    console.log("Datos del partido creado devuelto por la api: ", partidoCreado);
+                    this.cargarPartidos();
+                    const url = _links.self.href;
+                    console.log("link del partido devuelto por la api", url);
+                    this.debeRecargar = true;
+                    return url;
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 409) {
+                    console.log("Ya existe un partido programado para ese horario en ese campo.");
+                    return "error";
+                } else {
+                    console.error("Error al enviar el partido: ", error);
+                    throw error; 
+                }
             }
         },
         async actualizarPartido(partido) {
@@ -102,6 +110,10 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
                 getPartidosPorConfirmar,
                 "partidosPorConfirmar"
             )
+        },
+        async eliminarPartido(partidoHref) {
+            const response = await deleteEntidad(partidoHref)
+            console.log("Respuesta de la api al borrar partido: ", response)
         },        
     },
 });

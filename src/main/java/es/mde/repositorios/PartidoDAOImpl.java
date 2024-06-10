@@ -79,13 +79,13 @@ public class PartidoDAOImpl implements PartidoDAOCustom {
     }
 
     @Override
-    public List<Partido> getPartidosByJugadorYFecha(Jugador jugador, LocalDate localDate) {
-        return partidoDAO.findAll()
+    public List<Partido> getPartidosConfirmadosByJugadorYFecha(Long jugadorId, LocalDate localDate) {
+        return partidoDAO.getPartidosValidados()
                 .stream()
                 .filter(partido -> partido.getPuntuaciones()
                                           .stream()
-                                          .anyMatch(puntuacion -> puntuacion.getJugador()
-                                                                            .equals(jugador)))
+                                          .anyMatch(puntuacion -> puntuacion.getJugador().getId()
+                                                                            .equals(jugadorId)))
                 .filter(partido -> partido.getCuando()
                                           .toLocalDate()
                                           .equals(localDate))
