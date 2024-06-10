@@ -4,6 +4,7 @@ import { usePartidosAPIStore } from '@/stores/partidosAPI'
 import { useCamposAPIStore } from '@/stores/camposAPI'
 import { usePuntuacionesAPIStore } from '@/stores/puntuacionesAPI'
 import { useEmailAPIStore } from '@/stores/emailAPI'
+import { Modal } from 'bootstrap'
 
 export default {
     data() {
@@ -32,7 +33,7 @@ export default {
         async enviarFormularioPartido() {
             const datosPartido = {
                 campo: this.campoSeleccionado._links.self.href,
-                cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
+                cuando: `${this.fecha}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
                 url: this.partidoCompleto._links.self.href
             }
             const asignacion1 = {
@@ -77,7 +78,7 @@ export default {
             if (this.partidoCompleto) {
                 this.campoSeleccionado = this.campos.find(campo => campo.nombre == this.partidoCompleto.nombreCampo)
                 this.fecha = this.partidoCompleto.cuando.split('T')[0]
-                hora = this.partidoCompleto.cuando.split('T')[1]
+                const hora = this.partidoCompleto.cuando.split('T')[1]
                 this.horaSeleccionada = hora.split(':')[0]
                 this.minutoSeleccionado = hora.split(':')[1]
                 console.log('el partido completo es:', this.partidoCompleto)
@@ -108,7 +109,7 @@ export default {
                 <strong>Fecha:</strong> {{ fecha }}
             </p>
             <p>
-                <strong>Hora:</strong> {{ hora }}
+                <strong>Hora:</strong> {{ horaSeleccionada }}:{{ minutoSeleccionado }}
             </p>
             <p>
                 <strong>Campo:</strong> {{ campoSeleccionado.nombre }}
@@ -174,14 +175,14 @@ export default {
                         Error</h1>
                 </div>
                 <div class="modal-body d-flex align-items-center justify-content-center">
-                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya esiste un partido en ese horario
+                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya existe un partido en ese horario
                         en ese campo
                     </h5>
                     <h5 v-if="this.error == 'asignacion1'" style="text-align:justify;">{{ partidoCompleto.puntuaciones[0].nombreCompleto }}
-                        ya tiene partido asinado ese dia
+                        ya tiene partido asignado ese dia
                     </h5>
                     <h5 v-if="this.error == 'asignacion2'" style="text-align:justify;">{{ partidoCompleto.puntuaciones[1].nombreCompleto }}
-                        ya tiene partido asinado ese dia
+                        ya tiene partido asignado ese dia
                     </h5>
                 </div>
                 <div class="modal-footer">

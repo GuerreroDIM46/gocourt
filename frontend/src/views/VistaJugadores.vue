@@ -513,18 +513,18 @@ export default {
                         Error</h1>
                 </div>
                 <div class="modal-body d-flex align-items-center justify-content-center">
-                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya esiste un partido en ese horario
+                    <h5 v-if="this.error == 'partido'" style="text-align:justify;">Ya existe un partido en ese horario
                         en ese campo
                     </h5>
                     <h5 v-if="this.error == 'asignacion1'" style="text-align:justify;">{{ this.jugadorActual.nombre }}
                         {{ this.jugadorActual.apellido1 }} {{
                             this.jugadorActual.apellido2
-                        }} ya tiene partido asinado ese dia
+                        }} ya tiene partido asignado ese dia
                     </h5>
                     <h5 v-if="this.error == 'asignacion2'" style="text-align:justify;">{{ this.jugadorSimilar.nombre }}
                         {{ this.jugadorSimilar.apellido1 }} {{
                             this.jugadorSimilar.apellido2
-                        }} ya tiene partido asinado ese dia
+                        }} ya tiene partido asignado ese dia
                     </h5>
                 </div>
                 <div class="modal-footer">

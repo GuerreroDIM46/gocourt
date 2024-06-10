@@ -47,7 +47,7 @@ export const usePuntuacionesAPIStore = defineStore('puntuacionesAPI', {
             const { url, ...asignacionSinUrl } = asignacion
             try {
                 const response = await putPuntuacion(asignacionSinUrl, url)
-                if (response.status == 200 || response.status == 201) {
+                if (response.status == 200) {
                     console.log(response.data)
                     return 'OK'
                 }

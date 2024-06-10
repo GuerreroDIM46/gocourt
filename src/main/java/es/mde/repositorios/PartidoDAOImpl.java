@@ -93,8 +93,8 @@ public class PartidoDAOImpl implements PartidoDAOCustom {
     }
 
     @Override
-    public List<Partido> getPartidosByCampoYFechaHora(Long campoId, LocalDateTime localDateTime) {
-        return partidoDAO.findAll()
+    public List<Partido> getPartidosConfirmadosByCampoYFechaHora(Long campoId, LocalDateTime localDateTime) {
+        return partidoDAO.getPartidosValidados()
                 .stream()
                 .filter(p -> p.getCuando().equals(localDateTime))
                 .filter(p -> p.getCampo().getId().equals(campoId))

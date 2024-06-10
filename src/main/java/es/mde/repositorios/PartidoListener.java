@@ -18,10 +18,9 @@ public class PartidoListener {
         PartidoListener.partidoDAO = partidoDAO;
     }
 
-    @PreUpdate
     @PrePersist
 	public void validacionPartido(Partido partido) {
-		    List<Partido> partidosCoincidentes = partidoDAO.getPartidosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
+		    List<Partido> partidosCoincidentes = partidoDAO.getPartidosConfirmadosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
 		    if (!partidosCoincidentes.isEmpty()) {
 		        System.err.println("Error: hay partidos coincidentes");
                 throw new PartidoMismoHorarioException("Partidos concurrentes en el tiempo y en el espacio fallan");
