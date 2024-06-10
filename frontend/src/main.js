@@ -4,7 +4,6 @@ import * as bootstrap from 'bootstrap'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createPinia } from 'pinia'
 import PrimeVue from 'primevue/config'
-import VueDatePicker from '@vuepic/vue-datepicker';
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import 'primevue/resources/themes/aura-light-green/theme.css'
@@ -13,10 +12,10 @@ import App from './App.vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {  faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons' //iconos de muestra
-import { faInstagram, faXTwitter } from '@fortawesome/free-brands-svg-icons' 
+import { faInstagram, faXTwitter, faFacebook } from '@fortawesome/free-brands-svg-icons' 
 
 
-library.add( faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight)
+library.add( faFacebook, faInstagram, faXTwitter, faTrash, faCircleXmark, faMagnifyingGlass, faPenToSquare, faUserPlus, faXmark, faAngleLeft, faAngleRight, faAngleDoubleLeft, faAngleDoubleRight)
 
 
 
@@ -45,7 +44,6 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.component('font-awesome-icon', FontAwesomeIcon)
-app.component('VueDatePicker', VueDatePicker)
 app.use(router)
 app.use(pinia)
 app.use(PrimeVue)

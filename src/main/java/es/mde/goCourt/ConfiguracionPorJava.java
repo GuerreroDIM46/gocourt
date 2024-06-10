@@ -26,8 +26,8 @@ import jakarta.persistence.EntityManagerFactory;
     "classpath:config/jackson.properties" })
 @EnableTransactionManagement
 @EnableJpaRepositories("${misRepositorios}")
-@ComponentScan("es.mde.rest")//para que escanee los Controller...
-@ComponentScan("es.mde.services")//para que escanee los services...
+@ComponentScan({"es.mde.services","es.mde.repositorios", "es.mde.rest"})//para que escanee los services...
+
 @Import(ConfiguracionRest.class)
 public class ConfiguracionPorJava {
     

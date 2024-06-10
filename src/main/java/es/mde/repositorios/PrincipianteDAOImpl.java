@@ -14,8 +14,8 @@ public class PrincipianteDAOImpl implements PrincipianteDAOCustom {
     PrincipianteDAO principianteDAO;
     @PersistenceContext
     EntityManager entityManager;
-    @Override
     
+    @Override
     public List<Principiante> getPrincipiantesSinPaginacion() {
         return principianteDAO.findAll();
     }

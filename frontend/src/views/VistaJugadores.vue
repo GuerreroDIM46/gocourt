@@ -15,7 +15,7 @@ export default {
     components: {
         Jugador,
         Formulario,
-        JugadorSeleccionado
+        JugadorSeleccionado,
     },
     data() {
         return {
@@ -36,6 +36,9 @@ export default {
             campoSeleccionadoPartido: '',
             fechaSeleccionada: '',
             horaSeleccionada: '',
+            minutoSeleccionado: '',
+            horas: ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+            minutos: ['00', '20', '40']
         }
     },
     computed: {
@@ -160,8 +163,9 @@ export default {
         async crearPartido() {
             const partido = {
                 campo: this.campoSeleccionadoPartido,
-                cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:00Z`,
+                cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
             }
+            console.log('la hora del partideo es: ', partido.cuando)
             const partidoURL = await this.enviarPartido(partido)
             const asignacion1 = {
                 // aceptado: false,
@@ -339,8 +343,8 @@ export default {
                                         <div v-if="this.jugadorActual.profesional" class="badge bg-warning me-2">PRO
                                         </div>
                                         <strong>{{ this.jugadorActual.nombre }} {{ this.jugadorActual.apellido1 }} {{
-                            this.jugadorActual.apellido2
-                        }}</strong>
+                                            this.jugadorActual.apellido2
+                                            }}</strong>
                                     </div>
                                 </div>
                                 <div class="jugador containerjugador">
@@ -361,12 +365,12 @@ export default {
                                 </div>
                                 <div class="jugador containerjugador">
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'federado'"> - Su handicap es: {{
-                            this.jugadorActual.handicap }}
+                                        this.jugadorActual.handicap }}
                                     </div>
                                     <div class="fl" v-if="this.jugadorActual.tipo == 'principiante'"> - Su handicap
                                         simulado
                                         es: {{
-                            this.jugadorActual.handicap.toFixed(1) }}
+                                        this.jugadorActual.handicap.toFixed(1) }}
                                     </div>
                                 </div>
                             </div>
@@ -412,29 +416,34 @@ export default {
                                 <input type="date" id="fecha" class="form-control" v-model="fechaSeleccionada" required>
                             </div>
                             <div class="col-md-6 form-group mb-3">
-
-
                                 <label for="hora">Hora</label>
-
-                                <Datepicker
-                                    v-model="horaSeleccionada"
-                                    type="time"
-                                    format="HH:mm"
-                                    :minute-increment="20"
-                                    :min-time="new Date(0, 0, 0, 9, 0)"
-                                    :max-time="new Date(0, 0, 0, 20, 0)"
-                                    class="form-control"
-                                    />
-
-
-                                <!-- <input type="time" id="hora" class="form-control" v-model="horaSeleccionada" required> -->
+                                <!-- <input type="time"
+                                id="hora"
+                                class="form-control"
+                                v-model="horaSeleccionada"
+                                min="08:00"
+                                max="20:00"
+                                step="1200"  
+                                required> -->
+                                <div class="input-group">
+                                                                      
+                                    <select class="form-control text-center" v-model="horaSeleccionada" required>
+                                        <option v-for="hora in horas" :key="hora" :value="hora">{{ hora }}</option>
+                                    </select>
+                                    <select class="form-control text-center" v-model="minutoSeleccionado" required>
+                                        <option v-for="minuto in minutos" :key="minuto" :value="minuto">{{ minuto }}
+                                        </option>
+                                    </select>
+                                    <span class="input-group-text"><i class="pi pi-clock" style="font-size: 1rem"></i></span>  
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                @click="ocultarModal">Cancelar</button>
-                            <div class="ml-auto">
-                                <button type="button" class="btn btn-primary" @click="crearPartido">Confirmar</button>
+                            <div class="d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    @click="ocultarModal">Cancelar</button>
+                                <div class="ml-auto">
+                                    <button type="button" class="btn btn-primary"
+                                        @click="crearPartido">Confirmar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -442,33 +451,39 @@ export default {
             </div>
         </div>
     </div>
-    <!-- Modal Confirmacion -->
-    <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1"
-        aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header verdeoscuro">
-                    <h1 v-if="this.estado == 'creando'" class="modal-title fs-5" id="modalConfirmacionLabel">Creacion de
-                        jugador</h1>
-                    <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">Edicion de
-                        jugador</h1>
-                    <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">Creacion
-                        de
-                        partido</h1>
-                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
-                        aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
-                </div>
-                <div class="modal-body d-flex align-items-center justify-content-center">
-                    <h5 v-if="this.estado == 'creando'" style="text-align:justify;">Jugador creado correctamente</h5>
-                    <h5 v-if="this.estado == 'editando'" style="text-align:justify;">Jugador editado correctamente</h5>
-                    <h5 v-if="this.estado == 'asignando'" style="text-align:justify;">Partido creado correctamente</h5>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pues muy bien</button>
+        <!-- Modal Confirmacion -->
+        <div class="modal fade" id="modalConfirmacion" ref="modalConfirmacion" tabindex="-1"
+            aria-labelledby="modalConfirmacionLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header verdeoscuro">
+                        <h1 v-if="this.estado == 'creando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                            Creacion de
+                            jugador</h1>
+                        <h1 v-if="this.estado == 'editando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                            Edicion de
+                            jugador</h1>
+                        <h1 v-if="this.estado == 'asignando'" class="modal-title fs-5" id="modalConfirmacionLabel">
+                            Creacion
+                            de
+                            partido</h1>
+                        <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal"
+                            aria-label="Close"><font-awesome-icon :icon="['fas', 'xmark']" /></button>
+                    </div>
+                    <div class="modal-body d-flex align-items-center justify-content-center">
+                        <h5 v-if="this.estado == 'creando'" style="text-align:justify;">Jugador creado correctamente
+                        </h5>
+                        <h5 v-if="this.estado == 'editando'" style="text-align:justify;">Jugador editado correctamente
+                        </h5>
+                        <h5 v-if="this.estado == 'asignando'" style="text-align:justify;">Partido creado correctamente
+                        </h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Pues muy bien</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 
