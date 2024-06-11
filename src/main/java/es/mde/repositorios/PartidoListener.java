@@ -18,6 +18,7 @@ public class PartidoListener {
         PartidoListener.partidoDAO = partidoDAO;
     }
 
+//  @PreUpdate No funciona (todavia)
     @PrePersist
 	public void validacionPartido(Partido partido) {
 		    List<Partido> partidosCoincidentes = partidoDAO.getPartidosConfirmadosByCampoYFechaHora(partido.getCampo().getId(), partido.getCuando());
