@@ -35,6 +35,16 @@ const routes = [
     
 ]
 
+router.beforeEach((to, from, next) => {
+    const isLandingPage = from.path.startsWith('/landingPage')
+    const isPaginaNoAutorizada = to.path == '/partidos' || to.path == '/jugadores'
+    if (isLandingPage && isPaginaNoAutorizada) {
+        next(false)
+    } else {
+        next()
+    }
+})
+
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
