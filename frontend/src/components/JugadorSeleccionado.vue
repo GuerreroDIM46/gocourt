@@ -12,8 +12,6 @@ export default {
     emits: ['abrir-modal-jugador-asignar', 'cambiar-jugador'],
     methods: {
         abrirModalJugadorAsignar() {
-            console.log('jugador actual en jugadorseleccionado: ', this.jugadorViendo)
-            console.log('jugador similar en jugadorseleccionado: ', this.jugadorSimilar)
             this.$emit('abrir-modal-jugador-asignar', this.jugadorViendo, this.jugadorSimilar)
         },
         cambiarJugador() {
@@ -77,9 +75,6 @@ export default {
     background-color: white;
     border-color: #70AD47;
     color: #70AD47;
-}
-.crecer {
-    flex-grow: 1;
 }
 .cursor-pointer {
     cursor: pointer;
