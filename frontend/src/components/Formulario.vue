@@ -81,6 +81,7 @@ export default {
             if (this.estado == 'editando' && this.jugador._links.self.href) {
                 nuevoJugador.url = this.jugador._links.self.href
             }
+            console.log("Datos del jugador a enviar (Formulario):", nuevoJugador)
             if (this.estado == 'editando') {
                 this.$emit('formulario-actualizado', nuevoJugador)
             } else if (this.estado == 'creando') {
@@ -127,6 +128,7 @@ export default {
                     </select>
                 </div>
             </div>
+            <!-- Inputs de texto para otros campos -->
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="nombre" class="form-label">Nombre:</label>
@@ -159,6 +161,7 @@ export default {
                         title="Por favor, ingrese un correo electrónico válido." required>
                 </div>
             </div>
+            <!-- Controles específicos de tipo de jugador -->
             <div v-if="tipo == 'principiante'" class="row mb-3">
                 <div class="col-md-6">
                     <label for="puntuacionLargo" class="form-label">Precisión larga distancia: {{ puntuacionLargo

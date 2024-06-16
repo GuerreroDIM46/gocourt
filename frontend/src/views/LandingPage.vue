@@ -44,19 +44,23 @@ export default {
                 aceptado: true,
                 url: this.partidoCompleto.puntuaciones[1]._links.self.href
             }
+            console.log('datos enviados: partido', datosPartido)
             const partidoRetorno = await this.actualizarPartido(datosPartido)
             if (partidoRetorno == 'error') {
                 this.mostrarModalError("partido")
             } else {
+                console.log('datos enviados: asignacion1', asignacion1)
                 const asignacion1Retorno = await this.actualizarPuntuacion(asignacion1)
                 if (asignacion1Retorno == 'error') {
                     this.mostrarModalError("asignacion1")
                 } else {
+                    console.log('datos enviados: asignacion2', asignacion2)
                     const asignacion2Retorno = await this.actualizarPuntuacion(asignacion2)
                     if (asignacion2Retorno == 'error') {
                         this.mostrarModalError("asignacion2")
                     } else {
                         this.partidoEnviado = true
+                        console.log('envio al metodo: ', this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
                         this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
                     }
                 }
@@ -77,6 +81,7 @@ export default {
                 const hora = this.partidoCompleto.cuando.split('T')[1]
                 this.horaSeleccionada = hora.split(':')[0]
                 this.minutoSeleccionado = hora.split(':')[1]
+                console.log('el partido completo es:', this.partidoCompleto)
             }
             this.datosCargados = true;
         }

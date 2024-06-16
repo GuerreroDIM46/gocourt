@@ -71,11 +71,13 @@ export function getPrincipiantes() {
 
 export function getJugadoresSimilares(id) {
     const url = `${API_JUGADORESSIMILARES}?id=${id}`
+    console.log("lo que envia la funcion en APIservice es: ", url)
     return llamadaAPI('get', null, url)
 }
 
 export function getFederadosSimilares(id) {
     const url = `${API_FEDERADOSSIMILARES}?id=${id}`
+    console.log("lo que envia la funcion en APIservice es: ", url)
     return llamadaAPI('get', null, url)
 }
 

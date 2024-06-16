@@ -40,16 +40,6 @@ const router = createRouter({
     routes,
     })
 
-router.beforeEach((to, from, next) => {
-    const isLandingPage = from.path.startsWith('/landingPage')
-    const isPaginaNoAutorizada = to.path == '/partidos' || to.path == '/jugadores'
-    if (isLandingPage && isPaginaNoAutorizada) {
-        next(false)
-    } else {
-        next()
-    }
-})
-
 const app = createApp(App)
 const pinia = createPinia()
 

@@ -70,7 +70,7 @@ export default {
         totalPaginas() {
             return Math.ceil(this.jugadoresFiltrados.length / this.tamanoPagina)
         },
-        jugadoresAPIStore() {          
+        jugadoresAPIStore() {           // para observar cambios en el store (debeRecargar)
             return useJugadoresAPIStore()
         },
         tituloModal() {
@@ -101,13 +101,20 @@ export default {
             this.jugadorActual = jugador
             this.jugadorSimilar = similar
             if (this.estado == 'creando') {
+                console.log('estado: ', this.estado)
                 this.bsModalCrearEditarJugador.show();
             } else if (estado == 'editando') {
-
+                console.log('estado: ', this.estado)
+                console.log('jugador editando: ', jugador)
                 this.bsModalCrearEditarJugador.show();
             } else if (this.estado == 'viendo') {
+                console.log('estado: ', this.estado)
+                console.log('jugador viendo: ', jugador)
                 this.bsModalVerJugador.show();
             } else if (this.estado == 'asignando') {
+                console.log('estado: ', this.estado)
+                console.log('jugador actual: ', jugador)
+                console.log('jugador similar: ', this.jugadorSimilar)
                 this.bsModalVerJugador.hide();
                 this.bsModalCrearPartido.show();
             }
@@ -162,6 +169,7 @@ export default {
             }
         },
         borrarJugador({ href }) {
+            console.log("Href recibido:", href)
             this.eliminarJugador(href)
         },
         async crearPartido() {
@@ -169,7 +177,9 @@ export default {
                 campo: this.campoSeleccionadoPartido,
                 cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
             }
+            console.log('la hora del partido es: ', partido.cuando)
             const partidoURL = await this.enviarPartido(partido)
+            console.log(partidoURL)
             if (partidoURL == 'error') {
                 this.mostrarModalError("partido")
             } else {
@@ -192,6 +202,8 @@ export default {
                         this.eliminarPartido(partidoURL)
                         this.mostrarModalError("asignacion2")
                     } else {
+                        console.log('asignaciones devueltas', asignacion1URL)
+                        console.log('asignaciones devueltas', asignacion2URL)
                         this.enviarEmailsSolicitud(partidoURL, asignacion1URL, asignacion2URL)
                         this.mostrarModalCreado()
                     }
@@ -213,6 +225,7 @@ export default {
                 this.jugadoresAPIStore.cargarFederados() // Ultra Feo
                 this.jugadoresAPIStore.cargarPrincipiantes()  // Funciona, es lo que hay
                 this.jugadoresAPIStore.cargarJugadores()
+                console.log("Recargando jugadores...")
             }
         },
         jugadorActual: {
@@ -286,7 +299,7 @@ export default {
                         <option value="principiante">Principiante</option>
                     </select>
                     <!-- Select para filtrar campos -->
-                    <select v-model="campoSeleccionado" class="form-select col-auto me-2 mb-2 selectauto">
+                    <select v-model="campoSeleccionado" class="form-select col-auto me-2 mb-2 selectauto2">
                         <option value="todos">Todos los campos</option>
                         <option v-for="campo in campos" :value="campo.nombre" :key="campo._links.self.href">
                             {{ campo.nombre }}
@@ -534,9 +547,21 @@ export default {
     max-width: 20%;
 }
 
+.selectauto2 {
+    width: auto;
+    max-width: 20%;
+}
+
 .selectauto3 {
     width: 150px;
 }
+
+.flexmio {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 
 .btn-no-wrap {
     display: flex;
@@ -547,6 +572,19 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    flex-grow: 1;
+}
+
+.centrar {
+    text-align: center;
+}
+
+.contenedortitulo {
+    display: flex;
+    flex-direction: row;
+}
+
+.crecer {
     flex-grow: 1;
 }
 
@@ -584,7 +622,9 @@ export default {
 
 .pagination>li>a:hover {
     background-color: #70AD47;
+    /* Color de fondo al pasar el mouse */
     color: white;
+    /* Color del texto al pasar el mouse */
 }
 
 .btn-primary {
