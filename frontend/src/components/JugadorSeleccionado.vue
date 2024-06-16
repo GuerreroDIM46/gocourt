@@ -6,14 +6,12 @@ export default {
     },
     computed: {
         buttonText() {
-        return this.$route.path == '/estado' ? 'Retar' : 'Asignar';
+        return this.$route.path == '/estado' ? 'Retar' : 'Asignar'
         }
     },
     emits: ['abrir-modal-jugador-asignar', 'cambiar-jugador'],
     methods: {
         abrirModalJugadorAsignar() {
-            console.log('jugador actual en jugadorseleccionado: ', this.jugadorViendo)
-            console.log('jugador similar en jugadorseleccionado: ', this.jugadorSimilar)
             this.$emit('abrir-modal-jugador-asignar', this.jugadorViendo, this.jugadorSimilar)
         },
         cambiarJugador() {

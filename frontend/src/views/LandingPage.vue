@@ -44,23 +44,19 @@ export default {
                 aceptado: true,
                 url: this.partidoCompleto.puntuaciones[1]._links.self.href
             }
-            console.log('datos enviados: partido', datosPartido)
             const partidoRetorno = await this.actualizarPartido(datosPartido)
             if (partidoRetorno == 'error') {
                 this.mostrarModalError("partido")
             } else {
-                console.log('datos enviados: asignacion1', asignacion1)
                 const asignacion1Retorno = await this.actualizarPuntuacion(asignacion1)
                 if (asignacion1Retorno == 'error') {
                     this.mostrarModalError("asignacion1")
                 } else {
-                    console.log('datos enviados: asignacion2', asignacion2)
                     const asignacion2Retorno = await this.actualizarPuntuacion(asignacion2)
                     if (asignacion2Retorno == 'error') {
                         this.mostrarModalError("asignacion2")
                     } else {
                         this.partidoEnviado = true
-                        console.log('envio al metodo: ', this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
                         this.enviarEmailsPartidoAceptado(this.partidoCompleto._links.self.href, this.partidoCompleto.puntuaciones[0]._links.self.href, this.partidoCompleto.puntuaciones[1]._links.self.href)
                     }
                 }
@@ -74,16 +70,15 @@ export default {
             this.$router.go(-1)
         },
         async cargarDatosPartido() {
-            await this.cargarPartido(this.$route.params.id);
+            await this.cargarPartido(this.$route.params.id)
             if (this.partidoCompleto) {
                 this.campoSeleccionado = this.campos.find(campo => campo.nombre == this.partidoCompleto.nombreCampo)
                 this.fecha = this.partidoCompleto.cuando.split('T')[0]
                 const hora = this.partidoCompleto.cuando.split('T')[1]
                 this.horaSeleccionada = hora.split(':')[0]
                 this.minutoSeleccionado = hora.split(':')[1]
-                console.log('el partido completo es:', this.partidoCompleto)
             }
-            this.datosCargados = true;
+            this.datosCargados = true
         }
     },
     mounted() {

@@ -102,7 +102,6 @@ export default {
 }
 
 .jugador {
-
     margin: 4px;
 }
 

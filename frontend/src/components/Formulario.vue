@@ -70,10 +70,10 @@ export default {
                 email: this.email,
                 campo: urlCampo,
                 tipo: this.tipo
-            };
+            }
             if (this.tipo == 'federado') {
-                nuevoJugador.profesional = this.profesional;
-                nuevoJugador.handicap = this.handicap;
+                nuevoJugador.profesional = this.profesional
+                nuevoJugador.handicap = this.handicap
             } else if (this.tipo == 'principiante') {
                 nuevoJugador.puntuacionLargo = this.puntuacionLargo
                 nuevoJugador.puntuacionCorto = this.puntuacionCorto
@@ -81,7 +81,6 @@ export default {
             if (this.estado == 'editando' && this.jugador._links.self.href) {
                 nuevoJugador.url = this.jugador._links.self.href
             }
-            console.log("Datos del jugador a enviar (Formulario):", nuevoJugador)
             if (this.estado == 'editando') {
                 this.$emit('formulario-actualizado', nuevoJugador)
             } else if (this.estado == 'creando') {

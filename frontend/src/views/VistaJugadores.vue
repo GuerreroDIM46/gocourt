@@ -101,22 +101,15 @@ export default {
             this.jugadorActual = jugador
             this.jugadorSimilar = similar
             if (this.estado == 'creando') {
-                console.log('estado: ', this.estado)
-                this.bsModalCrearEditarJugador.show();
+
+                this.bsModalCrearEditarJugador.show()
             } else if (estado == 'editando') {
-                console.log('estado: ', this.estado)
-                console.log('jugador editando: ', jugador)
-                this.bsModalCrearEditarJugador.show();
+                this.bsModalCrearEditarJugador.show()
             } else if (this.estado == 'viendo') {
-                console.log('estado: ', this.estado)
-                console.log('jugador viendo: ', jugador)
-                this.bsModalVerJugador.show();
+                this.bsModalVerJugador.show()
             } else if (this.estado == 'asignando') {
-                console.log('estado: ', this.estado)
-                console.log('jugador actual: ', jugador)
-                console.log('jugador similar: ', this.jugadorSimilar)
-                this.bsModalVerJugador.hide();
-                this.bsModalCrearPartido.show();
+                this.bsModalVerJugador.hide()
+                this.bsModalCrearPartido.show()
             }
         },
         ocultarModal() {
@@ -169,7 +162,6 @@ export default {
             }
         },
         borrarJugador({ href }) {
-            console.log("Href recibido:", href)
             this.eliminarJugador(href)
         },
         async crearPartido() {
@@ -177,9 +169,7 @@ export default {
                 campo: this.campoSeleccionadoPartido,
                 cuando: `${this.fechaSeleccionada}T${this.horaSeleccionada}:${this.minutoSeleccionado}:00Z`,
             }
-            console.log('la hora del partido es: ', partido.cuando)
             const partidoURL = await this.enviarPartido(partido)
-            console.log(partidoURL)
             if (partidoURL == 'error') {
                 this.mostrarModalError("partido")
             } else {
@@ -202,8 +192,6 @@ export default {
                         this.eliminarPartido(partidoURL)
                         this.mostrarModalError("asignacion2")
                     } else {
-                        console.log('asignaciones devueltas', asignacion1URL)
-                        console.log('asignaciones devueltas', asignacion2URL)
                         this.enviarEmailsSolicitud(partidoURL, asignacion1URL, asignacion2URL)
                         this.mostrarModalCreado()
                     }
@@ -225,7 +213,6 @@ export default {
                 this.jugadoresAPIStore.cargarFederados() // Ultra Feo
                 this.jugadoresAPIStore.cargarPrincipiantes()  // Funciona, es lo que hay
                 this.jugadoresAPIStore.cargarJugadores()
-                console.log("Recargando jugadores...")
             }
         },
         jugadorActual: {
@@ -233,7 +220,7 @@ export default {
             deep: true,
             handler(nuevoValor) {
                 if (this.estado == 'viendo' && nuevoValor) {
-                    this.cargarJugadoresSimilares(nuevoValor);
+                    this.cargarJugadoresSimilares(nuevoValor)
                 }
             }
         }

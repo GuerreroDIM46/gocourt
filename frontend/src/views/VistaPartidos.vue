@@ -20,7 +20,7 @@ export default {
     methods: {
         ...mapActions(usePartidosAPIStore, ['cargarPartidos', 'cargarPartidosHistoricos', 'cargarPartidosValidados', 'cargarPartidosPorConfirmar']),
         setActiveTab(tab) {
-            this.activeTab = tab;
+            this.activeTab = tab
         },
         setVistaInicial() {
             this.activeTab = 'sinConfirmar'
@@ -32,7 +32,7 @@ export default {
             this.cargarPartidosValidados(),
             this.cargarPartidosHistoricos()
         ]).then(() => {
-            this.setVistaInicial();
+            this.setVistaInicial()
         })        
     },
 }

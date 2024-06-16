@@ -9,7 +9,7 @@ import {
     putPartido,
     getPartido,
     deleteEntidad
-} from "@/stores/APIservice.js";
+} from "@/stores/APIservice.js"
 
 export const usePartidosAPIStore = defineStore("partidosAPI", {
     state: () => ({
@@ -31,16 +31,15 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
             ) {
                 this[propiedadPartidos] = await Promise.all(
                     response.data._embedded.partidos.map(async (partido) => {
-                        const partidoId = this.obtenerId(partido);
+                        const partidoId = this.obtenerId(partido)
                         const puntuacionesResponse = await getPartidoPuntuaciones(
                             partidoId
                         )
                         partido.puntuaciones =
                             puntuacionesResponse.data._embedded.puntuaciones
-                        return partido;
+                        return partido
                     })
                 )
-                console.log("Partidos con puntuaciones:", this[propiedadPartidos])
                 this.partidosCargados = true
                 return true
             }
@@ -55,41 +54,34 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
         },
         async cargarPartido(id) {
             const response = await getPartido(id)
-            const partido = response.data;
-            const puntuacionesResponse = await getPartidoPuntuaciones(id);
-            const puntuaciones = puntuacionesResponse.data._embedded.puntuaciones;
-            console.log('el partido es: ', partido)
-            console.log('las puntuaciones son: ', puntuaciones)
+            const partido = response.data
+            const puntuacionesResponse = await getPartidoPuntuaciones(id)
+            const puntuaciones = puntuacionesResponse.data._embedded.puntuaciones
             partido.puntuaciones = puntuaciones
             this.partidoCompleto = partido           
         },
         async enviarPartido(partido) {
             try {
-                const response = await postPartido(partido);
-                if (response.status === 200 || response.status === 201) {
-                    const { _links, ...partidoCreado } = response.data;
-                    this.partidos.push(partidoCreado);
-                    console.log("Datos del partido creado devuelto por la api: ", partidoCreado);
-                    this.cargarPartidos();
-                    const url = _links.self.href;
-                    console.log("link del partido devuelto por la api", url);
-                    this.debeRecargar = true;
-                    return url;
+                const response = await postPartido(partido)
+                if (response.status == 200 || response.status == 201) {
+                    const { _links, ...partidoCreado } = response.data
+                    this.partidos.push(partidoCreado)
+                    this.cargarPartidos()
+                    const url = _links.self.href
+                    this.debeRecargar = true
+                    return url
                 }
             } catch (error) {
-                if (error.response && error.response.status === 409) {
-                    console.log("Ya existe un partido programado para ese horario en ese campo.");
-                    return "error";
+                if (error.response && error.response.status == 409) {
+                    return "error"
                 } else {
-                    console.error("Error al enviar el partido: ", error);
-                    throw error; 
+                    console.error("Error al enviar el partido: ", error)
+                    throw error
                 }
             }
         },
         async actualizarPartido(partido) {
             const { url, ...partidoSinUrl } = partido
-            console.log('partido enviado desde el store la api: ', partidoSinUrl)
-            console.log('id de partido (store): ', url)
             try {
                 const response = await putPartido(partidoSinUrl, url)
                 if (response.status == 200) {
@@ -97,11 +89,9 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
                 }
             } catch (error) {
                 if (error.response && error.response.status == 409) {
-                    console.log("Ya existe un partido programado para ese horario en ese campo.");
-                    return "error";
+                    return "error"
                 } else {
-                    console.error("Error al enviar el partido: ", error);
-                    throw error;
+                    throw error
                 }
             }
         },
@@ -125,7 +115,6 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
         },
         async eliminarPartido(partidoHref) {
             const response = await deleteEntidad(partidoHref)
-            console.log("Respuesta de la api al borrar partido: ", response)
         },        
     },
-});
+})

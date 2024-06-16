@@ -22,12 +22,8 @@ export const useEmailAPIStore = defineStore('emailAPI', {
                 puntuacion1Id: apuntuacion2Id,
                 puntuacion2Id: apuntuacion1Id
             }
-            console.log('el body que estoy enviando', bodyCorreo1)
             const response1 = await sendSolicitudPartido(bodyCorreo1)
             const response2 = await sendSolicitudPartido(bodyCorreo2)
-
-            console.log('Respuesta del correo 1:', response1)
-            console.log('Respuesta del correo 2:', response2)
         },
         async enviarEmailsPartidoAceptado(urlPartido, urlAsignacion1, urlAsignacion2) {
             const apartidoId = this.extractIdFromUrl(urlPartido)
@@ -38,9 +34,7 @@ export const useEmailAPIStore = defineStore('emailAPI', {
                 puntuacion1Id: apuntuacion1Id,
                 puntuacion2Id: apuntuacion2Id
             }
-            console.log('lo que envio', body)
             const response = await sendPartidoAceptado(body)
-            console.log('Respuesta del correo:', response)
         }
     }
 })
