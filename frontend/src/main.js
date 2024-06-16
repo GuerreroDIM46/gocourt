@@ -35,6 +35,11 @@ const routes = [
     
 ]
 
+const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+    })
+
 router.beforeEach((to, from, next) => {
     const isLandingPage = from.path.startsWith('/landingPage')
     const isPaginaNoAutorizada = to.path == '/partidos' || to.path == '/jugadores'
@@ -44,11 +49,6 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
-
-const router = createRouter({
-    history: createWebHashHistory(),
-    routes,
-    })
 
 const app = createApp(App)
 const pinia = createPinia()
