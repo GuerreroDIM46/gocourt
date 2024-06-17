@@ -99,6 +99,6 @@ public class JugadorDAOImpl implements JugadorDAOCustom{
         }
 
         return jugadoresFederadosNivelSimilar;
-    }
+    }  
    
 }
