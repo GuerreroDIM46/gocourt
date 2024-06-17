@@ -35,7 +35,7 @@ public class FederadoDAOImpl implements FederadoDAOCustom {
             respuesta = federadoDAO.findAll()
                     .stream()
                     .sorted(Comparator.comparingDouble(Jugador::getHandicap))
-                    .filter(j -> j.isProfesional() == false)
+                    .filter(j -> !j.isProfesional() && j.getCampo().equals(jugador.getCampo()))
                     .filter(j -> j.getHandicap() >= valorInferior && j.getHandicap() <= valorSuperior)                    
                     .collect(Collectors.toList());
             }
