@@ -1,7 +1,6 @@
 package es.mde.rest;
 
 import java.util.List;
-import org.checkerframework.common.value.qual.IntRangeFromGTENegativeOne;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
