@@ -99,6 +99,6 @@ public class PartidoDAOImpl implements PartidoDAOCustom {
                 .filter(p -> p.getCuando().equals(localDateTime))
                 .filter(p -> p.getCampo().getId().equals(campoId))
                 .collect(Collectors.toList());        
-    }
+    }    
     
 }

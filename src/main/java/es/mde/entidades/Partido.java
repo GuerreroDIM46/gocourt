@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import es.mde.repositorios.PartidoListener;
+import es.mde.services.TokenGenerator;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +18,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -33,6 +37,9 @@ public class Partido {
     @JoinColumn(name = "CAMPO")
     @NotNull(message = "El campo no puede ser nulo.")
     private Campo campo;
+    
+    @JsonIgnore
+    private String token;
     
     @NotNull(message = "La fecha y hora del partido no pueden ser nulas.")
     private LocalDateTime cuando;
@@ -76,9 +83,17 @@ public class Partido {
 	    int minutos = cuando.getMinute();
 	    int ajusteMinutos = (minutos % 20) < 10 ? -(minutos % 20) : (20 - minutos % 20);
 	    this.cuando = cuando.plusMinutes(ajusteMinutos);
-	}
+	} 
 
-	public Collection<Puntuacion> getPuntuaciones() {
+	public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Collection<Puntuacion> getPuntuaciones() {
 		return puntuaciones;
 	}
 
@@ -89,6 +104,14 @@ public class Partido {
     public void addPuntuacion(Puntuacion puntuacion) {
         getPuntuaciones().add(puntuacion);
         puntuacion.setPartido(this);
+    }
+    
+    @PrePersist
+    @PreUpdate
+    private void AsignarToken() {
+        if (this.token == null) {
+            this.token = TokenGenerator.generarToken();
+        }
     }
     
     public class AntesDeHoyExcepcion extends RuntimeException {

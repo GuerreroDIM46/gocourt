@@ -6,11 +6,14 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.mde.entidades.Partido;
 import es.mde.repositorios.PartidoDAO;
+import net.bytebuddy.dynamic.DynamicType.Builder.FieldDefinition.Optional;
 
 @RepositoryRestController
 @Configuration
@@ -44,6 +47,18 @@ public class PartidoController {
             PersistentEntityResourceAssembler assembler) {
         List<Partido> partidos = partidoDAO.getPartidosPorConfirmar();
         return assembler.toCollectionModel(partidos);
+    }
+    
+    @GetMapping("/partidos/search/findByToken")
+    @ResponseBody
+    public ResponseEntity<PersistentEntityResource> getPartidoByToken(
+            @RequestParam("token") String token,
+            PersistentEntityResourceAssembler assembler) {
+        Partido partido = partidoDAO.findByToken(token);
+        if (partido == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(assembler.toModel(partido));
     }
    
 }
