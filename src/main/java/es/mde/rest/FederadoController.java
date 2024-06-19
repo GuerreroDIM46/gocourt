@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import es.mde.entidades.Federado;
+import es.mde.entidades.Jugador;
 import es.mde.repositorios.FederadoDAO;
 
 @RepositoryRestController
@@ -32,12 +33,11 @@ public class FederadoController {
     @GetMapping("/federados/search/federadosParaCompetir")
     @ResponseBody
     public CollectionModel<PersistentEntityResource> getFederadosParaCompetir(
-            @RequestParam Long jugadorId,
-            @RequestParam float puntuacion, 
+            @RequestParam Jugador jugador,
             @RequestParam float rangoInferior, 
             @RequestParam float rangoSuperior,
             PersistentEntityResourceAssembler assembler) {
-        List<Federado> federados = federadoDAO.encontrarFederadosParaCompetir(jugadorId, puntuacion, rangoInferior, rangoSuperior);
+        List<Federado> federados = federadoDAO.encontrarFederadosParaCompetir(jugador, rangoInferior, rangoSuperior);
         return assembler.toCollectionModel(federados);
     }
 
