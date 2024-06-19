@@ -73,6 +73,7 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
                 }
             } catch (error) {
                 if (error.response && error.response.status == 409) {
+                    console.log("Ya existe un partido programado para ese horario en ese campo.");
                     return "error"
                 } else {
                     console.error("Error al enviar el partido: ", error)
