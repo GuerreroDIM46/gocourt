@@ -75,6 +75,13 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
                 if (error.response && error.response.status == 409) {
                     console.log("Ya existe un partido programado para ese horario en ese campo.");
                     return "error"
+                } else if (error.response && error.response.status == 400) {
+                    if (response.status == "La fecha del partido no puede ser anterior a la fecha actual.") {
+                        return "error2"
+                    }
+                    if (response.status == "La hora del partido debe estar entre las 8:00 y las 20:00.") {
+                        return "error3"
+                    }
                 } else {
                     console.error("Error al enviar el partido: ", error)
                     throw error

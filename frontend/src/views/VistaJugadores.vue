@@ -172,6 +172,10 @@ export default {
             const partidoURL = await this.enviarPartido(partido)
             if (partidoURL == 'error') {
                 this.mostrarModalError("partido")
+            } else if (partidoURL == 'error2') {
+                this.mostrarModalError("partidoAyer")
+            } else if (partidoURL == 'error3') {
+                this.mostrarModalError("partidoHoraNo")
             } else {
                 const asignacion1 = {
                     jugador: this.jugadorActual._links.self.href,
@@ -512,6 +516,10 @@ export default {
                         {{ this.jugadorSimilar.apellido1 }} {{
                             this.jugadorSimilar.apellido2
                         }} ya tiene partido asignado ese dia
+                    </h5>
+                    <h5 v-if="this.error == 'partidoAyer'" style="text-align:justify;">No tenemos maquina del tiempo para jugar ese partido
+                    </h5>
+                    <h5 v-if="this.error == 'partidoHoraNo'" style="text-align:justify;">Los partidos mejor entre las 08:00 y las 20:00
                     </h5>
                 </div>
                 <div class="modal-footer">
