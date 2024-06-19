@@ -18,6 +18,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "JUGADORES")
@@ -31,8 +34,26 @@ public abstract class Jugador {
     @Column(unique = true)  
     private Long id;
     
-    private String nombre, apellido1, apellido2, dni, telefono, email;
+    @NotBlank(message = "El nombre no puede estar vacío")
+    private String nombre;
+
+    @NotBlank(message = "El primer apellido no puede estar vacío")
+    private String apellido1;
+
+    @NotBlank(message = "El segundo apellido no puede estar vacío")
+    private String apellido2;
+
+    @NotBlank(message = "El DNI no puede estar vacío")
+    private String dni;
+
+    @NotBlank(message = "El teléfono no puede estar vacío")
+    private String telefono;
+
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "El email debe ser válido")
+    private String email;
     
+    @NotNull(message = "El campo no puede ser nulo")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAMPO")
     private Campo campo;

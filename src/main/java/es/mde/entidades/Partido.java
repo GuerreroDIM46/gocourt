@@ -1,6 +1,7 @@
 package es.mde.entidades;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import es.mde.repositorios.PartidoListener;
@@ -16,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "PARTIDOS")
@@ -29,7 +31,10 @@ public class Partido {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CAMPO")
+    @NotNull(message = "El campo no puede ser nulo.")
     private Campo campo;
+    
+    @NotNull(message = "La fecha y hora del partido no pueden ser nulas.")
     private LocalDateTime cuando;
     
     @OneToMany(cascade = CascadeType.ALL, targetEntity = Puntuacion.class, mappedBy = "partido")
@@ -62,7 +67,15 @@ public class Partido {
 	}
 
 	public void setCuando(LocalDateTime cuando) {
-		this.cuando = cuando;
+	    if (cuando.isBefore(LocalDateTime.now())) {
+	        throw new AntesDeHoyExcepcion("La fecha del partido no puede ser anterior a la fecha actual.");
+	    }
+	    if (cuando.toLocalTime().isBefore(LocalTime.of(8, 0)) || cuando.toLocalTime().isAfter(LocalTime.of(20, 0))) {
+	        throw new FueraRangoHorarioException("La hora del partido debe estar entre las 8:00 y las 20:00.");
+	    }
+	    int minutos = cuando.getMinute();
+	    int ajusteMinutos = (minutos % 20) < 10 ? -(minutos % 20) : (20 - minutos % 20);
+	    this.cuando = cuando.plusMinutes(ajusteMinutos);
 	}
 
 	public Collection<Puntuacion> getPuntuaciones() {
@@ -76,6 +89,18 @@ public class Partido {
     public void addPuntuacion(Puntuacion puntuacion) {
         getPuntuaciones().add(puntuacion);
         puntuacion.setPartido(this);
+    }
+    
+    public class AntesDeHoyExcepcion extends RuntimeException {
+        public AntesDeHoyExcepcion(String message) {
+            super(message);
+        }
+    }
+    
+    public class FueraRangoHorarioException extends RuntimeException {
+        public FueraRangoHorarioException(String message) {
+            super(message);
+        }
     }
 
 }
