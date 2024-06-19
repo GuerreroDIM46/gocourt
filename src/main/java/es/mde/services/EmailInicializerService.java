@@ -49,12 +49,11 @@ public class EmailInicializerService {
         String jugador2 = puntuacion2.getNombreCompleto();
         String emailJugador1 = Puntuacion1.getJugador().getEmail();
         String telefonoJugador2 = puntuacion2.getJugador().getTelefono();
-        String partidoToken = partido.getToken();
         String aceptarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=true";
         String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
         String aceptarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=true";
         String rechazarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=false";
-        String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoToken;
+        String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoId;
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("emailJugador1", emailJugador1);
