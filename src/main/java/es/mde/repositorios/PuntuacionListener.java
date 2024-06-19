@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import es.mde.entidades.Partido;
 import es.mde.entidades.Puntuacion;
 import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 
 @Component
 public class PuntuacionListener {

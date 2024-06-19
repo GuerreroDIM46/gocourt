@@ -3,8 +3,6 @@ package es.mde.repositorios;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import es.mde.entidades.Campo;
-import es.mde.entidades.Jugador;
 import es.mde.entidades.Partido;
 
 public interface PartidoDAOCustom {

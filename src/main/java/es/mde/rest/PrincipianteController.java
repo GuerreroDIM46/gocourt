@@ -8,7 +8,6 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import es.mde.entidades.Jugador;
 import es.mde.entidades.Principiante;
 import es.mde.repositorios.PrincipianteDAO;
 
