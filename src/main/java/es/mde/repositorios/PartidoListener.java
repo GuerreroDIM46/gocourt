@@ -2,13 +2,14 @@ package es.mde.repositorios;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 
 import es.mde.entidades.Partido;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
-@Component
+@Configurable
 public class PartidoListener {
    
     private static PartidoDAO partidoDAO;
