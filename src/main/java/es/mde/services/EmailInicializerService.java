@@ -43,6 +43,7 @@ public class EmailInicializerService {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         String fecha = fechaHora.toLocalDate().format(dateFormatter);
+        String partidoToken = partido.getToken();
         String hora = fechaHora.toLocalTime().format(timeFormatter);        
         String nombreJugador1 = puntuacion1.getJugador().getNombre();
         String nombreCompletoJugador1 = puntuacion1.getNombreCompleto();
@@ -54,6 +55,7 @@ public class EmailInicializerService {
         String aceptarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=true";
         String rechazarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=false";
         String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoId;
+//        String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoToken;
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("emailJugador1", emailJugador1);
