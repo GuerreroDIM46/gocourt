@@ -54,7 +54,6 @@ public class EmailInicializerService {
         String rechazarInvitacionUrl = direccionAPI + "puntuaciones/search/actualizarAsistencia?id=" + puntuacion1Id + "&aceptado=false";
         String aceptarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=true";
         String rechazarIntercambioUrl = direccionAPI + "puntuaciones/search/actualizarCompartidoTelefono?id=" + puntuacion1Id + "&compartidoTelefono=false";
-//        String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoId;
         String introducirDetallesPartidoURL = direccionApp + "#/landingPage/" + partidoToken;
 
         Map<String, Object> variables = new HashMap<>();
