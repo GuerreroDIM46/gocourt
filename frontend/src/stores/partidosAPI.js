@@ -52,10 +52,11 @@ export const usePartidosAPIStore = defineStore("partidosAPI", {
         async cargarPartidos() {
             return await this.cargarPartidosGenerales(getPartidos, "partidos")
         },
-        async cargarPartido(id) {
-            const response = await getPartido(id)
+        async cargarPartido(token) {
+            const response = await getPartido(token)
             const partido = response.data
-            const puntuacionesResponse = await getPartidoPuntuaciones(id)
+            const partidoId = this.obtenerId(partido)
+            const puntuacionesResponse = await getPartidoPuntuaciones(partidoId)
             const puntuaciones = puntuacionesResponse.data._embedded.puntuaciones
             partido.puntuaciones = puntuaciones
             this.partidoCompleto = partido           

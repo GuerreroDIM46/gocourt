@@ -40,8 +40,8 @@ export function getPartidos() {
     return llamadaAPI('get', null, API_PARTIDOS)
 }
 
-export function getPartido(id) {
-    const url = `${API_PARTIDOS}/${id}`
+export function getPartido(token) {
+    const url = `${API_PARTIDOS}/search/findByToken?token=${token}`
     return llamadaAPI('get', null, url)
 }
 

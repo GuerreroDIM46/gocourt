@@ -70,7 +70,7 @@ export default {
             this.$router.go(-1)
         },
         async cargarDatosPartido() {
-            await this.cargarPartido(this.$route.params.id)
+            await this.cargarPartido(this.$route.params.token)
             if (this.partidoCompleto) {
                 this.campoSeleccionado = this.campos.find(campo => campo.nombre == this.partidoCompleto.nombreCampo)
                 this.fecha = this.partidoCompleto.cuando.split('T')[0]

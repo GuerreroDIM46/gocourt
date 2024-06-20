@@ -30,7 +30,7 @@ const routes = [
     { path: '/', redirect: '/jugadores'},
     { path: '/partidos', component: Partidos, name: 'partidos' },
     { path: '/jugadores', component: Jugadores, name: 'jugadores' },
-    { path: '/landingPage/:id', component: LandingPage, name: 'landingPage' },
+    { path: '/landingPage/:token', component: LandingPage, name: 'landingPage' },
     { path: '/:pathMatch(.*)', component: NotFound, name: 'notfound'}
     
 ]
